@@ -421,7 +421,7 @@ public class Entities {
 
     /** convenience for starting an entity, esp a new Startable instance which has been created dynamically
      * (after the application is started) */
-    public static void start(Entity e, Collection<Location> locations) {
+    public static void start(Entity e, Collection<? extends Location> locations) {
         if (!isManaged(e) && !manage(e)) {
             log.warn("Using discouraged mechanism to start management -- Entities.start(Application, Locations) -- caller should create and use the preferred management context");
             startManagement(e);
