@@ -599,7 +599,6 @@
                 <module>software/messaging</module>
                 <module>software/nosql</module>
                 <module>software/database</module>
-                <module>software/monitoring</module>
                 <module>systems/whirr/base</module>
                 <module>systems/whirr/hadoop</module>
                 <module>systems/paas/openshift</module>
@@ -640,6 +639,7 @@
                 <module>sandbox/database</module>
                 <module>sandbox/mgmt</module>
                 <module>sandbox/web-acceptance</module>
+                <module>sandbox/monitoring</module>
             </modules>
         </profile>
 
