@@ -1,57 +1,84 @@
 /*
- * Copyright 2012-2013 by Cloudsoft Corp.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 by Andrew Kennedy
  */
 package brooklyn.entity.monitoring.ganglia;
 
+import java.util.Map;
+import java.util.concurrent.Callable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
-import brooklyn.entity.basic.SoftwareProcess;
-import brooklyn.entity.proxying.ImplementedBy;
+import brooklyn.entity.basic.SoftwareProcessEntity;
 import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
+import brooklyn.event.feed.function.FunctionFeed;
+import brooklyn.event.feed.function.FunctionPollConfig;
 import brooklyn.location.basic.PortRanges;
 import brooklyn.util.flags.SetFromFlag;
+
+import com.google.common.base.Functions;
+import com.google.common.collect.Maps;
+
 
 /**
  * An {@link brooklyn.entity.Entity} that represents a Ganglia monitoring daemon, {@code gmond}.
  */
-@ImplementedBy(GangliaMonitorImpl.class)
-public interface GangliaMonitor extends SoftwareProcess {
+public class GangliaMonitor extends SoftwareProcessEntity {
+    /** serialVersionUID */
+    private static final long serialVersionUID = -9113861914926145090L;
+
+    private static final Logger log = LoggerFactory.getLogger(GangliaMonitor.class);
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.1.6");
-
+    public static final ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcessEntity.SUGGESTED_VERSION, "1.1.6");
+    
     @SetFromFlag("gangliaPort")
-    PortAttributeSensorAndConfigKey GANGLIA_PORT = new PortAttributeSensorAndConfigKey("ganglia.port", "Ganglia communications port", PortRanges.fromString("7000+"));
-
+    public static final PortAttributeSensorAndConfigKey GANGLIA_PORT = new PortAttributeSensorAndConfigKey("ganglia.port", "Ganglia communications port", PortRanges.fromString("7000+"));
+    
     @SetFromFlag("clusterName")
-    BasicAttributeSensor<String> CLUSTER_NAME = GangliaCluster.CLUSTER_NAME;
+    public static final BasicAttributeSensor<String> CLUSTER_NAME = GangliaCluster.CLUSTER_NAME;
 
-    @SetFromFlag("gangliaManager")
-    ConfigKey<GangliaManager> GANGLIA_MANAGER = new BasicConfigKey<GangliaManager>(GangliaManager.class, "ganglia.entity.manager", "The Ganglia manager entity");
+    public GangliaMonitor(Map<?, ?> flags){
+        this(flags, null);
+    }
 
-    @SetFromFlag("monitoredEntity")
-    ConfigKey<Entity> MONITORED_ENTITY = new BasicConfigKey<Entity>(Entity.class, "ganglia.entity.monitored", "The monitored entity");
+    public GangliaMonitor(Entity owner){
+        this(Maps.newHashMap(), owner);
+    }
 
-    GangliaManager getGangliaManager();
+    public GangliaMonitor(Map<?, ?> flags, Entity owner) {
+        super(flags, owner);
+        setAttribute(CLUSTER_NAME, getConfig(GangliaCluster.CLUSTER_NAME));
+    }
+    
+    public Integer getGangliaPort() { return getAttribute(GANGLIA_PORT); }
+    public String getClusterName() { return getAttribute(CLUSTER_NAME); }
 
-    Entity getMonitoredEntity();
+    @Override
+    public Class getDriverInterface() {
+        return GangliaMonitorDriver.class;
+    }
+    
+    transient FunctionFeed serviceUp;
 
-    Integer getGangliaPort();
+    @Override
+    protected void connectSensors() {
+        super.connectSensors();
 
-    String getClusterName();
-
+        serviceUp = FunctionFeed.builder()
+                .entity(this)
+                .poll(new FunctionPollConfig<Object, Boolean>(SERVICE_UP)
+                        .period(500)
+                        .callable(new Callable<Boolean>(){
+                            public Boolean call() {
+                                return getDriver().isRunning();
+                             }
+                         })
+                        .onError(Functions.constant(false)))
+                .build();
+    }
 }

@@ -1,31 +1,19 @@
 /*
- * Copyright 2012-2013 by Cloudsoft Corp.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 by Andrew Kennedy
  */
 package brooklyn.entity.monitoring.ganglia;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
-import brooklyn.location.Location;
+import brooklyn.entity.basic.lifecycle.CommonCommands;
 import brooklyn.location.basic.SshMachineLocation;
+import brooklyn.util.MutableMap;
 import brooklyn.util.NetworkUtils;
-import brooklyn.util.collections.MutableMap;
-import brooklyn.util.ssh.CommonCommands;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -37,7 +25,7 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
 
     private static final Logger log = LoggerFactory.getLogger(GangliaMonitorSshDriver.class);
     
-    public GangliaMonitorSshDriver(GangliaMonitorImpl entity, SshMachineLocation machine) {
+    public GangliaMonitorSshDriver(GangliaMonitor entity, SshMachineLocation machine) {
         super(entity, machine);
     }
 
@@ -52,7 +40,7 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
     @Override
     public void install() {
         List<String> commands = ImmutableList.<String>builder()
-                .add(CommonCommands.installPackage(ImmutableMap.of("apt", "ganglia-monitor", "port", "ganglia"), "ganglia-gmond"))
+                .add(CommonCommands.installPackage(ImmutableMap.of("apt", "ganglia-monitor"), "ganglia-gmond"))
                 .build();
 
         newScript(INSTALLING)
@@ -67,13 +55,21 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
         NetworkUtils.checkPortsValid(ImmutableMap.<String, Integer>builder()
                 .put("gangliaPort", getGangliaPort())
                 .build());
+
+        List<String> commands = ImmutableList.<String>builder()
+                .add(CommonCommands.sudo("service ganglia-monitor start"))
+                .build();
+
+        newScript(CUSTOMIZING)
+                .body.append(commands)
+                .execute();
     }
 
     @Override
     public void launch() {
         log.info("Launching: {}", entity);
         newScript(MutableMap.of("usePidFile", Boolean.FALSE), LAUNCHING)
-                .body.append(CommonCommands.sudo("service ganglia-monitor start"))
+                .body.append(CommonCommands.sudo("service ganglia-monitor restart"))
                 .execute();
     }
 
@@ -81,7 +77,7 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
     public boolean isRunning() {
         log.info("Check Running: {}", entity);
         return newScript(MutableMap.of("usePidFile", Boolean.FALSE), CHECK_RUNNING)
-                .body.append(CommonCommands.sudo("service ganglia-monitor status")) // FIXME
+                .body.append(CommonCommands.sudo("service ganglia-monitor start"))
                 .execute() == 0;
     }
 

@@ -1,31 +1,19 @@
 /*
- * Copyright 2012-2013 by Cloudsoft Corp.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 by Andrew Kennedy
  */
 package brooklyn.entity.monitoring.ganglia;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
-import brooklyn.location.Location;
+import brooklyn.entity.basic.lifecycle.CommonCommands;
 import brooklyn.location.basic.SshMachineLocation;
+import brooklyn.util.MutableMap;
 import brooklyn.util.NetworkUtils;
-import brooklyn.util.collections.MutableMap;
-import brooklyn.util.ssh.CommonCommands;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -37,7 +25,7 @@ public class GangliaManagerSshDriver extends AbstractSoftwareProcessSshDriver im
 
     private static final Logger log = LoggerFactory.getLogger(GangliaManagerSshDriver.class);
     
-    public GangliaManagerSshDriver(GangliaManagerImpl entity, SshMachineLocation machine) {
+    public GangliaManagerSshDriver(GangliaManager entity, SshMachineLocation machine) {
         super(entity, machine);
     }
 
@@ -81,7 +69,7 @@ public class GangliaManagerSshDriver extends AbstractSoftwareProcessSshDriver im
     public void launch() {
         log.info("Launching: {}", entity);
         newScript(MutableMap.of("usePidFile", Boolean.FALSE), LAUNCHING)
-                .body.append(CommonCommands.sudo("service gmetad start"))
+                .body.append(CommonCommands.sudo("service gmetad restart"))
                 .execute();
     }
 
@@ -89,7 +77,7 @@ public class GangliaManagerSshDriver extends AbstractSoftwareProcessSshDriver im
     public boolean isRunning() {
         log.info("Check Running: {}", entity);
         return newScript(MutableMap.of("usePidFile", Boolean.FALSE), CHECK_RUNNING)
-                .body.append(CommonCommands.sudo("service gmetad status")) // FIXME
+                .body.append(CommonCommands.sudo("service gmetad start"))
                 .execute() == 0;
     }
 
