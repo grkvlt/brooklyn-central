@@ -499,6 +499,18 @@ public class Entities {
         return mgmt;
     }
     
+    public static ManagementContext newManagementContext() {
+        return new LocalManagementContext();
+    }
+    
+    public static ManagementContext newManagementContext(BrooklynProperties props) {
+        return new LocalManagementContext(props);
+    }
+    
+    public static ManagementContext newManagementContext(Map<?,?> props) {
+        return new LocalManagementContext(props);
+    }
+    
     public static void unmanage(Entity entity) {
         if (((AbstractEntity)entity).getManagementSupport().isDeployed()) {
             ((AbstractEntity)entity).getManagementSupport().getManagementContext(true).getEntityManager().unmanage(entity);
