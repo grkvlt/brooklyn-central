@@ -17,11 +17,11 @@ import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
+import brooklyn.config.BrooklynProperties
 import brooklyn.entity.basic.Entities
 import brooklyn.entity.trait.Startable
-import brooklyn.location.basic.jclouds.CredentialsFromEnv
-import brooklyn.location.basic.jclouds.JcloudsLocation
-import brooklyn.location.basic.jclouds.JcloudsLocationFactory
+import brooklyn.location.Location
+import brooklyn.location.basic.BasicLocationRegistry
 import brooklyn.test.entity.TestApplication
 import brooklyn.util.internal.TimeExtras
 
@@ -30,43 +30,20 @@ class ActiveMQEc2LiveTest {
 
     static { TimeExtras.init() }
 
-    private final String provider
-    protected JcloudsLocation loc;
-    protected JcloudsLocationFactory locFactory;
-    private File sshPrivateKey
-    private File sshPublicKey
+    Location loc;
     TestApplication app
     ActiveMQBroker activeMQ
 
     @BeforeMethod(alwaysRun=true)
     public void setUp() {
-        URL resource = getClass().getClassLoader().getResource("jclouds/id_rsa.private")
-        assertNotNull resource
-        sshPrivateKey = new File(resource.path)
-        resource = getClass().getClassLoader().getResource("jclouds/id_rsa.pub")
-        assertNotNull resource
-        sshPublicKey = new File(resource.path)
-
-        CredentialsFromEnv creds = new CredentialsFromEnv("aws-ec2");
-        locFactory = new JcloudsLocationFactory([
-                provider:"aws-ec2",
-                identity:creds.getIdentity(),
-                credential:creds.getCredential(),
-                sshPublicKey:sshPublicKey,
-                sshPrivateKey:sshPrivateKey])
-
-        String regionName = "eu-west-1"
-        String imageId = "eu-west-1/ami-89def4fd"
-        String imageOwner = "411009282317"
-
-        loc = locFactory.newLocation(regionName)
-        loc.setTagMapping([(ActiveMQBroker.class.getName()):[
-            imageId:imageId,
-            imageOwner:imageOwner,
-            securityGroups:["brooklyn-all"]
-        ]])
-
         app = new TestApplication()
+        Entities.manage(app)
+
+        BrooklynProperties props = BrooklynProperties.Factory.newDefault()
+        props.put("brooklyn.location.jclouds.aws-ec2.image-id", "eu-west-1/ami-89def4fd")
+        props.put("brooklyn.location.jclouds.aws-ec2.image-owner", "411009282317")
+
+        loc = new BasicLocationRegistry(props).resolve("aws-ec2:eu-west-1")
     }
 
     @AfterMethod(alwaysRun=true)
