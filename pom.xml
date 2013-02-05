@@ -635,11 +635,12 @@
         <profile>
             <id>Sandbox</id>
             <modules>
-                <module>sandbox/rest</module>
                 <module>sandbox/database</module>
                 <module>sandbox/mgmt</module>
                 <module>sandbox/web-acceptance</module>
                 <module>sandbox/monitoring</module>
+                <module>sandbox/dropwizard</module>
+                <module>sandbox/nosql</module>
             </modules>
         </profile>
 
