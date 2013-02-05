@@ -4,13 +4,13 @@
 package brooklyn.entity.monitoring.ganglia;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
 import brooklyn.entity.basic.lifecycle.CommonCommands;
+import brooklyn.location.Location;
 import brooklyn.location.basic.SshMachineLocation;
 import brooklyn.util.MutableMap;
 import brooklyn.util.NetworkUtils;
@@ -25,7 +25,7 @@ public class GangliaManagerSshDriver extends AbstractSoftwareProcessSshDriver im
 
     private static final Logger log = LoggerFactory.getLogger(GangliaManagerSshDriver.class);
     
-    public GangliaManagerSshDriver(GangliaManager entity, SshMachineLocation machine) {
+    public GangliaManagerSshDriver(GangliaManagerImpl entity, SshMachineLocation machine) {
         super(entity, machine);
     }
 

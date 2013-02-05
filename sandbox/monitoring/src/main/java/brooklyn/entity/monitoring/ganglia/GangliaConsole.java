@@ -24,7 +24,7 @@ import com.google.common.base.Predicates;
  * TODO add sensors with aggregated Ganglia statistics from cluster
  */
 @ImplementedBy(GangliaClusterImpl.class)
-public interface GangliaCluster extends Entity, Startable {
+public interface GangliaConsole extends Entity, Startable {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @SetFromFlag("filter")
