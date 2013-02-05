@@ -1,3 +1,6 @@
+/*
+ * Copyright 2012-2013 by Cloudsoft Corp.
+ */
 package brooklyn.entity.monitoring.ganglia;
 
 import static brooklyn.test.TestUtils.*
@@ -12,44 +15,37 @@ import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
-import com.google.common.base.Joiner;
-
-import brooklyn.config.BrooklynProperties;
-import brooklyn.entity.Application
+import brooklyn.entity.basic.ApplicationBuilder
 import brooklyn.entity.basic.Entities
+import brooklyn.entity.proxying.BasicEntitySpec
 import brooklyn.entity.trait.Startable
 import brooklyn.location.Location
-import brooklyn.location.basic.BasicLocationRegistry
+import brooklyn.location.basic.LocalhostMachineProvisioningLocation
 import brooklyn.test.entity.TestApplication
 import brooklyn.util.internal.TimeExtras
 
 /**
- * Test the operation of the {@link GangliaManager} class.
+ * Test the operation of the {@link GangliaCluster} class.
  */
-public class GangliaIntegrationTest {
-    private static final Logger log = LoggerFactory.getLogger(GangliaIntegrationTest.class)
+public class GangliaClusterIntegrationTest {
+    private static final Logger log = LoggerFactory.getLogger(GangliaClusterIntegrationTest.class)
 
     static { TimeExtras.init() }
 
-    private Application app
+    private TestApplication app
     private Location testLocation
     private GangliaCluster ganglia
 
     @BeforeMethod(alwaysRun = true)
     public void setup() {
-        app = new TestApplication();
-        ganglia = new GangliaCluster(parent:app);
-        Entities.startManagement(app);
-//        testLocation = new LocalhostMachineProvisioningLocation()
-        testLocation = new BasicLocationRegistry(app.getManagementContext()).resolve("ganglia")
+        app = ApplicationBuilder.builder(TestApplication.class).manage();
+        ganglia = app.createAndManageChild(BasicEntitySpec.newInstance(GangliaCluster.class));
+        testLocation = new LocalhostMachineProvisioningLocation()
     }
 
     @AfterMethod(alwaysRun = true)
     public void shutdown() {
-        if (ganglia != null && ganglia.getAttribute(Startable.SERVICE_UP)) {
-            ganglia.stop();
-        }
-        Entities.destroy(app)
+        Entities.destroyAll(app)
     }
 
     /**
@@ -58,7 +54,7 @@ public class GangliaIntegrationTest {
     @Test(groups = "Integration")
     public void canStartupAndShutdown() {
         app.start([ testLocation ])
-        executeUntilSucceedsWithShutdown(ganglia, timeout:600*TimeUnit.SECONDS) {
+        executeUntilSucceedsWithShutdown(ganglia, timeout:2*TimeUnit.MINUTES) {
             assertTrue ganglia.getAttribute(Startable.SERVICE_UP)
             assertTrue ganglia.manager.getAttribute(Startable.SERVICE_UP)
             Entities.dumpInfo(app)

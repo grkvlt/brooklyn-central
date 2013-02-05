@@ -25,7 +25,7 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
 
     private static final Logger log = LoggerFactory.getLogger(GangliaMonitorSshDriver.class);
     
-    public GangliaMonitorSshDriver(GangliaMonitor entity, SshMachineLocation machine) {
+    public GangliaMonitorSshDriver(GangliaMonitorImpl entity, SshMachineLocation machine) {
         super(entity, machine);
     }
 
@@ -40,7 +40,7 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
     @Override
     public void install() {
         List<String> commands = ImmutableList.<String>builder()
-                .add(CommonCommands.installPackage(ImmutableMap.of("apt", "ganglia-monitor"), "ganglia-gmond"))
+                .add(CommonCommands.installPackage(ImmutableMap.of("apt", "ganglia-monitor", "port", "ganglia"), "ganglia-gmond"))
                 .build();
 
         newScript(INSTALLING)
