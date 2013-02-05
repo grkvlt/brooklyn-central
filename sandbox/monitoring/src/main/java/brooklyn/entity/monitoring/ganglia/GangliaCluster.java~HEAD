@@ -1,6 +1,5 @@
 /*
  * Copyright 2012-2013 by Cloudsoft Corp.
-<<<<<<< HEAD
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-package brooklyn.entity.monitoring.ganglia;
-
-import brooklyn.entity.proxying.ImplementedBy;
-import brooklyn.entity.web.httpd.ApacheHttpd;
-
-/**
- * The Ganglia monitoring console.
- */
-@ImplementedBy(GangliaConsoleImpl.class)
-public interface GangliaConsole extends ApacheHttpd {
-=======
  */
 package brooklyn.entity.monitoring.ganglia;
 
@@ -49,7 +36,7 @@ import com.google.common.base.Predicates;
  * TODO add sensors with aggregated Ganglia statistics from cluster
  */
 @ImplementedBy(GangliaClusterImpl.class)
-public interface GangliaConsole extends Entity, Startable {
+public interface GangliaCluster extends Entity, Startable {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @SetFromFlag("filter")
@@ -58,13 +45,12 @@ public interface GangliaConsole extends Entity, Startable {
     @SetFromFlag("clusterName")
     BasicAttributeSensorAndConfigKey<String> CLUSTER_NAME = new BasicAttributeSensorAndConfigKey<String>(String.class, "ganglia.cluster.name", "Name of the Ganglia cluster", "Brooklyn Ganglia Cluster");
 
-    public GangliaManager getManager();
+    GangliaManager getManager();
 
-    public DynamicGroup getMonitoredEntities();
+    DynamicGroup getMonitoredEntities();
 
-    public Group getMonitors();
+    Group getMonitors();
 
-    public String getClusterName();
->>>>>>> Refactor Ganglia entities to use interface and implementation pattern
+    String getClusterName();
 
 }
