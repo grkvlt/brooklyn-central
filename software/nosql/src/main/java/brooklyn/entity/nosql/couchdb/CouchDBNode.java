@@ -33,6 +33,10 @@ public interface CouchDBNode extends SoftwareProcess, WebAppService {
     @SetFromFlag("version")
     BasicConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.2.1");
 
+    @SetFromFlag("downloadUrl")
+    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
+            SoftwareProcess.DOWNLOAD_URL, "http://mirror.catn.com/pub/apache/couchdb/${version}/apache-couchdb-${version}.tar.gz");
+
     @SetFromFlag("clusterName")
     BasicAttributeSensorAndConfigKey<String> CLUSTER_NAME = CouchDBCluster.CLUSTER_NAME;
 

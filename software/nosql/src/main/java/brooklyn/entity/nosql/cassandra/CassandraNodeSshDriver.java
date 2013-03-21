@@ -75,7 +75,7 @@ public class CassandraNodeSshDriver extends JavaSoftwareProcessSshDriver impleme
         List<String> urls = resolver.getTargets();
         String saveAs = resolver.getFilename();
         expandedInstallDir = getInstallDir()+"/"+resolver.getUnpackedDirectoryName(format("apache-cassandra-%s", getVersion()));
-        
+
         List<String> commands = ImmutableList.<String>builder()
                 .addAll(CommonCommands.downloadUrlAs(urls, saveAs))
                 .add(CommonCommands.INSTALL_TAR)
