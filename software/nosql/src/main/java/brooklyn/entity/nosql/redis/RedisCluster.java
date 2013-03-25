@@ -12,6 +12,7 @@ import brooklyn.entity.trait.Startable;
  * The slaves are contained in a {@link DynamicCluster} which can be resized by a policy if required.
  *
  * TODO add sensors with aggregated Redis statistics from cluster
+ * FIXME move to interface/impl entity pattern
  */
 @Catalog(name="Redis Cluster", description="Redis is an open-source, networked, in-memory, key-value data store with optional durability", iconUrl="classpath:///redis-logo.png")
 @ImplementedBy(RedisClusterImpl.class)
