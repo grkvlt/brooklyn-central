@@ -1,6 +1,6 @@
 package brooklyn.entity.messaging.amqp;
 
-import brooklyn.event.Sensor;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 
 /**
@@ -13,9 +13,8 @@ public interface AmqpExchange {
     String DIRECT = "amq.direct";
     String TOPIC = "amq.topic";
 
-    /** The AMQP exchange name {@link Sensor}. */
-    BasicAttributeSensorAndConfigKey<String> EXCHANGE_NAME = new BasicAttributeSensorAndConfigKey<String>(
-            String.class, "amqp.exchange.name", "AMQP exchange name");
+    /** The AMQP exchange name {@link brooklyn.event.Sensor sensor}. */
+    BasicAttributeSensorAndConfigKey<String> EXCHANGE_NAME = ConfigKeys.newAttributeSensorAndConfigKey("amqp.exchange.name", "AMQP exchange name");
 
     /**
      * Return the AMQP exchange name.
