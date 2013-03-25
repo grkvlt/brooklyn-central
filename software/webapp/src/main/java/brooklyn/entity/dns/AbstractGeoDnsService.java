@@ -14,21 +14,26 @@ import brooklyn.location.geo.HostGeoInfo;
 import brooklyn.util.flags.SetFromFlag;
 
 public interface AbstractGeoDnsService extends Entity {
+
     @SetFromFlag("pollPeriod")
-    public static final ConfigKey<Long> POLL_PERIOD = new BasicConfigKey<Long>(Long.class, "geodns.pollperiod", "Poll period (in milliseconds) for refreshing target hosts", 5000L);
-    public static final AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
-    public static final AttributeSensor<Boolean> SERVICE_UP = Startable.SERVICE_UP;
-    public static final AttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
-    public static final AttributeSensor<Map<String,String>> TARGETS = new BasicAttributeSensor(
+    ConfigKey<Long> POLL_PERIOD = new BasicConfigKey<Long>(Long.class, "geodns.pollperiod", "Poll period (in milliseconds) for refreshing target hosts", 5000L);
+
+    AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
+
+    AttributeSensor<Boolean> SERVICE_UP = Startable.SERVICE_UP;
+
+    AttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
+
+    AttributeSensor<Map<String,String>> TARGETS = new BasicAttributeSensor(
             Map.class, "geodns.targets", "Map of targets currently being managed (entity ID to URL)");
 
-    public void setServiceState(Lifecycle state);
-    
+    void setServiceState(Lifecycle state);
+
     /** if target is a group, its members are searched; otherwise its children are searched */
-    public void setTargetEntityProvider(final Entity entityProvider);
-    
+    void setTargetEntityProvider(final Entity entityProvider);
+
     /** should return the hostname which this DNS service is configuring */
-    public String getHostname();
-    
-    public Map<Entity, HostGeoInfo> getTargetHosts();
+    String getHostname();
+
+    Map<Entity, HostGeoInfo> getTargetHosts();
 }

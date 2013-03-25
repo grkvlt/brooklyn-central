@@ -6,7 +6,7 @@ import brooklyn.entity.Entity
 import brooklyn.entity.basic.AbstractGroupImpl
 import brooklyn.entity.basic.Attributes
 import brooklyn.entity.trait.Changeable
-import brooklyn.event.basic.BasicAttributeSensor
+import brooklyn.event.AttributeSensor
 import brooklyn.event.basic.BasicConfigKey
 import brooklyn.util.flags.SetFromFlag
 
@@ -19,8 +19,8 @@ public class WhirrInstanceImpl extends AbstractGroupImpl implements WhirrInstanc
     @SetFromFlag("instance")
     public static final BasicConfigKey<Cluster.Instance> INSTANCE =
         [Cluster.Instance, "whirr.instance.instance", "Apache Whirr instance Cluster.Instance"]
-        
-    public static final BasicAttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
+
+    public static final AttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
 
     public WhirrInstanceImpl(Map props, Entity parent) {
         super(props, parent);

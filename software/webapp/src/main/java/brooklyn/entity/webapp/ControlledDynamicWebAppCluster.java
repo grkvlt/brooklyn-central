@@ -42,65 +42,66 @@ public interface ControlledDynamicWebAppCluster extends Entity, Startable, Resiz
                 super(ControlledDynamicWebAppCluster.class);
             }
         }
-        
+
         public static Spec<ControlledDynamicWebAppCluster, ?> newInstance() {
             return new ConcreteSpec();
         }
-        
+
         protected Spec(Class<T> type) {
             super(type);
         }
-        
+
         public S initialSize(int val) {
             configure(INITIAL_SIZE, 1);
             return self();
         }
-        
+
         public S controller(AbstractController val) {
             configure(CONTROLLER, val);
             return self();
         }
-        
+
         public S memberSpec(EntitySpec<? extends WebAppService> val) {
             configure(MEMBER_SPEC, val);
             return self();
         }
-        
+
         public S factory(ConfigurableEntityFactory<? extends WebAppService> val) {
             configure(FACTORY, val);
             return self();
         }
     }
-    
+
     @SetFromFlag("initialSize")
-    public static ConfigKey<Integer> INITIAL_SIZE = new BasicConfigKey<Integer>(Cluster.INITIAL_SIZE, 1);
+    ConfigKey<Integer> INITIAL_SIZE = new BasicConfigKey<Integer>(Cluster.INITIAL_SIZE, 1);
 
     @SetFromFlag("controller")
-    public static BasicAttributeSensorAndConfigKey<AbstractController> CONTROLLER = new BasicAttributeSensorAndConfigKey<AbstractController>(
+    BasicAttributeSensorAndConfigKey<AbstractController> CONTROLLER = new BasicAttributeSensorAndConfigKey<AbstractController>(
             AbstractController.class, "controlleddynamicweballcluster.controller", "Controller for the cluster; if null a default will created");
 
     @SetFromFlag("controllerSpec")
-    public static BasicAttributeSensorAndConfigKey<EntitySpec<? extends AbstractController>> CONTROLLER_SPEC = new BasicAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<EntitySpec<? extends AbstractController>> CONTROLLER_SPEC = new BasicAttributeSensorAndConfigKey(
             EntitySpec.class, "controlleddynamicweballcluster.controllerSpec", "Spec for creating the cluster (if one not supplied explicitly); if null an NGINX instance will be created");
 
     /** factory (or closure) to create the web server, given flags */
     @SetFromFlag("factory")
-    public static BasicAttributeSensorAndConfigKey<ConfigurableEntityFactory<? extends WebAppService>> FACTORY = new BasicAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<ConfigurableEntityFactory<? extends WebAppService>> FACTORY = new BasicAttributeSensorAndConfigKey(
             ConfigurableEntityFactory.class, "controlleddynamicweballcluster.factory", "factory (or closure) to create the web server");
 
     /** Spec for web server entiites to be created */
     @SetFromFlag("memberSpec")
-    public static BasicAttributeSensorAndConfigKey<EntitySpec<? extends WebAppService>> MEMBER_SPEC = new BasicAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<EntitySpec<? extends WebAppService>> MEMBER_SPEC = new BasicAttributeSensorAndConfigKey(
             EntitySpec.class, "controlleddynamicweballcluster.memberSpec", "Spec for web server entiites to be created");
 
-    public static AttributeSensor<DynamicWebAppCluster> CLUSTER = new BasicAttributeSensor<DynamicWebAppCluster>(
+    AttributeSensor<DynamicWebAppCluster> CLUSTER = new BasicAttributeSensor<DynamicWebAppCluster>(
             DynamicWebAppCluster.class, "controlleddynamicweballcluster.cluster", "Underlying web-app cluster");
 
-    public static final AttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
+    AttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
 
-    public AbstractController getController();
-    
-    public ConfigurableEntityFactory<WebAppService> getFactory();
-    
-    public DynamicWebAppCluster getCluster();
+    AbstractController getController();
+
+    ConfigurableEntityFactory<WebAppService> getFactory();
+
+    DynamicWebAppCluster getCluster();
+
 }

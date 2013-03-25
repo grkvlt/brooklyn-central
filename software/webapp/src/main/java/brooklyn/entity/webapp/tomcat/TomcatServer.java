@@ -1,6 +1,7 @@
 package brooklyn.entity.webapp.tomcat;
 
 import brooklyn.catalog.Catalog;
+import brooklyn.config.ConfigKey;
 import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.java.UsesJmx;
@@ -8,6 +9,7 @@ import brooklyn.entity.proxying.BasicEntitySpec;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.trait.HasShortName;
 import brooklyn.entity.webapp.JavaWebAppSoftwareProcess;
+import brooklyn.event.AttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 import brooklyn.event.basic.BasicConfigKey;
@@ -40,7 +42,7 @@ public interface TomcatServer extends JavaWebAppSoftwareProcess, UsesJmx, HasSho
     }
 
     @SetFromFlag("version")
-    BasicConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "7.0.39");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "7.0.39");
 
     @SetFromFlag("downloadUrl")
     BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
@@ -55,9 +57,9 @@ public interface TomcatServer extends JavaWebAppSoftwareProcess, UsesJmx, HasSho
     PortAttributeSensorAndConfigKey SHUTDOWN_PORT =
             new PortAttributeSensorAndConfigKey("tomcat.shutdownport", "Suggested shutdown port", PortRanges.fromString("31880+"));
 
-    BasicAttributeSensor<String> CONNECTOR_STATUS =
+    AttributeSensor<String> CONNECTOR_STATUS =
             new BasicAttributeSensor<String>(String.class, "webapp.tomcat.connectorStatus", "Catalina connector state name");
 
-    BasicAttributeSensor<String> JMX_SERVICE_URL = Attributes.JMX_SERVICE_URL;
+    AttributeSensor<String> JMX_SERVICE_URL = Attributes.JMX_SERVICE_URL;
 
 }
