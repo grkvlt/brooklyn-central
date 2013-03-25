@@ -1,12 +1,14 @@
 package brooklyn.entity.webapp;
 
+import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.group.DynamicFabric;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.AttributeSensor;
-import brooklyn.event.basic.BasicAttributeSensor;
 
 /**
- * DynamicWebAppFabric provide a fabric of clusters, aggregating the entity attributes.  Currently totals and averages:
+ * DynamicWebAppFabric provide a fabric of clusters, aggregating the entity attributes.
+ * <p>
+ * Currently totals and averages:
  * <ul>
  *   <li>Entity request counts</li>
  *   <li>Entity error counts</li>
@@ -17,18 +19,14 @@ import brooklyn.event.basic.BasicAttributeSensor;
 @ImplementedBy(DynamicWebAppFabricImpl.class)
 public interface DynamicWebAppFabric extends DynamicFabric, WebAppService {
 
-    public static final AttributeSensor<Double> REQUEST_COUNT_PER_NODE = new BasicAttributeSensor<Double>(
-            Double.class, "webapp.reqs.total.perNode", "Fabric entity request average");
+    AttributeSensor<Double> REQUEST_COUNT_PER_NODE = Attributes.newAttributeSensor("webapp.reqs.total.perNode", "Fabric entity request average");
 
-    public static final AttributeSensor<Integer> ERROR_COUNT_PER_NODE = new BasicAttributeSensor<Integer>(
-            Integer.class, "webapp.reqs.errors.perNode", "Fabric entity request error average");
+    AttributeSensor<Integer> ERROR_COUNT_PER_NODE = Attributes.newAttributeSensor("webapp.reqs.errors.perNode", "Fabric entity request error average");
 
-    public static final AttributeSensor<Double> REQUESTS_PER_SECOND_LAST_PER_NODE = new BasicAttributeSensor<Double>(
-            Double.class, "webapp.reqs.perSec.last.perNode", "Reqs/sec (last datapoint) averaged over all nodes");
+    AttributeSensor<Double> REQUESTS_PER_SECOND_LAST_PER_NODE = Attributes.newAttributeSensor("webapp.reqs.perSec.last.perNode", "Reqs/sec (last datapoint) averaged over all nodes");
 
-    public static final AttributeSensor<Double> REQUESTS_PER_SECOND_IN_WINDOW_PER_NODE = new BasicAttributeSensor<Double>(
-            Double.class, "webapp.reqs.perSec.windowed.perNode", "Reqs/sec (over time window) averaged over all nodes");
+    AttributeSensor<Double> REQUESTS_PER_SECOND_IN_WINDOW_PER_NODE = Attributes.newAttributeSensor("webapp.reqs.perSec.windowed.perNode", "Reqs/sec (over time window) averaged over all nodes");
 
-    public static final AttributeSensor<Integer> TOTAL_PROCESSING_TIME_PER_NODE = new BasicAttributeSensor<Integer>(
-            Integer.class, "webapp.reqs.processingTime.perNode", "Total processing time per node");
+    AttributeSensor<Integer> TOTAL_PROCESSING_TIME_PER_NODE = Attributes.newAttributeSensor("webapp.reqs.processingTime.perNode", "Total processing time per node");
+
 }

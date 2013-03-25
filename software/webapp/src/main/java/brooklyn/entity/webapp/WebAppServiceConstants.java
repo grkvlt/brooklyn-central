@@ -1,16 +1,16 @@
 package brooklyn.entity.webapp;
 
+import java.util.Collections;
 import java.util.List;
 
 import brooklyn.config.render.RendererHints;
 import brooklyn.entity.basic.Attributes;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.util.flags.SetFromFlag;
-
-import com.google.common.collect.ImmutableList;
 
 public interface WebAppServiceConstants {
 
@@ -21,38 +21,29 @@ public interface WebAppServiceConstants {
     PortAttributeSensorAndConfigKey HTTPS_PORT = Attributes.HTTPS_PORT;
 
     @SetFromFlag("enabledProtocols")
-    BasicAttributeSensorAndConfigKey<List<String>> ENABLED_PROTOCOLS = new BasicAttributeSensorAndConfigKey(
-            List.class, "webapp.enabledProtocols", "List of enabled protocols (e.g. http, https)", ImmutableList.of("http"));
+    BasicAttributeSensorAndConfigKey<List<String>> ENABLED_PROTOCOLS = ConfigKeys.newAttributeSensorAndConfigKey("webapp.enabledProtocols", "List of enabled protocols (e.g. http, https)", Collections.singletonList("http"));
 
     @SetFromFlag("httpsSsl")
-    BasicAttributeSensorAndConfigKey<HttpsSslConfig> HTTPS_SSL_CONFIG = new BasicAttributeSensorAndConfigKey<HttpsSslConfig>(
-            HttpsSslConfig.class, "webapp.https.ssl", "SSL Configuration for HTTPS", null);
+    BasicAttributeSensorAndConfigKey<HttpsSslConfig> HTTPS_SSL_CONFIG = ConfigKeys.newAttributeSensorAndConfigKey("webapp.https.ssl", "SSL Configuration for HTTPS", null);
 
-    AttributeSensor<Integer> REQUEST_COUNT =
-            new BasicAttributeSensor<Integer>(Integer.class, "webapp.reqs.total", "Request count");
-    AttributeSensor<Integer> ERROR_COUNT =
-            new brooklyn.event.basic.BasicAttributeSensor<Integer>(Integer.class, "webapp.reqs.errors", "Request errors");
-    AttributeSensor<Integer> TOTAL_PROCESSING_TIME =
-            new BasicAttributeSensor<Integer>(Integer.class, "webapp.reqs.processingTime.total", "Total processing time (millis)");
-    AttributeSensor<Integer> MAX_PROCESSING_TIME =
-            new BasicAttributeSensor<Integer>(Integer.class, "webapp.reqs.processingTime.max", "Max processing time (millis)");
+    AttributeSensor<Integer> REQUEST_COUNT = Attributes.newAttributeSensor("webapp.reqs.total", "Request count");
+    AttributeSensor<Integer> ERROR_COUNT = Attributes.newAttributeSensor("webapp.reqs.errors", "Request errors");
+    AttributeSensor<Integer> TOTAL_PROCESSING_TIME = Attributes.newAttributeSensor("webapp.reqs.processingTime.total", "Total processing time (millis)");
+    AttributeSensor<Integer> MAX_PROCESSING_TIME = Attributes.newAttributeSensor("webapp.reqs.processingTime.max", "Max processing time (millis)");
 
-    AttributeSensor<Long> BYTES_RECEIVED =
-            new BasicAttributeSensor<Long>(Long.class, "webapp.reqs.bytes.received", "Total bytes received by the webserver");
-    AttributeSensor<Long> BYTES_SENT =
-            new BasicAttributeSensor<Long>(Long.class, "webapp.reqs.bytes.sent", "Total bytes sent by the webserver");
+    AttributeSensor<Long> BYTES_RECEIVED = Attributes.newAttributeSensor("webapp.reqs.bytes.received", "Total bytes received by the webserver");
+    AttributeSensor<Long> BYTES_SENT = Attributes.newAttributeSensor("webapp.reqs.bytes.sent", "Total bytes sent by the webserver");
 
     /** req/second computed from the delta of the last request count and an associated timestamp */
-    AttributeSensor<Double> REQUESTS_PER_SECOND_LAST =
-            new BasicAttributeSensor<Double>(Double.class, "webapp.reqs.perSec.last", "Reqs/sec (last datapoint)");
+    AttributeSensor<Double> REQUESTS_PER_SECOND_LAST = Attributes.newAttributeSensor("webapp.reqs.perSec.last", "Reqs/sec (last datapoint)");
     /** @deprecated since 0.5.0, use REQUESTS_PER_SECOND_LAST */
     AttributeSensor<Double> REQUESTS_PER_SECOND = REQUESTS_PER_SECOND_LAST;
 
     // TODO make this a config key
     Integer REQUESTS_PER_SECOND_WINDOW_PERIOD = 10 * 1000;
     /** rolled-up req/second for a window */
-    AttributeSensor<Double> REQUESTS_PER_SECOND_IN_WINDOW
-            = new BasicAttributeSensor<Double>(Double.class, String.format("webapp.reqs.perSec.windowed", REQUESTS_PER_SECOND_WINDOW_PERIOD),
+    AttributeSensor<Double> REQUESTS_PER_SECOND_IN_WINDOW = Attributes.newAttributeSensor(
+                    String.format("webapp.reqs.perSec.windowed", REQUESTS_PER_SECOND_WINDOW_PERIOD),
                     String.format("Reqs/sec (over time window)", REQUESTS_PER_SECOND_WINDOW_PERIOD));
     /** @deprecated since 0.5.0, use REQUESTS_PER_SECOND_WINDOW_PERIOD */
     Integer AVG_REQUESTS_PER_SECOND_PERIOD = REQUESTS_PER_SECOND_WINDOW_PERIOD;

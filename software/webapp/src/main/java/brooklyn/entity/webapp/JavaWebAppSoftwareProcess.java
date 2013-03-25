@@ -3,20 +3,20 @@ package brooklyn.entity.webapp;
 import java.util.Set;
 
 import brooklyn.entity.Effector;
+import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.MethodEffector;
 import brooklyn.entity.basic.NamedParameter;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.event.AttributeSensor;
-import brooklyn.event.basic.BasicAttributeSensor;
 
 public interface JavaWebAppSoftwareProcess extends SoftwareProcess, JavaWebAppService {
 
-    public static final AttributeSensor<Set<String>> DEPLOYED_WARS = new BasicAttributeSensor(
-            Set.class, "webapp.deployedWars", "Names of archives/contexts that are currently deployed");
+    AttributeSensor<Set<String>> DEPLOYED_WARS = Attributes.newAttributeSensor(
+            "webapp.deployedWars", "Names of archives/contexts that are currently deployed");
 
-    public static final Effector<Void> DEPLOY = new MethodEffector<Void>(JavaWebAppSoftwareProcess.class, "deploy");
-    public static final Effector<Void> UNDEPLOY = new MethodEffector<Void>(JavaWebAppSoftwareProcess.class, "undeploy");
+    Effector<Void> DEPLOY = new MethodEffector<Void>(JavaWebAppSoftwareProcess.class, "deploy");
+    Effector<Void> UNDEPLOY = new MethodEffector<Void>(JavaWebAppSoftwareProcess.class, "undeploy");
 
     /**
      * Deploys the given artifact, from a source URL, to a given deployment filename/context.
@@ -44,7 +44,7 @@ public interface JavaWebAppSoftwareProcess extends SoftwareProcess, JavaWebAppSe
      * @param targetName  where to tell the server to serve the WAR, see above
      */
     @Description("Deploys the given artifact, from a source URL, to a given deployment filename/context")
-    public void deploy(
+    void deploy(
             @NamedParameter("url") @Description("URL of WAR file") String url, 
             @NamedParameter("targetName") @Description("context path where WAR should be deployed (/ for ROOT)") String targetName);
 
@@ -52,6 +52,7 @@ public interface JavaWebAppSoftwareProcess extends SoftwareProcess, JavaWebAppSe
      * For the DEPLOYED_WARS to be updated, the input must match the result of the call to deploy
      */
     @Description("Undeploys the given context/artifact")
-    public void undeploy(
+    void undeploy(
             @NamedParameter("targetName") String targetName);
+
 }

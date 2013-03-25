@@ -2,17 +2,19 @@ package brooklyn.entity.proxy.nginx;
 
 import java.util.Collection;
 
+import brooklyn.config.ConfigKey;
 import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.AbstractGroup;
+import brooklyn.entity.basic.Attributes;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.MethodEffector;
 import brooklyn.entity.proxy.AbstractController;
 import brooklyn.entity.proxy.ProxySslConfig;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.webapp.WebAppService;
-import brooklyn.event.basic.BasicAttributeSensor;
-import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.event.AttributeSensor;
 import brooklyn.util.flags.SetFromFlag;
 
 /**
@@ -24,56 +26,58 @@ import brooklyn.util.flags.SetFromFlag;
 @ImplementedBy(UrlMappingImpl.class)
 public interface UrlMapping extends AbstractGroup {
 
-    public static final Effector<Void> DISCARD = new MethodEffector<Void>(UrlMapping.class, "discard");
+    Effector<Void> DISCARD = new MethodEffector<Void>(UrlMapping.class, "discard");
 
     @SetFromFlag("label")
-    public static final BasicConfigKey<String> LABEL =
-        new BasicConfigKey<String>(String.class, "urlmapping.label", "optional human-readable label to identify a server");
+    ConfigKey<String> LABEL = ConfigKeys.newConfigKey("urlmapping.label", "optional human-readable label to identify a server");
 
     @SetFromFlag("domain")
-    public static final BasicConfigKey<String> DOMAIN =
-        new BasicConfigKey<String>(String.class, "urlmapping.domain", "domain (hostname, e.g. www.foo.com) to present for this URL map rule; required.");
+    ConfigKey<String> DOMAIN = ConfigKeys.newConfigKey("urlmapping.domain", "domain (hostname, e.g. www.foo.com) to present for this URL map rule; required.");
 
     @SetFromFlag("path")
-    public static final BasicConfigKey<String> PATH =
-        new BasicConfigKey<String>(String.class, "urlmapping.path", 
-                "URL path (pattern) for this URL map rule. Currently only supporting regex matches "+ 
+    ConfigKey<String> PATH = ConfigKeys.newConfigKey("urlmapping.path",
+                "URL path (pattern) for this URL map rule. Currently only supporting regex matches " +
                 "(if not supplied, will match all paths at the indicated domain)");
 
     @SetFromFlag("ssl")
-    public static final BasicConfigKey<ProxySslConfig> SSL_CONFIG = AbstractController.SSL_CONFIG;
-            
+    ConfigKey<ProxySslConfig> SSL_CONFIG = AbstractController.SSL_CONFIG;
+
     @SetFromFlag("rewrites")
-    public static final BasicConfigKey<Collection<UrlRewriteRule>> REWRITES =
-        new BasicConfigKey(Collection.class, "urlmapping.rewrites", "Set of URL rewrite rules to apply");
+    ConfigKey<Collection<UrlRewriteRule>> REWRITES = ConfigKeys.newConfigKey("urlmapping.rewrites", "Set of URL rewrite rules to apply");
 
     @SetFromFlag("target")
-    public static final BasicConfigKey<Entity> TARGET_PARENT =
-        new BasicConfigKey<Entity>(Entity.class, "urlmapping.target.parent", "optional target entity whose children will be pointed at by this mapper");
+    ConfigKey<Entity> TARGET_PARENT = ConfigKeys.newConfigKey("urlmapping.target.parent", "optional target entity whose children will be pointed at by this mapper");
 
-    public static final BasicAttributeSensor<Collection<String>> TARGET_ADDRESSES =
-        new BasicAttributeSensor(Collection.class, "urlmapping.target.addresses", "set of addresses which should be forwarded to by this URL mapping");
-        
-    public static final BasicAttributeSensor<String> ROOT_URL = WebAppService.ROOT_URL;    
+    AttributeSensor<Collection<String>> TARGET_ADDRESSES = Attributes.newAttributeSensor("urlmapping.target.addresses", "set of addresses which should be forwarded to by this URL mapping");
 
-    public String getUniqueLabel();
+    AttributeSensor<String> ROOT_URL = WebAppService.ROOT_URL;
 
-    /** adds a rewrite rule, must be called at config time.  see {@link UrlRewriteRule} for more info. */
-    public UrlMapping addRewrite(String from, String to);
-    
-    /** adds a rewrite rule, must be called at config time.  see {@link UrlRewriteRule} for more info. */
-    public UrlMapping addRewrite(UrlRewriteRule rule);
-    
-    public String getDomain();
-    
-    public String getPath();
-    
-    public Entity getTarget(); 
-    
-    public void setTarget(Entity target);
+    String getUniqueLabel();
 
-    public void recompute();
-    
+    /**
+     * Adds a rewrite rule, must be called at config time.
+     *
+     * @see {@link UrlRewriteRule} for more info.
+     */
+    UrlMapping addRewrite(String from, String to);
+
+    /**
+     * Adds a rewrite rule, must be called at config time.
+     *
+     * @see {@link UrlRewriteRule} for more info.
+     */
+    UrlMapping addRewrite(UrlRewriteRule rule);
+
+    String getDomain();
+
+    String getPath();
+
+    Entity getTarget();
+
+    void setTarget(Entity target);
+
+    void recompute();
+
     @Description("Unmanages the url-mapping, so it is discarded and no longer applies")
-    public void discard();
+    void discard();
 }
