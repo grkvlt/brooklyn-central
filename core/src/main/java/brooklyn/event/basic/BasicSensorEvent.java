@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011-2013 by Cloudsoft Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package brooklyn.event.basic;
 
 import brooklyn.entity.Entity;
@@ -27,7 +42,7 @@ public class BasicSensorEvent<T> implements SensorEvent<T> {
     public BasicSensorEvent(Sensor<T> sensor, Entity source, T value) {
         this(sensor, source, value, 0);
     }
-    
+
     public BasicSensorEvent(Sensor<T> sensor, Entity source, T value, long timestamp) {
         this.sensor = sensor;
         this.source = source;
@@ -43,7 +58,7 @@ public class BasicSensorEvent<T> implements SensorEvent<T> {
     @Override
     public int hashCode() {
         return Objects.hashCode(sensor, source, value);
-    }   
+    }
 
     /**
      * Any SensorEvents are equal if their sensor, source and value are equal.
@@ -56,7 +71,7 @@ public class BasicSensorEvent<T> implements SensorEvent<T> {
         return Objects.equal(sensor, other.getSensor()) && Objects.equal(source, other.getSource()) &&
                 Objects.equal(value, other.getValue());
     }
-    
+
     @Override
     public String toString() {
         return source+"."+sensor+"="+value+" @ "+timestamp;

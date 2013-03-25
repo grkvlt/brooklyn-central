@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011-2013 by Cloudsoft Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package brooklyn.event.basic;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -21,7 +36,7 @@ import com.google.common.reflect.TypeToken;
 
 public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializable {
     private static final long serialVersionUID = -1762014059150215376L;
-    
+
     private static final Splitter dots = Splitter.on('.');
 
     // TODO For use with generics; TODO accept some form of ParameterizedType
@@ -33,14 +48,14 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
     public static <T> Builder<T> builder(Class<T> type) {
         return new Builder<T>().type(type);
     }
-    
+
     public static class Builder<T> {
         private String name;
         private Class<T> type;
         private String description;
         private T defaultValue;
         private boolean reconfigurable;
-        
+
         public Builder<T> name(String val) {
             this.name = val; return this;
         }
@@ -64,7 +79,7 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
             return new BasicConfigKey<T>(this);
         }
     }
-    
+
     private String name;
     private Class<T> type;
     private String description;
@@ -91,14 +106,29 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
         this((Class<T>) type.getRawType(), name, description, defaultValue);
     }
 
+    @SuppressWarnings("serial")
+    public BasicConfigKey(String name) {
+        this(new TypeToken<T>(BasicConfigKey.class) { }, name);
+    }
+
+    @SuppressWarnings("serial")
+    public BasicConfigKey(String name, String description) {
+        this(new TypeToken<T>(BasicConfigKey.class) { }, name, description);
+    }
+
+    @SuppressWarnings("serial")
+    public BasicConfigKey(String name, String description, T defaultValue) {
+        this(new TypeToken<T>(BasicConfigKey.class) { }, name, description, defaultValue);
+    }
+
     public BasicConfigKey(Class<T> type, String name) {
         this(type, name, name, null);
     }
-    
+
     public BasicConfigKey(Class<T> type, String name, String description) {
         this(type, name, description, null);
     }
-    
+
     public BasicConfigKey(Class<T> type, String name, String description, T defaultValue) {
         this.description = description;
         this.name = checkNotNull(name, "name");
@@ -122,7 +152,7 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
         this.defaultValue = builder.defaultValue;
         this.reconfigurable = builder.reconfigurable;
     }
-    
+
     /** @see ConfigKey#getName() */
     public String getName() { return name; }
 
