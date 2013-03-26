@@ -144,7 +144,7 @@ public class CustomAggregatingEnricher<S,T> extends AbstractAggregatingEnricher<
     }
     
     public static <N extends Number, T extends Number> CustomAggregatingEnricher<N,T> newSummingEnricher(
-            Map<String,?> flags, AttributeSensor<N> source, final AttributeSensor<T> target) {
+            Map<String, ?> flags, AttributeSensor<N> source, final AttributeSensor<T> target) {
         
         Function<Collection<N>, T> aggregator = new Function<Collection<N>, T>() {
             @Override public T apply(Collection<N> vals) {
@@ -159,32 +159,43 @@ public class CustomAggregatingEnricher<S,T> extends AbstractAggregatingEnricher<
         return newSummingEnricher(Collections.<String,Object>emptyMap(), source, target);
     }
 
-    /** creates an enricher which averages over all sensors, 
-     * counting ZERO for sensors which have not yet published anything;
-     * to have those sensors excluded, pass null as an additional argument (defaultValue)
+    /**
+     * Creates an enricher which averages over all sensors.
+     * <p>
+     * Counts {@literal 0} for sensors which have not yet published anything.
+     * To have those sensors excluded, pass null as the {@code defaultValue} argument.
      */
-    // this function can't strictly return <N,Double> like the others because 
-    // we have to supply a 0 of instance of N
-    public static CustomAggregatingEnricher<Number,Double> newAveragingEnricher(
-            Map<String,?> flags, AttributeSensor<? extends Number> source, AttributeSensor<Double> target) {
-        return newAveragingEnricher(flags, source, target, 0);
+    @SuppressWarnings("unchecked")
+    public static <N extends Number> CustomAggregatingEnricher<N, Double> newAveragingEnricher(
+            Map<String, ?> flags, AttributeSensor<N> source, AttributeSensor<Double> target) {
+        // XXX hack required to allow the casting of 0 to the returned generic N
+        if (source.getType().isAssignableFrom(Integer.class)) {
+            return newAveragingEnricher(flags, source, target, (N) Integer.valueOf(0));
+        } else if (source.getType().isAssignableFrom(Long.class)) {
+            return newAveragingEnricher(flags, source, target, (N) Long.valueOf(0));
+        } else if (source.getType().isAssignableFrom(Double.class)) {
+            return newAveragingEnricher(flags, source, target, (N) Double.valueOf(0));
+        } else if (source.getType().isAssignableFrom(Float.class)) {
+            return newAveragingEnricher(flags, source, target, (N) Float.valueOf(0));
+        } else return newAveragingEnricher(flags, source, target, null);
     }
-    /** defaultValue of null means that the sensor is excluded */
-    public static <N extends Number> CustomAggregatingEnricher<N,Double> newAveragingEnricher(
-            Map<String,?> flags, AttributeSensor<? extends N> source, AttributeSensor<Double> target,
+
+    /** A {@code defaultValue} of {@literal null} means that the sensor is excluded. */
+    public static <N extends Number> CustomAggregatingEnricher<N, Double> newAveragingEnricher(
+            Map<String, ?> flags, AttributeSensor<N> source, AttributeSensor<Double> target,
             N defaultValue) {
-        
         Function<Collection<N>, Double> aggregator = new Function<Collection<N>, Double>() {
             @Override public Double apply(Collection<N> vals) {
                 int count = count(vals);
                 return (count==0) ? 0d : ((Double) sum(vals) / count);
             }
         };
-        return new CustomAggregatingEnricher<N,Double>(flags, source, target, aggregator, defaultValue);
+        return new CustomAggregatingEnricher<N, Double>(flags, source, target, aggregator, defaultValue);
     }
-    public static <N extends Number> CustomAggregatingEnricher<Number,Double> newAveragingEnricher(
+
+    public static <N extends Number> CustomAggregatingEnricher<N, Double> newAveragingEnricher(
             AttributeSensor<N> source, AttributeSensor<Double> target) {
-        return newAveragingEnricher(Collections.<String,Object>emptyMap(), source, target);
+        return newAveragingEnricher(Collections.<String, Object>emptyMap(), source, target);
     }
 
     private static <N extends Number> double sum(Iterable<N> vals) {

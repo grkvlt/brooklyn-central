@@ -15,7 +15,9 @@ import brooklyn.util.MutableMap;
 import com.google.common.collect.ImmutableList;
 
 /**
- * DynamicWebAppClusters provide cluster-wide aggregates of entity attributes.  Currently totals and averages:
+ * DynamicWebAppClusters provide cluster-wide aggregates of entity attributes.
+ * <p>
+ * Currently totals and averages:
  * <ul>
  *   <li>Entity request counts</li>
  *   <li>Entity error counts</li>
@@ -64,14 +66,16 @@ public class DynamicWebAppClusterImpl extends DynamicClusterImpl implements Dyna
         for (List<? extends AttributeSensor<? extends Number>> es : summingEnricherSetup) {
             AttributeSensor<? extends Number> t = es.get(0);
             AttributeSensor<? extends Number> total = es.get(1);
-            CustomAggregatingEnricher<?,?> totaller = CustomAggregatingEnricher.newSummingEnricher(MutableMap.of("allMembers", true), t, total);
+            CustomAggregatingEnricher<? extends Number , ? extends Number> totaller =
+                    CustomAggregatingEnricher.newSummingEnricher(MutableMap.of("allMembers", true), t, total);
             addEnricher(totaller);
         }
         
         for (List<? extends AttributeSensor<? extends Number>> es : averagingEnricherSetup) {
             AttributeSensor<Number> t = (AttributeSensor<Number>) es.get(0);
             AttributeSensor<Double> average = (AttributeSensor<Double>) es.get(1);
-            CustomAggregatingEnricher<?,?> averager = CustomAggregatingEnricher.newAveragingEnricher(MutableMap.of("allMembers", true), t, average);
+            CustomAggregatingEnricher<? extends Number, ? extends Double> averager =
+                    CustomAggregatingEnricher.newAveragingEnricher(MutableMap.of("allMembers", true), t, average);
             addEnricher(averager);
         }
 
@@ -82,7 +86,7 @@ public class DynamicWebAppClusterImpl extends DynamicClusterImpl implements Dyna
         });
     }
 
-        
+    @Override
     public synchronized boolean addMember(Entity member) {
         boolean result = super.addMember(member);
         setAttribute(SERVICE_UP, calculateServiceUp());
@@ -104,4 +108,5 @@ public class DynamicWebAppClusterImpl extends DynamicClusterImpl implements Dyna
         }
         return up;
     }
+
 }
