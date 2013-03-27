@@ -148,31 +148,55 @@ public class Attributes {
     }
 
     /*
-     * Static methods to build new BasicSensor instances.
+     * Static methods to build new Sensor instances.
      */
 
-    public static <T> BasicSensor<T> newNotificationSensor(Class<T> type, String name) {
+    public static <T> Sensor<T> newNotificationSensor(Class<T> type, String name) {
         return new BasicNotificationSensor<T>(type, name);
     }
 
-    public static <T> BasicSensor<T> newNotificationSensor(Class<T> type, String name, String description) {
+    public static <T> Sensor<T> newNotificationSensor(Class<T> type, String name, String description) {
         return new BasicNotificationSensor<T>(type, name, description);
     }
 
-    public static <T> BasicSensor<T> newNotificationSensor(TypeToken<T> type, String name) {
+    public static <T> Sensor<T> newNotificationSensor(TypeToken<T> type, String name) {
         return new BasicNotificationSensor<T>(type, name);
     }
 
-    public static <T> BasicSensor<T> newNotificationSensor(TypeToken<T> type, String name, String description) {
+    public static <T> Sensor<T> newNotificationSensor(TypeToken<T> type, String name, String description) {
         return new BasicNotificationSensor<T>(type, name, description);
     }
 
-    public static <T> BasicSensor<T> newNotificationSensor(String name) {
+    public static <T> Sensor<T> newNotificationSensor(String name) {
         return new BasicNotificationSensor<T>(name);
     }
 
-    public static <T> BasicSensor<T> newNotificationSensor(String name, String description) {
+    public static <T> Sensor<T> newNotificationSensor(String name, String description) {
         return new BasicNotificationSensor<T>(name, description);
+    }
+
+    public static <T> Sensor<T> newSensor(Class<T> type, String name) {
+        return new BasicSensor<T>(type, name);
+    }
+
+    public static <T> Sensor<T> newSensor(Class<T> type, String name, String description) {
+        return new BasicSensor<T>(type, name, description);
+    }
+
+    public static <T> Sensor<T> newSensor(TypeToken<T> type, String name) {
+        return new BasicSensor<T>(type, name);
+    }
+
+    public static <T> Sensor<T> newSensor(TypeToken<T> type, String name, String description) {
+        return new BasicSensor<T>(type, name, description);
+    }
+
+    public static <T> Sensor<T> newSensor(String name) {
+        return new BasicSensor<T>(name);
+    }
+
+    public static <T> Sensor<T> newSensor(String name, String description) {
+        return new BasicSensor<T>(name, description);
     }
 
 }

@@ -58,17 +58,17 @@ public abstract class AttributeSensorAndConfigKey<ConfigType, SensorType> extend
 
     public AttributeSensor<SensorType> asAttributeSensor() { return this; }
 
-    /** returns the sensor value for this attribute on the given entity, if present,
-     * otherwise works out what the sensor value should be based on the config key's value
+    /**
+     * Returns the sensor value for this attribute on the given entity, if present,
+     * otherwise works out what the sensor value should be based on the config key's value.
      * <p>
-     * calls to this may allocate resources (e.g. ports) so should be called only once and 
-     * then (if non-null) assigned as the sensor's value
+     * Calls to this may allocate resources (e.g. ports) so should be called only once and 
+     * then (if non-null) assigned as the sensor's value.
      * <p>
-     * <b>(for this reason this method should generally not be invoked by callers except in tests and by the framework,
+     * <em>For this reason this method should generally not be invoked by callers except in tests and by the framework,
      * and similarly should not be overridden; implement convertConfigToSensor instead for single-execution calls.
      * the framework calls this from {@link EntityLocal#setAttribute(AttributeSensorAndConfigKey)} 
-     * typically via {@link ConfigToAttributes#apply(EntityLocal)} e.g. from SoftwareProcess.preStart.)
-     * </b> 
+     * typically via {@link ConfigToAttributes#apply(EntityLocal)} e.g. from SoftwareProcess.preStart.</em> 
      */
     public SensorType getAsSensorValue(Entity e) {
         SensorType sensorValue = e.getAttribute(this);
@@ -83,14 +83,16 @@ public abstract class AttributeSensorAndConfigKey<ConfigType, SensorType> extend
         }
     }
 
-    /** converts the given ConfigType value to the corresponding SensorType value, 
-     * with respect to the given entity
+    /**
+     * Converts the given ConfigType value to the corresponding SensorType value, 
+     * with respect to the given entity.
      * <p>
-     * this is invoked after checks whether the entity already has a value for the sensor,
+     * This is invoked after checks whether the entity already has a value for the sensor,
      * and the entity-specific config value is passed for convenience if set, 
-     * otherwise the config key default value is passed for convenience
+     * otherwise the config key default value is passed for convenience.
      * <p>
-     * this message should be allowed to return null if the conversion cannot be completed at this time */
+     * This message should be allowed to return null if the conversion cannot be completed at this time.
+     */
     protected abstract SensorType convertConfigToSensor(ConfigType value, Entity entity);
 
 }

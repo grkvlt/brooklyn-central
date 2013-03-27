@@ -219,26 +219,33 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
             throw Throwables.propagate(e);
         }
     }
-    
+
     @Override
     public boolean isSet(Map<?,?> vals) {
         return vals.containsKey(this);
     }
-    
+
     protected Object resolveValue(Object v, ExecutionContext exec) throws ExecutionException, InterruptedException {
         return Tasks.resolveValue(v, type, exec, "config "+name);
     }
-    
-    /** attempt to resolve the given value as the given type, waiting on futures,
-     * and coercing as allowed by TypeCoercions 
-     * @deprecated in 0.4.0, use Tasks.resolveValue */
+
+    /**
+     * Attempt to resolve the given value as the given type, waiting on futures,
+     * and coercing as allowed by TypeCoercions.
+     *
+     * @deprecated in 0.4.0, use {@link Tasks#resolveValue(Object, Class, ExecutionContext)}
+     */
+    @Deprecated
     public static <T> T resolveValue(Object v, Class<T> type, ExecutionContext exec) throws ExecutionException, InterruptedException {
         return Tasks.resolveValue(v, type, exec);
     }
-    
+
+    /** @deprecated in 0.5.0, use {@link ConfigKeys#newConfigKey(String, String, String)}
+     */
+    @Deprecated
     public static class StringConfigKey extends BasicConfigKey<String> {
         private static final long serialVersionUID = 8207099275514012088L;
-        
+
         public StringConfigKey(String name) {
             super(String.class, name);
         }

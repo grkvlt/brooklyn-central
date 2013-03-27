@@ -6,12 +6,12 @@ import java.util.Set;
 
 public interface StructuredConfigKey {
 
-    public boolean isSubKey(Object contender);
-    
+    boolean isSubKey(Object contender);
+
     /** for internal use */
     Object applyValueToMap(Object value, @SuppressWarnings("rawtypes") Map target);
-    
-    public static class StructuredModifications {
+
+    class StructuredModifications {
         /** when passed as a value to a StructuredConfigKey, causes the structure to be cleared */
         @SuppressWarnings("unchecked")
         public static final <U extends StructuredConfigKey,T extends StructuredModification<U>> T clearing() {
@@ -32,9 +32,9 @@ public interface StructuredConfigKey {
             };
         }
     }
-    
-    public interface StructuredModification<T extends StructuredConfigKey> {
+
+    interface StructuredModification<T extends StructuredConfigKey> {
         Object applyToKeyInMap(T key, @SuppressWarnings("rawtypes") Map target);
     }
-    
+
 }

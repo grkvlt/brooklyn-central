@@ -15,10 +15,15 @@
  */
 package brooklyn.entity.basic;
 
+import java.util.List;
+import java.util.Map;
+
 import brooklyn.config.ConfigKey;
 import brooklyn.config.ConfigUtils;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.event.basic.ListConfigKey;
+import brooklyn.event.basic.MapConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.util.internal.ssh.SshTool;
 
@@ -29,27 +34,25 @@ import com.google.common.reflect.TypeToken;
  */
 public class ConfigKeys {
 
-
-    public static final ConfigKey<String> BROOKLYN_DATA_DIR = newConfigKey(String.class, "brooklyn.datadir",
-            "Directory for writing all brooklyn data", "/tmp/brooklyn-"+System.getProperty("user.name"));
+    public static final ConfigKey<String> BROOKLYN_DATA_DIR = newConfigKey(
+            "brooklyn.datadir", "Directory for writing all brooklyn data", "/tmp/brooklyn-" + System.getProperty("user.name"));
 
     // FIXME Rename to VERSION, instead of SUGGESTED_VERSION? And declare as BasicAttributeSensorAndConfigKey?
-    public static final ConfigKey<String> SUGGESTED_VERSION = newConfigKey(String.class, "install.version", "Suggested version");
-    public static final ConfigKey<String> SUGGESTED_INSTALL_DIR = newConfigKey(String.class, "install.dir", "Suggested installation directory");
-    public static final ConfigKey<String> SUGGESTED_RUN_DIR = newConfigKey(String.class, "run.dir", "Suggested working directory for the running app");
+    public static final ConfigKey<String> SUGGESTED_VERSION = newConfigKey("install.version", "Suggested version");
+    public static final ConfigKey<String> SUGGESTED_INSTALL_DIR = newConfigKey("install.dir", "Suggested installation directory");
+    public static final ConfigKey<String> SUGGESTED_RUN_DIR = newConfigKey("run.dir", "Suggested working directory for the running app");
 
     /**
      * Intention is to use this with {@link brooklyn.event.basic.DependentConfiguration#attributeWhenReady(brooklyn.entity.Entity, brooklyn.event.AttributeSensor) DependentConfiguration#attributeWhenReady}
      * to allow an entity's start to block until dependents are ready. This is particularly useful when we want to block until a dependent
      * component is up, but do not care about the its actual config values.
      */
-    public static final ConfigKey<Boolean> START_LATCH = newConfigKey(Boolean.class, "start.latch", "Latch for blocking start until ready");
-    public static final ConfigKey<Boolean> INSTALL_LATCH = newConfigKey(Boolean.class, "install.latch", "Latch for blocking install until ready");
-    public static final ConfigKey<Boolean> CUSTOMIZE_LATCH = newConfigKey(Boolean.class, "customize.latch", "Latch for blocking customize until ready");
-    public static final ConfigKey<Boolean> LAUNCH_LATCH = newConfigKey(Boolean.class, "launch.latch", "Latch for blocking launch until ready");
+    public static final ConfigKey<Boolean> START_LATCH = newConfigKey("start.latch", "Latch for blocking start until ready");
+    public static final ConfigKey<Boolean> INSTALL_LATCH = newConfigKey("install.latch", "Latch for blocking install until ready");
+    public static final ConfigKey<Boolean> CUSTOMIZE_LATCH = newConfigKey("customize.latch", "Latch for blocking customize until ready");
+    public static final ConfigKey<Boolean> LAUNCH_LATCH = newConfigKey("launch.latch", "Latch for blocking launch until ready");
 
-    public static final BasicConfigKey<Integer> START_TIMEOUT = new BasicConfigKey<Integer>(
-            Integer.class, "start.timeout", "Time to wait for SERVICE_UP to be set before failing (in seconds, default 60)", 60);
+    public static final ConfigKey<Integer> START_TIMEOUT = newConfigKey("start.timeout", "Time to wait for SERVICE_UP to be set before failing (in seconds, default 60)", 60);
 
     /*
      * Selected properties from SshTool for external public access (e.g. putting on entities) 
@@ -122,7 +125,7 @@ public class ConfigKeys {
         return new BasicConfigKey<T>(type, name, description);
     }
 
-    public static <T> ConfigKey<T> newConfigKey(TypeToken<T> type, String name, String description, T defaultValue) {
+    public static <T, V extends T> ConfigKey<T> newConfigKey(TypeToken<T> type, String name, String description, V defaultValue) {
         return new BasicConfigKey<T>(type, name, description, defaultValue);
     }
 
@@ -134,7 +137,7 @@ public class ConfigKeys {
         return new BasicConfigKey<T>(type, name, description);
     }
 
-    public static <T> ConfigKey<T> newConfigKey(Class<T> type, String name, String description, T defaultValue) {
+    public static <T, V extends T> ConfigKey<T> newConfigKey(Class<T> type, String name, String description, V defaultValue) {
         return new BasicConfigKey<T>(type, name, description, defaultValue);
     }
 
@@ -150,12 +153,12 @@ public class ConfigKeys {
         return new BasicConfigKey<T>(name, description);
     }
 
-    public static <T> ConfigKey<T> newConfigKey(String name, String description, T defaultValue) {
+    public static <T, V extends T> ConfigKey<T> newConfigKey(String name, String description, V defaultValue) {
         return new BasicConfigKey<T>(name, description, defaultValue);
     }
 
     /*
-     * Static methods to build new AttributeSensorAndConfigKey instances.
+     * Static methods to build new PortAttributeSensorAndConfigKey instances.
      */
 
     public static PortAttributeSensorAndConfigKey newPortAttributeSensorAndConfigKey(String name) {
@@ -172,6 +175,46 @@ public class ConfigKeys {
 
     public static PortAttributeSensorAndConfigKey newPortAttributeSensorAndConfigKey(PortAttributeSensorAndConfigKey orig, Object defaultValue) {
         return new PortAttributeSensorAndConfigKey(orig, defaultValue);
+    }
+
+    /*
+     * Static methods to build new MapConfigKey instances.
+     */
+
+    public static <V> MapConfigKey<V> newMapConfigKey(String name) {
+        return new MapConfigKey<V>(name);
+    }
+
+    public static <V> MapConfigKey<V> newMapConfigKey(String name, String description) {
+        return new MapConfigKey<V>(name, description);
+    }
+
+    public static <V> MapConfigKey<V> newMapConfigKey(String name, String description, Map<String, ? extends V> defaultValue) {
+        return new MapConfigKey<V>(name, description, defaultValue);
+    }
+
+    public static <V> MapConfigKey<V> newMapConfigKey(MapConfigKey<V> orig, Map<String, ? extends V> defaultValue) {
+        return new MapConfigKey<V>(orig, defaultValue);
+    }
+
+    /*
+     * Static methods to build new ListConfigKey instances.
+     */
+
+    public static <V> ListConfigKey<V> newListConfigKey(String name) {
+        return new ListConfigKey<V>(name);
+    }
+
+    public static <V> ListConfigKey<V> newListConfigKey(String name, String description) {
+        return new ListConfigKey<V>(name, description);
+    }
+
+    public static <V> ListConfigKey<V> newListConfigKey(String name, String description, List<? extends V> defaultValue) {
+        return new ListConfigKey<V>(name, description, defaultValue);
+    }
+
+    public static <V> ListConfigKey<V> newListConfigKey(ListConfigKey<V> orig, List<? extends V> defaultValue) {
+        return new ListConfigKey<V>(orig, defaultValue);
     }
 
 }

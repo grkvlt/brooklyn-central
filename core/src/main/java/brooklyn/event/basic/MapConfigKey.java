@@ -13,18 +13,24 @@ import brooklyn.management.ExecutionContext;
 import brooklyn.util.MutableMap;
 
 import com.google.common.collect.Maps;
+import com.google.common.reflect.TypeToken;
 
-/** A config key which represents a map, where contents can be accessed directly via subkeys.
+/**
+ * A {@linkplain brooklyn.config.ConfigKey} which represents a {@linkplain java.util.Map}
+ * where contents can be accessed directly via subkeys.
+ * <p>
  * Items added directly to the map must be of type map, and are put (as individual subkeys). 
  * <p>
  * You can also pass an appropriate {@link MapModification} from {@link MapModifications}
- * to clear (and clear-and-set). */
-//TODO Create interface
-public class MapConfigKey<V> extends BasicConfigKey<Map<String,V>> implements StructuredConfigKey {
-    
+ * to clear (and clear-and-set).
+ * <p>
+ * TODO Create interface
+ */
+public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> implements StructuredConfigKey {
+
     private static final long serialVersionUID = -6126481503795562602L;
     private static final Logger log = LoggerFactory.getLogger(MapConfigKey.class);
-    
+
     public final Class<V> subType;
 
     public MapConfigKey(Class<V> subType, String name) {
@@ -38,10 +44,46 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String,V>> implements St
     // TODO it isn't clear whether defaultValue is an initialValue, or a value to use when map is empty
     // probably the latter, currently ... but maybe better to say that map configs are never null, 
     // and defaultValue is really an initial value
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public MapConfigKey(Class<V> subType, String name, String description, Map<String, V> defaultValue) {
-        super((Class)Map.class, name, description, defaultValue);
+    @SuppressWarnings("serial")
+    public MapConfigKey(Class<V> subType, String name, String description, Map<String, ? extends V> defaultValue) {
+        super(new TypeToken<Map<String, ? extends V>>(MapConfigKey.class) { }, name, description, defaultValue);
         this.subType = subType;
+    }
+
+    @SuppressWarnings("unchecked")
+    public MapConfigKey(TypeToken<V> subType, String name) {
+        this((Class<V>) subType.getRawType(), name, name, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public MapConfigKey(TypeToken<V> subType, String name, String description) {
+        this((Class<V>) subType.getRawType(), name, description, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public MapConfigKey(TypeToken<V> subType, String name, String description, Map<String, ? extends V> defaultValue) {
+        this((Class<V>) subType.getRawType(), name, description, defaultValue);
+    }
+
+    @SuppressWarnings("serial")
+    public MapConfigKey(String name) {
+        this(new TypeToken<V>(MapConfigKey.class) { }, name, name, null);
+    }
+
+    @SuppressWarnings("serial")
+    public MapConfigKey(String name, String description) {
+        this(new TypeToken<V>(MapConfigKey.class) { }, name, description, null);
+    }
+
+    @SuppressWarnings("serial")
+    public MapConfigKey(String name, String description, Map<String, ? extends V> defaultValue) {
+        this(new TypeToken<V>(MapConfigKey.class) { }, name, description, defaultValue);
+    }
+
+    @SuppressWarnings({ "serial", "unchecked" })
+    public MapConfigKey(MapConfigKey<V> key, Map<String, ? extends V> defaultValue) {
+        super(key, defaultValue);
+        this.subType = (Class<V>) new TypeToken<V>(MapConfigKey.class) { }.getRawType();
     }
 
     public ConfigKey<V> subKey(String subName) {

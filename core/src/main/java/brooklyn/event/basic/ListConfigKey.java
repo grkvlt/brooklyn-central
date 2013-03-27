@@ -14,23 +14,27 @@ import brooklyn.management.ExecutionContext;
 import brooklyn.util.text.Identifiers;
 
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
 
-/** A config key representing a list of values. 
- * If a value is set on this key, it is _added_ to the list.
- * (But a warning is issued if a colleciton is passed in.)
+/**
+ * A {@linkplain brooklyn.config.ConfigKey} which represents a {@linkplain java.util.List} of values.
+ * <p>
+ * If a value is set on this key, it is <em>added</em> to the list, and a warning is issued if a
+ * {@linkplain java.utilCollection} is passed in.
  * <p>
  * To add all items in a collection, to add a collection as a single element, 
  * to clear the list, or to set a collection (clearing first), 
  * use the relevant {@link ListModification} in {@link ListModifications}.
  * <p>  
  * Specific values can be added in a replaceable way by referring to a subkey.
+ *
+ * TODO Create interface
  */
-//TODO Create interface
 public class ListConfigKey<V> extends BasicConfigKey<List<? extends V>> implements StructuredConfigKey {
 
     private static final long serialVersionUID = 751024268729803210L;
     private static final Logger log = LoggerFactory.getLogger(ListConfigKey.class);
-    
+
     public final Class<V> subType;
 
     public ListConfigKey(Class<V> subType, String name) {
@@ -41,10 +45,46 @@ public class ListConfigKey<V> extends BasicConfigKey<List<? extends V>> implemen
         this(subType, name, description, null);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("serial")
     public ListConfigKey(Class<V> subType, String name, String description, List<? extends V> defaultValue) {
-        super((Class)List.class, name, description, defaultValue);
+        super(new TypeToken<List<? extends V>>(ListConfigKey.class) { }, name, description, defaultValue);
         this.subType = subType;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ListConfigKey(TypeToken<V> subType, String name) {
+        this((Class<V>) subType.getRawType(), name, name, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ListConfigKey(TypeToken<V> subType, String name, String description) {
+        this((Class<V>) subType.getRawType(), name, description, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ListConfigKey(TypeToken<V> subType, String name, String description, List<? extends V> defaultValue) {
+        this((Class<V>) subType.getRawType(), name, description, defaultValue);
+    }
+
+    @SuppressWarnings("serial")
+    public ListConfigKey(String name) {
+        this(new TypeToken<V>(MapConfigKey.class) { }, name, name, null);
+    }
+
+    @SuppressWarnings("serial")
+    public ListConfigKey(String name, String description) {
+        this(new TypeToken<V>(MapConfigKey.class) { }, name, description, null);
+    }
+
+    @SuppressWarnings("serial")
+    public ListConfigKey(String name, String description, List<? extends V> defaultValue) {
+        this(new TypeToken<V>(ListConfigKey.class) { }, name, description, defaultValue);
+    }
+
+    @SuppressWarnings({ "serial", "unchecked" })
+    public ListConfigKey(ListConfigKey<V> key, List<? extends V> defaultValue) {
+        super(key, defaultValue);
+        this.subType = (Class<V>) new TypeToken<V>(ListConfigKey.class) { }.getRawType();
     }
 
     public ConfigKey<V> subKey() {
@@ -55,13 +95,13 @@ public class ListConfigKey<V> extends BasicConfigKey<List<? extends V>> implemen
     public boolean isSubKey(Object contender) {
         return contender instanceof ConfigKey && isSubKey((ConfigKey<?>)contender);
     }
-    
+
     public boolean isSubKey(ConfigKey<?> contender) {
         return (contender instanceof SubElementConfigKey && this.equals(((SubElementConfigKey<?>) contender).parent));
     }
 
     @SuppressWarnings("unchecked")
-    public List<V> extractValue(Map<?,?> vals, ExecutionContext exec) {
+    public List<V> extractValue(Map<?, ?> vals, ExecutionContext exec) {
         List<V> result = Lists.newArrayList();
         for (Object k : vals.keySet()) {
             if (isSubKey(k))
@@ -101,10 +141,10 @@ public class ListConfigKey<V> extends BasicConfigKey<List<? extends V>> implemen
             return null;
         }
     }
-    
+
     public interface ListModification<T> extends StructuredModification<ListConfigKey<T>>, List<T> {
     }
-    
+
     public static class ListModifications extends StructuredModifications {
         /** when passed as a value to a ListConfigKey, causes each of these items to be added.
          * if you have just one, no need to wrap in a mod. */

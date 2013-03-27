@@ -15,13 +15,15 @@
  */
 package brooklyn.event.basic;
 
-import com.google.common.reflect.TypeToken;
-
+import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
+import brooklyn.event.Sensor;
+
+import com.google.common.reflect.TypeToken;
 
 /**
  * A {@link Sensor} describing an attribute that can be configured with a default value.
- *
+ * <p>
  * The {@link ConfigKey} has the same type, name and description as the sensor,
  * and is typically used to populate the sensor's value at runtime.
  */
@@ -75,4 +77,5 @@ public class BasicAttributeSensorAndConfigKey<T> extends AttributeSensorAndConfi
     }
 
     protected T convertConfigToSensor(T value, Entity entity) { return value; }
+
 }

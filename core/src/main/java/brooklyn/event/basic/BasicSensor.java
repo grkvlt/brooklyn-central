@@ -26,6 +26,7 @@ import brooklyn.event.SensorEvent;
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.reflect.TypeToken;
 
 /**
  * Parent for all {@link Sensor}s.
@@ -52,6 +53,26 @@ public class BasicSensor<T> implements Sensor<T> {
         this.type = checkNotNull(type, "type");
         this.name = checkNotNull(name, "name");
         this.description = description;
+    }
+
+    @SuppressWarnings("unchecked")
+    public BasicSensor(TypeToken<T> type, String name) {
+        this((Class<T>) type.getRawType(), name, name);
+    }
+
+    @SuppressWarnings("unchecked")
+    public BasicSensor(TypeToken<T> type, String name, String description) {
+        this((Class<T>) type.getRawType(), name, description);
+    }
+
+    @SuppressWarnings("serial")
+    public BasicSensor(String name) {
+        this(new TypeToken<T>(BasicSensor.class) { }, name, name);
+    }
+
+    @SuppressWarnings("serial")
+    public BasicSensor(String name, String description) {
+        this(new TypeToken<T>(BasicSensor.class) { }, name, description);
     }
 
     /** @see Sensor#getType() */
