@@ -28,168 +28,164 @@ public interface SshTool {
 
 //    /** Intermediate config keys for Brooklyn are defined where they are used, e.g. in {@link SshMachineLocation} 
 //     * and have this prefix pre-prended to the config keys in this class. */
-//    public static final String LOCATION_CONFIG_KEY_PREFIX = "ssh.config.";
+//    String LOCATION_CONFIG_KEY_PREFIX = "ssh.config.";
     
     /** Public-facing global config keys for Brooklyn are defined in ConfigKeys, 
      * and have this prefix pre-prended to the config keys in this class. */
-    public static final String BROOKLYN_CONFIG_KEY_PREFIX = "brooklyn.ssh.config.";
+    String BROOKLYN_CONFIG_KEY_PREFIX = "brooklyn.ssh.config.";
     
-    public static final ConfigKey<String> PROP_TOOL_CLASS = new StringConfigKey("tool.class", "SshTool implementation to use", null);
+    ConfigKey<String> PROP_TOOL_CLASS = ConfigKeys.newConfigKey("tool.class", "SshTool implementation to use", null);
     
-    public static final ConfigKey<String> PROP_HOST = new StringConfigKey("host", "Host to connect to (required)", null);
-    public static final ConfigKey<Integer> PROP_PORT = new BasicConfigKey<Integer>(Integer.class, "port", "Port on host to connect to", 22);
-    public static final ConfigKey<String> PROP_USER = new StringConfigKey("user", "User to connect as", System.getProperty("user.name"));
-    public static final ConfigKey<String> PROP_PASSWORD = new StringConfigKey("password", "Password to use to connect", null);
+    ConfigKey<String> PROP_HOST = ConfigKeys.newConfigKey("host", "Host to connect to (required)", null);
+    ConfigKey<Integer> PROP_PORT = ConfigKeys.newConfigKey("port", "Port on host to connect to", 22);
+    ConfigKey<String> PROP_USER = ConfigKeys.newConfigKey("user", "User to connect as", System.getProperty("user.name"));
+    ConfigKey<String> PROP_PASSWORD = ConfigKeys.newConfigKey("password", "Password to use to connect", null);
     
-    public static final ConfigKey<String> PROP_PRIVATE_KEY_FILE = new StringConfigKey("privateKeyFile", "the path of an ssh private key file; leave blank to use defaults (i.e. ~/.ssh/id_rsa and id_dsa)", null);
-    public static final ConfigKey<String> PROP_PRIVATE_KEY_DATA = new StringConfigKey("privateKeyData", "the private ssh key (e.g. contents of an id_rsa.pub or id_dsa.pub file)", null);
-    public static final ConfigKey<String> PROP_PRIVATE_KEY_PASSPHRASE = new StringConfigKey("privateKeyPassphrase", "the passphrase for the ssh private key", null);
-    public static final ConfigKey<Boolean> PROP_STRICT_HOST_KEY_CHECKING = new BasicConfigKey<Boolean>(Boolean.class, "strictHostKeyChecking", "whether to check the remote host's identification; defaults to false", false);
-    public static final ConfigKey<Boolean> PROP_ALLOCATE_PTY = new BasicConfigKey<Boolean>(Boolean.class, "allocatePTY", "whether to allocate PTY (vt100); if true then stderr is sent to stdout, but sometimes required for sudo'ing due to requiretty", false);
+    ConfigKey<String> PROP_PRIVATE_KEY_FILE = ConfigKeys.newConfigKey("privateKeyFile", "the path of an ssh private key file; leave blank to use defaults (i.e. ~/.ssh/id_rsa and id_dsa)", null);
+    ConfigKey<String> PROP_PRIVATE_KEY_DATA = ConfigKeys.newConfigKey("privateKeyData", "the private ssh key (e.g. contents of an id_rsa.pub or id_dsa.pub file)", null);
+    ConfigKey<String> PROP_PRIVATE_KEY_PASSPHRASE = ConfigKeys.newConfigKey("privateKeyPassphrase", "the passphrase for the ssh private key", null);
+    ConfigKey<Boolean> PROP_STRICT_HOST_KEY_CHECKING = ConfigKeys.newConfigKey("strictHostKeyChecking", "whether to check the remote host's identification; defaults to false", false);
+    ConfigKey<Boolean> PROP_ALLOCATE_PTY = ConfigKeys.newConfigKey("allocatePTY", "whether to allocate PTY (vt100); if true then stderr is sent to stdout, but sometimes required for sudo'ing due to requiretty", false);
 
-    public static final ConfigKey<Integer> PROP_CONNECT_TIMEOUT = new BasicConfigKey<Integer>(Integer.class, "connectTimeout", "The timeout when establishing an SSH connection; if 0 then uses default", 0);
-    public static final ConfigKey<Integer> PROP_SESSION_TIMEOUT = new BasicConfigKey<Integer>(Integer.class, "sessionTimeout", "The timeout for an ssh session; if 0 then uses default", 0);
-    public static final ConfigKey<Integer> PROP_SSH_TRIES = new BasicConfigKey<Integer>(Integer.class, "sshTries", "Max number of attempts to connect when doing ssh operations", 4);
-    public static final ConfigKey<Integer> PROP_SSH_TRIES_TIMEOUT = new BasicConfigKey<Integer>(Integer.class, "sshTriesTimeout", "Timeout when attempting to connect for ssh operations; so if too slow trying sshTries times, will abort anyway", 2*60*1000);
-    public static final ConfigKey<Long> PROP_SSH_RETRY_DELAY = new BasicConfigKey<Long>(Long.class, "sshRetryDelay", "Time (in milliseconds) before first ssh-retry, after which it will do exponential backoff", 50L);
+    ConfigKey<Integer> PROP_CONNECT_TIMEOUT = ConfigKeys.newConfigKey("connectTimeout", "The timeout when establishing an SSH connection; if 0 then uses default", 0);
+    ConfigKey<Integer> PROP_SESSION_TIMEOUT = ConfigKeys.newConfigKey("sessionTimeout", "The timeout for an ssh session; if 0 then uses default", 0);
+    ConfigKey<Integer> PROP_SSH_TRIES = ConfigKeys.newConfigKey("sshTries", "Max number of attempts to connect when doing ssh operations", 4);
+    ConfigKey<Integer> PROP_SSH_TRIES_TIMEOUT = ConfigKeys.newConfigKey("sshTriesTimeout", "Timeout when attempting to connect for ssh operations; so if too slow trying sshTries times, will abort anyway", 2*60*1000);
+    ConfigKey<Long> PROP_SSH_RETRY_DELAY = ConfigKeys.newConfigKey("sshRetryDelay", "Time (in milliseconds) before first ssh-retry, after which it will do exponential backoff", 50L);
 
-    public static final ConfigKey<File> PROP_LOCAL_TEMP_DIR = new BasicConfigKey<File>(File.class, "localTempDir", "The directory on the local machine (i.e. running brooklyn) for writing temp files", 
+    ConfigKey<File> PROP_LOCAL_TEMP_DIR = ConfigKeys.newConfigKey("localTempDir", "The directory on the local machine (i.e. running brooklyn) for writing temp files", 
             new File(System.getProperty("java.io.tmpdir"), "tmpssh"));
     
     // NB -- items above apply for _session_ (a tool), below apply for a _call_
     // TODO would be nice to track which arguments are used, so we can indicate whether extras are supplied
 
-    public static final ConfigKey<OutputStream> PROP_OUT_STREAM = new BasicConfigKey<OutputStream>(OutputStream.class, "out", "Stream to which to capture stdout");
-    public static final ConfigKey<OutputStream> PROP_ERR_STREAM = new BasicConfigKey<OutputStream>(OutputStream.class, "err", "Stream to which to capture stderr");
+    ConfigKey<OutputStream> PROP_OUT_STREAM = ConfigKeys.newConfigKey("out", "Stream to which to capture stdout");
+    ConfigKey<OutputStream> PROP_ERR_STREAM = ConfigKeys.newConfigKey("err", "Stream to which to capture stderr");
     
-    public static final ConfigKey<String> PROP_SEPARATOR = new StringConfigKey("separator", "string to insert between caller-supplied commands being executed as commands", " ; ");
+    ConfigKey<String> PROP_SEPARATOR = ConfigKeys.newConfigKey("separator", "string to insert between caller-supplied commands being executed as commands", " ; ");
     
-    public static final ConfigKey<String> PROP_SCRIPT_DIR = new StringConfigKey("scriptDir", "directory where scripts should be copied", "/tmp");
-    public static final ConfigKey<String> PROP_SCRIPT_HEADER = new StringConfigKey("scriptHeader", "lines to insert at the start of scripts generated for caller-supplied commands for script execution", "#!/bin/bash -e\n");
-    public static final ConfigKey<String> PROP_DIRECT_HEADER = new StringConfigKey("directHeader", "commands to run remotely before any caller-supplied commands for direct execution", "exec bash -e");
+    ConfigKey<String> PROP_SCRIPT_DIR = ConfigKeys.newConfigKey("scriptDir", "directory where scripts should be copied", "/tmp");
+    ConfigKey<String> PROP_SCRIPT_HEADER = ConfigKeys.newConfigKey("scriptHeader", "lines to insert at the start of scripts generated for caller-supplied commands for script execution", "#!/bin/bash -e\n");
+    ConfigKey<String> PROP_DIRECT_HEADER = ConfigKeys.newConfigKey("directHeader", "commands to run remotely before any caller-supplied commands for direct execution", "exec bash -e");
 
-    public static final ConfigKey<String> PROP_PERMISSIONS = new StringConfigKey("permissions", "Default permissions for files copied/created on remote machine; must be four-digit octal string, default '0644'", "0644");
-    public static final ConfigKey<Long> PROP_LAST_MODIFICATION_DATE = new BasicConfigKey<Long>(Long.class, "lastModificationDate", "Last-modification-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to current)", 0L);
-    public static final ConfigKey<Long> PROP_LAST_ACCESS_DATE = new BasicConfigKey<Long>(Long.class, "lastAccessDate", "Last-access-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to lastModificationDate)", 0L);
+    ConfigKey<String> PROP_PERMISSIONS = ConfigKeys.newConfigKey("permissions", "Default permissions for files copied/created on remote machine; must be four-digit octal string, default '0644'", "0644");
+    ConfigKey<Long> PROP_LAST_MODIFICATION_DATE = ConfigKeys.newConfigKey("lastModificationDate", "Last-modification-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to current)", 0L);
+    ConfigKey<Long> PROP_LAST_ACCESS_DATE = ConfigKeys.newConfigKey("lastAccessDate", "Last-access-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to lastModificationDate)", 0L);
 
     // TODO Could define the following in SshMachineLocation, or some such?
-    //public static ConfigKey<String> PROP_LOG_PREFIX = new StringConfigKey("logPrefix", "???", ???);
-    //public static ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = new StringConfigKey("noStdoutLogging", "???", ???);
-    //public static ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = new StringConfigKey("noStdoutLogging", "???", ???);
+    // ConfigKey<String> PROP_LOG_PREFIX = ConfigKeys.newConfigKey("logPrefix", "???", ???);
+    // ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = ConfigKeys.newConfigKey("noStdoutLogging", "???", ???);
+    // ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = ConfigKeys.newConfigKey("noStdoutLogging", "???", ???);
 
     /**
      * @deprecated since 0.4; use PROP_PRIVATE_KEY_FILE; if this contains more than one element then it will fail.
      */
-    public static final ConfigKey<List<String>> PROP_KEY_FILES = new BasicConfigKey(List.class, "keyFiles", "DEPRECATED: see privateKeyFile", Collections.<String>emptyList());
+    ConfigKey<List<String>> PROP_KEY_FILES = ConfigKeys.newConfigKey("keyFiles", "DEPRECATED: see privateKeyFile", Collections.<String>emptyList());
 
     /**
      * @deprecated since 0.4; use PROP_PRIVATE_KEY_DATA instead
      */
     @Deprecated
-    public static final ConfigKey<String> PROP_PRIVATE_KEY = new StringConfigKey("privateKey", "DEPRECATED: see privateKeyData", null);
+    ConfigKey<String> PROP_PRIVATE_KEY = ConfigKeys.newConfigKey("privateKey", "DEPRECATED: see privateKeyData", null);
 
     /**
      * @throws SshException
      */
-    public void connect();
+    void connect();
 
     /**
      * @param maxAttempts
      * @throws SshException
      */
-    public void connect(int maxAttempts);
+    void connect(int maxAttempts);
 
-    public void disconnect();
+    void disconnect();
 
-    public boolean isConnected();
+    boolean isConnected();
 
     /**
      * Executes the set of commands in a shell script. Blocks until completion.
      * <p>
-     * 
      * Optional properties are:
      * <ul>
-     *   <li>'out' {@link OutputStream} - see {@link PROP_OUT_STREAM}
-     *   <li>'err' {@link OutputStream} - see {@link PROP_ERR_STREAM}
+     *   <li>{@code out} {@link java.io.OutputStream} - see {@link #PROP_OUT_STREAM}
+     *   <li>{@code err} {@link java.io.OutputStream} - see {@link #PROP_ERR_STREAM}
      * </ul>
      * 
      * @return exit status of script
-     * 
      * @throws SshException If failed to connect
+     * @see #execCommands(Map, List, Map)
      */
-    public int execScript(Map<String,?> props, List<String> commands, Map<String,?> env);
+    int execScript(Map<String,?> props, List<String> commands, Map<String,?> env);
 
-    /**
-     * @see execScript(Map, List, Map)
-     */
-    public int execScript(Map<String,?> props, List<String> commands);
+    /** @see #execScript(Map, List, Map) */
+    int execScript(Map<String,?> props, List<String> commands);
 
-    /** @deprecated since 0.4; use execScript(...) */
-    public int execShell(Map<String,?> props, List<String> commands);
-    
-    /** @deprecated since 0.4; execScript(...) */
-    public int execShell(Map<String,?> props, List<String> commands, Map<String,?> env);
+    /** @deprecated since 0.4; use {@link #execScript(Map, List)} */
+    @Deprecated
+    int execShell(Map<String,?> props, List<String> commands);
+
+    /** @deprecated since 0.4; use {@link #execScript(Map, List, Map)} */
+    @Deprecated
+    int execShell(Map<String,?> props, List<String> commands, Map<String,?> env);
 
     /**
      * Executes the set of commands using ssh exec.
-     * 
+     * <p>
      * This is generally more efficient than shell, but is not suitable if you need 
      * env values which are only set on a fully-fledged shell.
-     *
+     * <p>
      * Optional properties are:
      * <ul>
-     *   <li>'out' {@link OutputStream} - see {@link PROP_OUT_STREAM}
-     *   <li>'err' {@link OutputStream} - see {@link PROP_ERR_STREAM}
-     *   <li>'separator', defaulting to ";" - see {@link PROP_SEPARATOR}
+     *   <li>{@code out} {@link java.io.OutputStream} - see {@link #PROP_OUT_STREAM}
+     *   <li>{@code err} {@link java.io.OutputStream} - see {@link #PROP_ERR_STREAM}
+     *   <li>{@code separator} defaulting to {@literal ;} - see {@link #PROP_SEPARATOR}
      * </ul>
      * 
      * @return exit status of commands
      * @throws SshException If failed to connect
+     * @see #execScript(Map, List, Map)
      */
-    public int execCommands(Map<String,?> properties, List<String> commands, Map<String,?> env);
+    int execCommands(Map<String,?> properties, List<String> commands, Map<String,?> env);
 
-    /**
-     * @see execuCommands(Map, List, Map)
-     */
-    public int execCommands(Map<String,?> properties, List<String> commands);
+    /** @see #execCommands(Map, List, Map) */
+    int execCommands(Map<String,?> properties, List<String> commands);
 
     /**
      * Copies the file to the server at the given path.
-     * If path is null, empty, '.', '..', or ends with '/' then file name is used.
+     * If path is null, empty, {literal .}, {@literal ..}, or ends with {@literal /} then file name is used.
      * <p>
-     * The file will not preserve the permission of last _access_ date.
-     * 
+     * The file will not preserve the permission of last <em>access</em> date.
+     * <p>
      * Optional properties are:
      * <ul>
-     *   <li>'permissions' (e.g. "0644") - see {@link PROP_PERMISSIONS}
-     *   <li>'lastModificationDate' see {@link PROP_LAST_MODIFICATION_DATE}; not supported by all SshTool implementations
-     *   <li>'lastAccessDate' see {@link PROP_LAST_ACCESS_DATE}; not supported by all SshTool implementations
+     *   <li>{@code permissions} in octal, for example {@literal 0644} - see {@link #PROP_PERMISSIONS}
+     *   <li>{@code lastModificationDate} - see {@link #PROP_LAST_MODIFICATION_DATE}; not supported by all SshTool implementations
+     *   <li>{@code lastAccessDate} - see {@link #PROP_LAST_ACCESS_DATE}; not supported by all SshTool implementations
      * </ul>
      * 
      * @return exit code (not supported by all SshTool implementations, sometimes just returning 0)
      */
-    public int copyToServer(Map<String,?> props, File localFile, String pathAndFileOnRemoteServer);
+    int copyToServer(Map<String,?> props, File localFile, String pathAndFileOnRemoteServer);
 
     /**
      * Closes the given input stream before returning.
      * Consider using {@link KnownSizeInputStream} for efficiency when the size of the stream is known.
      * 
-     * @see copyToServer(Map, File, String)
+     * @see #copyToServer(Map, File, String)
      */
-    public int copyToServer(Map<String,?> props, InputStream contents, String pathAndFileOnRemoteServer);
+    int copyToServer(Map<String,?> props, InputStream contents, String pathAndFileOnRemoteServer);
 
-    /**
-     * @see copyToServer(Map, File, String)
-     */
-    public int copyToServer(Map<String,?> props, byte[] contents, String pathAndFileOnRemoteServer);
+    /** @see #copyToServer(Map, File, String) */
+    int copyToServer(Map<String,?> props, byte[] contents, String pathAndFileOnRemoteServer);
 
     /**
      * Copies the file to the server at the given path.
-     * If path is null, empty, '.', '..', or ends with '/' then file name is used.
+     * If path is null, empty, {literal .}, {@literal ..}, or ends with {@literal /} then file name is used.
      * <p>
      * Optional properties are:
      * <ul>
-     *   <li>'permissions' (e.g. "0644") - see {@link PROP_PERMISSIONS}
+     *   <li>{@code permissions} in octal, for example {@literal 0644} - see {@link #PROP_PERMISSIONS}
      * </ul>
      *
      * @return exit code (not supported by all SshTool implementations, sometimes just returning 0)
@@ -197,27 +193,32 @@ public interface SshTool {
     public int copyFromServer(Map<String,?> props, String pathAndFileOnRemoteServer, File local);
 
     /**
-     * @deprecated since 0.5; See copyToServer(Map, InputStream, String)
+     * @deprecated since 0.5.0; use {@link #copyToServer(Map, InputStream, String)}
      */
+    @Deprecated
     public int transferFileTo(Map<String,?> props, InputStream input, String pathAndFileOnRemoteServer);
-    
+
     /**
-     * @deprecated since 0.5; See copyFromServer(Map, InputStream, String)
+     * @deprecated since 0.5.0; use {@link #copyFromServer(Map, InputStream, String)}
      */
+    @Deprecated
     public int transferFileFrom(Map<String,?> props, String pathAndFileOnRemoteServer, String pathAndFileOnLocalServer);
 
     /**
-     * @deprecated since 0.5; See copyToServer(Map, InputStream, String)
+     * @deprecated since 0.5.0; use {@link #copyToServer(Map, InputStream, String)}
      */
+    @Deprecated
     public int createFile(Map<String,?> props, String pathAndFileOnRemoteServer, InputStream input, long size);
 
     /**
-     * @deprecated since 0.5; See copyToServer(Map, byte[], String)
+     * @deprecated since 0.5.0; use {@link #copyToServer(Map, byte[], String)}
      */
+    @Deprecated
     public int createFile(Map<String,?> props, String pathAndFileOnRemoteServer, String contents);
 
     /**
-     * @deprecated since 0.5; See copyToServer(Map, byte[], String)
+     * @deprecated since 0.5.0; use {@link #copyToServer(Map, byte[], String)}
      */
+    @Deprecated
     public int createFile(Map<String,?> props, String pathAndFileOnRemoteServer, byte[] contents);
 }

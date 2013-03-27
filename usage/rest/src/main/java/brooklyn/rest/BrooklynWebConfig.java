@@ -1,7 +1,7 @@
 package brooklyn.rest;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.rest.security.provider.ExplicitUsersSecurityProvider;
 
 public class BrooklynWebConfig {
@@ -10,7 +10,7 @@ public class BrooklynWebConfig {
 
     /** e.g. brooklyn.webconsole.security.provider=brooklyn.rest.security.provider.AnyoneSecurityProvider will allow anyone to log in;
      * default is explicitly named users, using SECURITY_PROVIDER_EXPLICIT__USERS  */
-    public final static ConfigKey<String> SECURITY_PROVIDER_CLASSNAME = new BasicConfigKey<String>(String.class, 
+    public final static ConfigKey<String> SECURITY_PROVIDER_CLASSNAME = ConfigKeys.newConfigKey(
             BASE_NAME+".security.provider", "class name of a Brooklyn SecurityProvider",
             ExplicitUsersSecurityProvider.class.getCanonicalName());
     
@@ -19,17 +19,15 @@ public class BrooklynWebConfig {
      * brooklyn.webconsole.security.explicit.user.admin=password
      * brooklyn.webconsole.security.explicit.user.bob=bobspass
      */
-    public final static ConfigKey<String> SECURITY_PROVIDER_EXPLICIT__USERS = new BasicConfigKey<String>(String.class,
+    public final static ConfigKey<String> SECURITY_PROVIDER_EXPLICIT__USERS = ConfigKeys.newConfigKey(
             BASE_NAME+".security.explicit.users");
 
-    public final static ConfigKey<String> LDAP_URL = new BasicConfigKey<String>(String.class,
-            BASE_NAME+".security.ldap.url");
+    public final static ConfigKey<String> LDAP_URL = ConfigKeys.newConfigKey(BASE_NAME+".security.ldap.url");
 
-    public final static ConfigKey<String> LDAP_REALM = new BasicConfigKey<String>(String.class,
-            BASE_NAME+".security.ldap.realm");
+    public final static ConfigKey<String> LDAP_REALM = ConfigKeys.newConfigKey(BASE_NAME+".security.ldap.realm");
 
     public final static ConfigKey<String> SECURITY_PROVIDER_EXPLICIT__PASSWORD(String user) {
-        return new BasicConfigKey<String>(String.class, BASE_NAME+".security.explicit.user."+user);
+        return ConfigKeys.newConfigKey(BASE_NAME+".security.explicit.user."+user);
     }
 
 }

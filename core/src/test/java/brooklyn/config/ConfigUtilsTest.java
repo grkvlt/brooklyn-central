@@ -6,13 +6,13 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import brooklyn.config.ConfigKey.HasConfigKey;
-import brooklyn.event.basic.BasicConfigKey.StringConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 
 public class ConfigUtilsTest {
 
-    public static final StringConfigKey S1 = new StringConfigKey("s1");
-    public final StringConfigKey S2 = new StringConfigKey("s2");
-    
+    public static final ConfigKey<String> S1 = ConfigKeys.newConfigKey("s1");
+    public final ConfigKey<String> S2 = ConfigKeys.newConfigKey("s2");
+
     @Test
     public void testGetStaticKeys() {
         Set<HasConfigKey<?>> keys = ConfigUtils.getStaticKeysOnClass(ConfigUtilsTest.class);

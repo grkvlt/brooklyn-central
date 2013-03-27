@@ -6,9 +6,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.testng.collections.Lists;
 
+import brooklyn.config.ConfigKey;
 import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.Attributes;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.EntityInternal;
 import brooklyn.entity.basic.EntityLocal;
@@ -20,9 +22,7 @@ import brooklyn.entity.proxying.EntitySpec;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.trait.Startable;
 import brooklyn.event.AttributeSensor;
-import brooklyn.event.basic.BasicAttributeSensor;
-import brooklyn.event.basic.BasicConfigKey;
-import brooklyn.event.basic.BasicNotificationSensor;
+import brooklyn.event.Sensor;
 import brooklyn.event.basic.ListConfigKey;
 import brooklyn.event.basic.MapConfigKey;
 import brooklyn.util.MutableMap;
@@ -42,26 +42,26 @@ public interface TestEntity extends Entity, Startable, EntityLocal, EntityIntern
                 super(TestEntity.class);
             }
         }
-        
+
         public static Spec<TestEntity, ?> newInstance() {
             return new ConcreteSpec();
         }
-        
+
         protected Spec(Class<T> type) {
             super(type);
         }
     }
-    
+
     @SetFromFlag("confName")
-    public static final BasicConfigKey<String> CONF_NAME = new BasicConfigKey<String>(String.class, "test.confName", "Configuration key, my name", "defaultval");
-    public static final BasicConfigKey<Map> CONF_MAP_PLAIN = new BasicConfigKey<Map>(Map.class, "test.confMapPlain", "Configuration key that's a plain map", MutableMap.of());
-    public static final BasicConfigKey<List> CONF_LIST_PLAIN = new BasicConfigKey<List>(List.class, "test.confListPlain", "Configuration key that's a plain list", Lists.newArrayList());
-    public static final MapConfigKey<String> CONF_MAP_THING = new MapConfigKey<String>(String.class, "test.confMapThing", "Configuration key that's a map thing");
-    public static final ListConfigKey<String> CONF_LIST_THING = new ListConfigKey<String>(String.class, "test.confListThing", "Configuration key that's a list thing");
+    public static final ConfigKey<String> CONF_NAME = ConfigKeys.newConfigKey("test.confName", "Configuration key, my name", "defaultval");
+    public static final ConfigKey<Map<?, ?>> CONF_MAP_PLAIN = ConfigKeys.newConfigKey("test.confMapPlain", "Configuration key that's a plain map", MutableMap.of());
+    public static final ConfigKey<List<?>> CONF_LIST_PLAIN = ConfigKeys.newConfigKey("test.confListPlain", "Configuration key that's a plain list", Lists.newArrayList());
+    public static final MapConfigKey<String> CONF_MAP_THING = ConfigKeys.newMapConfigKey("test.confMapThing", "Configuration key that's a map thing");
+    public static final ListConfigKey<String> CONF_LIST_THING = ConfigKeys.newListConfigKey("test.confListThing", "Configuration key that's a list thing");
     
-    public static final BasicAttributeSensor<Integer> SEQUENCE = new BasicAttributeSensor<Integer>(Integer.class, "test.sequence", "Test Sequence");
-    public static final BasicAttributeSensor<String> NAME = new BasicAttributeSensor<String>(String.class, "test.name", "Test name");
-    public static final BasicNotificationSensor<Integer> MY_NOTIF = new BasicNotificationSensor<Integer>(Integer.class, "test.myNotif", "Test notification");
+    public static final AttributeSensor<Integer> SEQUENCE = Attributes.newAttributeSensor("test.sequence", "Test Sequence");
+    public static final AttributeSensor<String> NAME = Attributes.newAttributeSensor("test.name", "Test name");
+    public static final Sensor<Integer> MY_NOTIF = Attributes.newNotificationSensor("test.myNotif", "Test notification");
     
     public static final AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
     

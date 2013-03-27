@@ -22,7 +22,6 @@ import java.util.concurrent.Callable;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.logging.Log;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ComputeMetadata;

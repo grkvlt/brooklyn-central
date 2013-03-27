@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.event.basic.BasicConfigKey.StringConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.util.exceptions.Exceptions;
 import brooklyn.util.internal.StreamGobbler;
 import brooklyn.util.internal.ssh.SshAbstractTool;
@@ -33,26 +33,24 @@ import com.google.common.collect.Lists;
 public class SshCliTool extends SshAbstractTool implements SshTool {
 
     // TODO No retry support, with backoffLimitedRetryHandler
-    
-    private static final Logger LOG = LoggerFactory.getLogger(SshCliTool.class);
+    Logger LOG = LoggerFactory.getLogger(SshCliTool.class);
 
-    public static final ConfigKey<String> PROP_SSH_EXECUTABLE = new StringConfigKey("sshExecutable", "command to execute for ssh (defaults to \"ssh\", but could be overridden to sshg3 for Tectia for example)", "ssh");
-    public static final ConfigKey<String> PROP_SSH_FLAGS = new StringConfigKey("sshFlags", "flags to pass to ssh, as a space separated list", "");
-    public static final ConfigKey<String> PROP_SCP_EXECUTABLE = new StringConfigKey("scpExecutable", "command to execute for scp (defaults to \"scp\", but could be overridden to scpg3 for Tectia for example)", "scp");
+    public static final ConfigKey<String> PROP_SSH_EXECUTABLE = ConfigKeys.newConfigKey("sshExecutable", "command to execute for ssh (defaults to \"ssh\", but could be overridden to sshg3 for Tectia for example)", "ssh");
+    public static final ConfigKey<String> PROP_SSH_FLAGS = ConfigKeys.newConfigKey("sshFlags", "flags to pass to ssh, as a space separated list", "");
+    public static final ConfigKey<String> PROP_SCP_EXECUTABLE = ConfigKeys.newConfigKey("scpExecutable", "command to execute for scp (defaults to \"scp\", but could be overridden to scpg3 for Tectia for example)", "scp");
 
     public static Builder<SshCliTool,?> builder() {
         return new ConcreteBuilder();
     }
-    
-    private static class ConcreteBuilder extends Builder<SshCliTool, ConcreteBuilder> {
-    }
-    
+
+    private static class ConcreteBuilder extends Builder<SshCliTool, ConcreteBuilder> { }
+
     public static class Builder<T extends SshCliTool, B extends Builder<T,B>> extends AbstractToolBuilder<T,B> {
         private String sshExecutable;
         private String sshFlags;
         private String scpExecutable;
 
-        @SuppressWarnings("unchecked")
+        @Override
         public B from(Map<String,?> props) {
             super.from(props);
             sshExecutable = getOptionalVal(props, PROP_SSH_EXECUTABLE);
@@ -60,13 +58,17 @@ public class SshCliTool extends SshAbstractTool implements SshTool {
             scpExecutable = getOptionalVal(props, PROP_SCP_EXECUTABLE);
             return self();
         }
+
         public B sshExecutable(String val) {
             this.sshExecutable = val; return self();
         }
+
         public B scpExecutable(String val) {
             this.scpExecutable = val; return self();
         }
+
         @SuppressWarnings("unchecked")
+        @Override
         public T build() {
             return (T) new SshCliTool(this);
         }

@@ -1,35 +1,34 @@
 package brooklyn.location.basic;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.event.basic.BasicConfigKey;
-import brooklyn.event.basic.BasicConfigKey.StringConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 
 public class LocationConfigKeys {
 
-    public static final ConfigKey<String> LOCATION_ID = new StringConfigKey("id");
-    public static final ConfigKey<String> DISPLAY_NAME = new StringConfigKey("displayName");
-    
-    public static final ConfigKey<String> ACCESS_IDENTITY = new StringConfigKey("identity"); 
-    public static final ConfigKey<String> ACCESS_CREDENTIAL = new StringConfigKey("credential"); 
+    public static final ConfigKey<String> LOCATION_ID = ConfigKeys.newConfigKey("id");
+    public static final ConfigKey<String> DISPLAY_NAME = ConfigKeys.newConfigKey("displayName");
 
-    public static final ConfigKey<Double> LATITUDE = new BasicConfigKey<Double>(Double.class, "latitude"); 
-    public static final ConfigKey<Double> LONGITUDE = new BasicConfigKey<Double>(Double.class, "longitude"); 
+    public static final ConfigKey<String> ACCESS_IDENTITY = ConfigKeys.newConfigKey("identity"); 
+    public static final ConfigKey<String> ACCESS_CREDENTIAL = ConfigKeys.newConfigKey("credential"); 
 
-    public static final ConfigKey<String> CLOUD_PROVIDER = new StringConfigKey("provider");
-    public static final ConfigKey<String> CLOUD_ENDPOINT = new StringConfigKey("endpoint");
-    public static final ConfigKey<String> CLOUD_REGION_ID = new StringConfigKey("region");
+    public static final ConfigKey<Double> LATITUDE = ConfigKeys.newConfigKey("latitude"); 
+    public static final ConfigKey<Double> LONGITUDE = ConfigKeys.newConfigKey("longitude"); 
 
-    public static final ConfigKey<String> USER = new StringConfigKey("user", 
+    public static final ConfigKey<String> CLOUD_PROVIDER = ConfigKeys.newConfigKey("provider");
+    public static final ConfigKey<String> CLOUD_ENDPOINT = ConfigKeys.newConfigKey("endpoint");
+    public static final ConfigKey<String> CLOUD_REGION_ID = ConfigKeys.newConfigKey("region");
+
+    public static final ConfigKey<String> USER = ConfigKeys.newConfigKey("user", 
             "user account for normal access to the remote machine, defaulting to local user", System.getProperty("user.name"));
-    
-    public static final ConfigKey<String> PASSWORD = new StringConfigKey("password");
-    public static final ConfigKey<String> PUBLIC_KEY_FILE = new StringConfigKey("publicKeyFile");
-    public static final ConfigKey<String> PUBLIC_KEY_DATA = new StringConfigKey("publicKeyData");
-    public static final ConfigKey<String> PRIVATE_KEY_FILE = new StringConfigKey("privateKeyFile");
-    public static final ConfigKey<String> PRIVATE_KEY_DATA = new StringConfigKey("privateKeyData");
-    public static final ConfigKey<String> PRIVATE_KEY_PASSPHRASE = new StringConfigKey("privateKeyPassphrase");
 
-    public static final ConfigKey<Object> CALLER_CONTEXT = new BasicConfigKey<Object>(Object.class, "callerContext",
+    public static final ConfigKey<String> PASSWORD = ConfigKeys.newConfigKey("password");
+    public static final ConfigKey<String> PUBLIC_KEY_FILE = ConfigKeys.newConfigKey("publicKeyFile");
+    public static final ConfigKey<String> PUBLIC_KEY_DATA = ConfigKeys.newConfigKey("publicKeyData");
+    public static final ConfigKey<String> PRIVATE_KEY_FILE = ConfigKeys.newConfigKey("privateKeyFile");
+    public static final ConfigKey<String> PRIVATE_KEY_DATA = ConfigKeys.newConfigKey("privateKeyData");
+    public static final ConfigKey<String> PRIVATE_KEY_PASSPHRASE = ConfigKeys.newConfigKey("privateKeyPassphrase");
+
+    public static final ConfigKey<?> CALLER_CONTEXT = ConfigKeys.newConfigKey("callerContext",
             "An object whose toString is used for logging, to indicate wherefore a VM is being created");
 
 }

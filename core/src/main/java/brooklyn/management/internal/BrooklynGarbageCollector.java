@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import brooklyn.config.BrooklynProperties;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.management.Task;
 import brooklyn.util.exceptions.Exceptions;
@@ -47,19 +48,17 @@ public class BrooklynGarbageCollector {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BrooklynGarbageCollector.class);
 
-    public static final ConfigKey<Long> GC_PERIOD = new BasicConfigKey<Long>(
-            Long.class, "brooklyn.gc.period", "the period, in millisconds, for checking if any tasks need to be deleted", 60*1000L);
+    public static final ConfigKey<Long> GC_PERIOD = ConfigKeys.newConfigKey("brooklyn.gc.period", "the period, in millisconds, for checking if any tasks need to be deleted", 60*1000L);
     
-    public static final ConfigKey<Boolean> DO_SYSTEM_GC = new BasicConfigKey<Boolean>(
-            Boolean.class, "brooklyn.gc.doSystemGc", "whether to periodically call System.gc()", false);
+    public static final ConfigKey<Boolean> DO_SYSTEM_GC = ConfigKeys.newConfigKey("brooklyn.gc.doSystemGc", "whether to periodically call System.gc()", false);
     
-    public static final ConfigKey<Integer> MAX_TASKS_PER_TAG = new BasicConfigKey<Integer>(
-            Integer.class, "brooklyn.gc.maxTasksPerTag", 
+    public static final ConfigKey<Integer> MAX_TASKS_PER_TAG = ConfigKeys.newConfigKey(
+            "brooklyn.gc.maxTasksPerTag", 
             "the maximum number of tasks to be kept for a given tag (e.g. for effector calls invoked on a particular entity)", 
             100);
     
-    public static final ConfigKey<Long> MAX_TASK_AGE = new BasicConfigKey<Long>(
-            Long.class, "brooklyn.gc.maxTaskAge", 
+    public static final ConfigKey<Long> MAX_TASK_AGE = ConfigKeys.newConfigKey(
+            "brooklyn.gc.maxTaskAge", 
             "the number of milliseconds after which a completed task will be automatically deleted", 
             TimeUnit.DAYS.toMillis(1));
     

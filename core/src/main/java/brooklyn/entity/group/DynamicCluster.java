@@ -20,12 +20,10 @@ import brooklyn.entity.basic.NamedParameter;
 import brooklyn.entity.proxying.EntitySpec;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.AttributeSensor;
-import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicSensor;
 import brooklyn.util.flags.SetFromFlag;
 
 import com.google.common.base.Function;
-import com.google.common.reflect.TypeToken;
 
 /**
  * A cluster of entities that can dynamically increase or decrease the number of entities.
@@ -37,29 +35,26 @@ public interface DynamicCluster extends AbstractGroup, Cluster {
     Effector<String> REPLACE_MEMBER = new MethodEffector<String>(DynamicCluster.class, "replaceMember");
 
     @SetFromFlag("quarantineFailedEntities")
-    ConfigKey<Boolean> QUARANTINE_FAILED_ENTITIES = ConfigKeys.newConfigKey(
-            Boolean.class, "dynamiccluster.quarantineFailedEntities", "Whether to guarantine entities that fail to start, or to try to clean them up", false);
+    ConfigKey<Boolean> QUARANTINE_FAILED_ENTITIES = ConfigKeys.newConfigKey("dynamiccluster.quarantineFailedEntities", "Whether to guarantine entities that fail to start, or to try to clean them up", false);
 
     AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
 
-    BasicSensor<Entity> ENTITY_QUARANTINED = Attributes.newNotificationSensor(Entity.class, "dynamiccluster.entityQuarantined", "Entity failed to start, and has been quarantined");
+    BasicSensor<Entity> ENTITY_QUARANTINED = Attributes.newNotificationSensor("dynamiccluster.entityQuarantined", "Entity failed to start, and has been quarantined");
 
-    AttributeSensor<Group> QUARANTINE_GROUP = Attributes.newAttributeSensor(Group.class, "dynamiccluster.quarantineGroup", "Group of quarantined entities that failed to start");
+    AttributeSensor<Group> QUARANTINE_GROUP = Attributes.newAttributeSensor("dynamiccluster.quarantineGroup", "Group of quarantined entities that failed to start");
 
     @SetFromFlag("memberSpec")
-    ConfigKey<EntitySpec<?>> MEMBER_SPEC = ConfigKeys.newConfigKey(
-            new TypeToken<EntitySpec<?>>() { }, "dynamiccluster.memberspec", "entity spec for creating new cluster members", null);
+    ConfigKey<EntitySpec<?>> MEMBER_SPEC = ConfigKeys.newConfigKey("dynamiccluster.memberspec", "entity spec for creating new cluster members", null);
 
     @SetFromFlag("factory")
-    ConfigKey<EntityFactory<?>> FACTORY = ConfigKeys.newConfigKey(
-            new TypeToken<EntityFactory<?>>() { }, "dynamiccluster.factory", "factory for creating new cluster members", null);
+    ConfigKey<EntityFactory<?>> FACTORY = ConfigKeys.newConfigKey("dynamiccluster.factory", "factory for creating new cluster members", null);
 
     @SetFromFlag("removalStrategy")
-    ConfigKey<Function<Collection<Entity>, Entity>> REMOVAL_STRATEGY = ConfigKeys.newConfigKey(
-            new TypeToken<Function<Collection<Entity>, Entity>>() { }, "dynamiccluster.removalstrategy", "strategy for deciding what to remove when down-sizing", null);
+    ConfigKey<Function<Collection<? extends Entity>, Entity>> REMOVAL_STRATEGY = ConfigKeys.newConfigKey("dynamiccluster.removalstrategy", "strategy for deciding what to remove when down-sizing", null);
 
     /**
-     * 
+     * Replaces the entity with the given ID.
+     *
      * @param memberId
      * @throws NoSuchElementException If entity cannot be resolved, or it is not a member 
      */
@@ -67,7 +62,7 @@ public interface DynamicCluster extends AbstractGroup, Cluster {
             "Returns id of the new entity; or throws exception if couldn't be replaced.")
     String replaceMember(@NamedParameter("memberId") @Description("The entity id of a member to be replaced") String memberId);
 
-    void setRemovalStrategy(Function<Collection<Entity>, Entity> val);
+    void setRemovalStrategy(Function<Collection<? extends Entity>, Entity> val);
 
     void setRemovalStrategy(Closure val);
 

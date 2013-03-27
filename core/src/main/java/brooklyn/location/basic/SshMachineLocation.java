@@ -82,11 +82,11 @@ import com.google.common.io.Closeables;
 public class SshMachineLocation extends AbstractLocation implements MachineLocation, PortSupplier, WithMutexes, Closeable {
     public static final Logger LOG = LoggerFactory.getLogger(SshMachineLocation.class);
     public static final Logger logSsh = LoggerFactory.getLogger(BrooklynLogging.SSH_IO);
-    
+
     protected interface ExecRunner {
         public int exec(SshTool ssh, Map<String,?> flags, List<String> cmds, Map<String,?> env);
     }
-    
+
     @SetFromFlag
     String user;
 
@@ -98,7 +98,7 @@ public class SshMachineLocation extends AbstractLocation implements MachineLocat
 
     @SetFromFlag
     transient WithMutexes mutexSupport;
-    
+ 
     @SetFromFlag
     private Set<Integer> usedPorts;
 
@@ -108,32 +108,29 @@ public class SshMachineLocation extends AbstractLocation implements MachineLocat
      *  @deprecated use {@link SshTool#BROOKLYN_CONFIG_KEY_PREFIX} */
     @Deprecated
     public static final String SSHCONFIG_PREFIX = "sshconfig";
-    
+
     public static final ConfigKey<String> SSH_HOST = ConfigKeys.SSH_CONFIG_HOST;
     public static final ConfigKey<Integer> SSH_PORT = ConfigKeys.SSH_CONFIG_PORT;
-    
-    public static final ConfigKey<String> SSH_EXECUTABLE = new StringConfigKey("sshExecutable", "Allows an `ssh` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
-    public static final ConfigKey<String> SCP_EXECUTABLE = new StringConfigKey("scpExecutable", "Allows an `scp` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
-    
+
+    public static final ConfigKey<String> SSH_EXECUTABLE = ConfigKeys.newConfigKey("sshExecutable", "Allows an `ssh` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
+    public static final ConfigKey<String> SCP_EXECUTABLE = ConfigKeys.newConfigKey("scpExecutable", "Allows an `scp` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
+
     // TODO remove
     public static final ConfigKey<String> PASSWORD = SshTool.PROP_PASSWORD;
     public static final ConfigKey<String> PRIVATE_KEY_FILE = SshTool.PROP_PRIVATE_KEY_FILE;
     public static final ConfigKey<String> PRIVATE_KEY_DATA = SshTool.PROP_PRIVATE_KEY_DATA;
     public static final ConfigKey<String> PRIVATE_KEY_PASSPHRASE = SshTool.PROP_PRIVATE_KEY_PASSPHRASE;
-    
-    public static final ConfigKey<String> SCRIPT_DIR = new StringConfigKey("scriptDir", "directory where scripts should be placed and executed on the SSH target machine", null);
-    public static final ConfigKey<Map<String,Object>> SSH_ENV_MAP = new MapConfigKey<Object>(Object.class, "env", "environment variables to pass to the remote SSH shell session", null);
-    
+
+    public static final ConfigKey<String> SCRIPT_DIR = ConfigKeys.newConfigKey("scriptDir", "directory where scripts should be placed and executed on the SSH target machine", null);
+    public static final ConfigKey<Map<String, Object>> SSH_ENV_MAP = ConfigKeys.newMapConfigKey("env", "environment variables to pass to the remote SSH shell session", null);
+
     public static final ConfigKey<Boolean> ALLOCATE_PTY = SshTool.PROP_ALLOCATE_PTY;
-    // TODO remove
-//            new BasicConfigKey<Boolean>(Boolean.class, "allocatePTY", "whether pseudo-terminal emulation should be turned on; " +
-//            "this causes stderr to be redirected to stdout, but it may be required for some commands (such as `sudo` when requiretty is set)", false);
-    
-    public static final ConfigKey<OutputStream> STDOUT = new BasicConfigKey<OutputStream>(OutputStream.class, "out");
-    public static final ConfigKey<OutputStream> STDERR = new BasicConfigKey<OutputStream>(OutputStream.class, "err");
-    public static final ConfigKey<Boolean> NO_STDOUT_LOGGING = new BasicConfigKey<Boolean>(Boolean.class, "noStdoutLogging", "whether to disable logging of stdout from SSH commands (e.g. for verbose commands)", false);
-    public static final ConfigKey<Boolean> NO_STDERR_LOGGING = new BasicConfigKey<Boolean>(Boolean.class, "noStderrLogging", "whether to disable logging of stderr from SSH commands (e.g. for verbose commands)", false);
-    public static final ConfigKey<String> LOG_PREFIX = new StringConfigKey("logPrefix");
+
+    public static final ConfigKey<OutputStream> STDOUT = ConfigKeys.newConfigKey("out");
+    public static final ConfigKey<OutputStream> STDERR = ConfigKeys.newConfigKey("err");
+    public static final ConfigKey<Boolean> NO_STDOUT_LOGGING = ConfigKeys.newConfigKey("noStdoutLogging", "whether to disable logging of stdout from SSH commands (e.g. for verbose commands)", false);
+    public static final ConfigKey<Boolean> NO_STDERR_LOGGING = ConfigKeys.newConfigKey("noStderrLogging", "whether to disable logging of stderr from SSH commands (e.g. for verbose commands)", false);
+    public static final ConfigKey<String> LOG_PREFIX = ConfigKeys.newConfigKey("logPrefix");
     
     public static final ConfigKey<File> LOCAL_TEMP_DIR = SshTool.PROP_LOCAL_TEMP_DIR;
 

@@ -2,9 +2,9 @@ package brooklyn.entity.database.postgresql;
 
 import brooklyn.catalog.Catalog;
 import brooklyn.config.ConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.database.DatabaseNode;
 import brooklyn.entity.proxying.ImplementedBy;
-import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.location.basic.PortRanges;
 import brooklyn.util.flags.SetFromFlag;
@@ -14,15 +14,15 @@ import brooklyn.util.flags.SetFromFlag;
 public interface PostgreSqlNode extends DatabaseNode {
 
     @SetFromFlag("creationScriptUrl")
-    public static final ConfigKey<String> CREATION_SCRIPT_URL =
-            new BasicConfigKey<String>(String.class, "postgresql.creation.script.url", "URL where PostgreSQL creation script can be found", null);
-    
+    ConfigKey<String> CREATION_SCRIPT_URL =
+            ConfigKeys.newConfigKey("postgresql.creation.script.url", "URL where PostgreSQL creation script can be found", null);
+
     @SetFromFlag("creationScriptContents")
-    public static final ConfigKey<String> CREATION_SCRIPT_CONTENTS =
-            new BasicConfigKey<String>(String.class, "postgresql.creation.script", "PostgreSQL creation script contents", "");
+    ConfigKey<String> CREATION_SCRIPT_CONTENTS =
+            ConfigKeys.newConfigKey("postgresql.creation.script", "PostgreSQL creation script contents", "");
 
     @SetFromFlag("port")
-    public static final PortAttributeSensorAndConfigKey POSTGRESQL_PORT =
-            new PortAttributeSensorAndConfigKey("postgresql.port", "PostgreSQL port", PortRanges.fromString("5432+"));
+    PortAttributeSensorAndConfigKey POSTGRESQL_PORT =
+            ConfigKeys.newPortAttributeSensorAndConfigKey("postgresql.port", "PostgreSQL port", PortRanges.fromString("5432+"));
 
 }

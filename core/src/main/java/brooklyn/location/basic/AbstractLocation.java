@@ -11,10 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.config.ConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.rebind.BasicLocationRebindSupport;
 import brooklyn.entity.rebind.RebindSupport;
 import brooklyn.entity.trait.Configurable;
-import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.location.Location;
 import brooklyn.location.geo.HasHostGeoInfo;
 import brooklyn.location.geo.HostGeoInfo;
@@ -41,37 +41,36 @@ import com.google.common.io.Closeables;
  * Override {@link #configure(Map)} to add special initialization logic.
  */
 public abstract class AbstractLocation implements Location, HasHostGeoInfo, Configurable {
-    
+
     public static final Logger LOG = LoggerFactory.getLogger(AbstractLocation.class);
 
-    public static final ConfigKey<Location> PARENT_LOCATION = new BasicConfigKey<Location>(Location.class, "parentLocation");
-    
+    public static final ConfigKey<Location> PARENT_LOCATION = ConfigKeys.newConfigKey("parentLocation");
+
     @SetFromFlag
     String id;
 
     // _not_ set from flag; configured explicitly in configure, because we also need to update the parent's list of children
     private Location parentLocation;
-    
+
     private final Collection<Location> childLocations = Lists.newArrayList();
     private final Collection<Location> childLocationsReadOnly = Collections.unmodifiableCollection(childLocations);
-    
+
     @SetFromFlag
     protected String name;
-    
+
     protected HostGeoInfo hostGeoInfo;
 
     final private ConfigBag configBag = new ConfigBag();
 
-
     /**
      * Construct a new instance of an AbstractLocation.
-     *
+     * <p>
      * The properties map recognizes the following keys:
      * <ul>
      * <li>name - a name for the location
      * <li>parentLocation - the parent {@link Location}
      * </ul>
-     * 
+     * <p>
      * Other common properties (retrieved via get/findLocationProperty) include:
      * <ul>
      * <li>latitude
@@ -88,36 +87,40 @@ public abstract class AbstractLocation implements Location, HasHostGeoInfo, Conf
     public AbstractLocation() {
         this(Maps.newLinkedHashMap());
     }
-    public AbstractLocation(Map properties) {
+    public AbstractLocation(Map<?, ?> properties) {
         configure(properties);
         boolean deferConstructionChecks = (properties.containsKey("deferConstructionChecks") && TypeCoercions.coerce(properties.get("deferConstructionChecks"), Boolean.class));
         if (!deferConstructionChecks) {
-        	FlagUtils.checkRequiredFields(this);
+            FlagUtils.checkRequiredFields(this);
         }
     }
 
-    /** @deprecated in 0.5.0, not used or exposed; use configure(Map) */
+    /** @deprecated in 0.5.0, not used or exposed; use {@link #configure(Map)} */
+    @Deprecated
     public final void configure() {
         configure(Maps.newLinkedHashMap());
     }
-    
-    /** will set fields from flags. The unused configuration can be found via the 
+
+    /**
+     * Will set fields from flags. The unused configuration can be found via
      * {@linkplain ConfigBag#getUnusedConfig()}.
-     * This can be overridden for custom initialization but note the following. 
+     * <p>
+     * This can be overridden for custom initialization but note the following: 
      * <p>
      * if you require fields to be initialized you must do that in this method,
      * with a guard (as in FixedListMachineProvisioningLocation).  you must *not*
      * rely on field initializers because they may not run until *after* this method
      * (this method is invoked by the constructor in this class, so initializers
-     * in subclasses will not have run when this overridden method is invoked.) */ 
-    protected void configure(Map properties) {
+     * in subclasses will not have run when this overridden method is invoked.)
+     */ 
+    protected void configure(Map<?, ?> properties) {
         boolean firstTime = (id==null);
         if (firstTime) {
             // pick a random ID if one not set
             id = properties.containsKey("id") ? (String)properties.get("id") : Identifiers.makeRandomId(8);
         }
         configBag.putAll(properties);
-        
+
         if (properties.containsKey(PARENT_LOCATION.getName())) {
             // need to ensure parent's list of children is also updated
             setParentLocation(configBag.get(PARENT_LOCATION));
@@ -175,7 +178,7 @@ public abstract class AbstractLocation implements Location, HasHostGeoInfo, Conf
         }
 
         Location l = (Location) o;
-		return getId().equals(l.getId());
+        return getId().equals(l.getId());
     }
 
     public int hashCode() {
@@ -192,21 +195,21 @@ public abstract class AbstractLocation implements Location, HasHostGeoInfo, Conf
     }
     
     public void addChildLocation(Location child) {
-    	// Previously, setParentLocation delegated to addChildLocation and we sometimes ended up with
-    	// duplicate entries here. Instead this now uses a similar scheme to 
-    	// AbstractEntity.setParent/addChild (with any weaknesses for distribution that such a 
-    	// scheme might have...).
-    	// 
-    	// We continue to use a list to allow identical-looking locations, but they must be different 
-    	// instances.
-    	
-    	for (Location contender : childLocations) {
-    		if (contender == child) {
-    			// don't re-add; no-op
-    			return;
-    		}
-    	}
-    	
+        // Previously, setParentLocation delegated to addChildLocation and we sometimes ended up with
+        // duplicate entries here. Instead this now uses a similar scheme to 
+        // AbstractEntity.setParent/addChild (with any weaknesses for distribution that such a 
+        // scheme might have...).
+        // 
+        // We continue to use a list to allow identical-looking locations, but they must be different 
+        // instances.
+        
+        for (Location contender : childLocations) {
+            if (contender == child) {
+                // don't re-add; no-op
+                return;
+            }
+        }
+        
         childLocations.add(child);
         child.setParentLocation(this);
     }
@@ -255,11 +258,6 @@ public abstract class AbstractLocation implements Location, HasHostGeoInfo, Conf
         if (parentLocation != null) return parentLocation.findLocationProperty(key);
         return null;
     }
-    
-//    @Override
-//    public Map<String,?> getLocationProperties() {
-//    	return Collections.<String,Object>unmodifiableMap(leftoverProperties);
-//    }
 
     /** Default String representation is simplified name of class, together with selected fields. */
     @Override
@@ -267,7 +265,7 @@ public abstract class AbstractLocation implements Location, HasHostGeoInfo, Conf
         return string().toString();
     }
     
-    /** override this, adding to the returned value, to supply additional fields to include in the toString */
+    /** Override this, adding to the returned value, to supply additional fields to include in {@link #toString()}. */
     protected ToStringHelper string() {
         return Objects.toStringHelper(getClass()).add("id", id).add("name", name);
     }

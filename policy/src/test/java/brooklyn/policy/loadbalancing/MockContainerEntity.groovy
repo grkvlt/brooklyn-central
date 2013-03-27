@@ -12,10 +12,10 @@ import brooklyn.entity.Effector
 import brooklyn.entity.Entity
 import brooklyn.entity.basic.AbstractGroupImpl
 import brooklyn.entity.basic.Attributes
+import brooklyn.entity.basic.ConfigKeys
 import brooklyn.entity.basic.MethodEffector
 import brooklyn.entity.trait.Startable
 import brooklyn.event.AttributeSensor
-import brooklyn.event.basic.BasicConfigKey
 import brooklyn.location.Location
 import brooklyn.util.flags.SetFromFlag
 
@@ -28,7 +28,7 @@ public class MockContainerEntity extends AbstractGroupImpl implements Balanceabl
 
     @SetFromFlag("membership")
     public static final ConfigKey<String> MOCK_MEMBERSHIP =
-            new BasicConfigKey<String>(String.class, "mock.container.membership", "For testing ItemsInContainersGroup")
+            ConfigKeys.newConfigKey("mock.container.membership", "For testing ItemsInContainersGroup")
 
     public static final Effector OFFLOAD_AND_STOP = new MethodEffector(MockContainerEntity.&offloadAndStop);
 

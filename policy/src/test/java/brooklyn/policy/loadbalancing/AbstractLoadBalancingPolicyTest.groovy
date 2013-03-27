@@ -13,11 +13,11 @@ import brooklyn.config.ConfigKey
 import brooklyn.entity.Application
 import brooklyn.entity.Entity
 import brooklyn.entity.Group
+import brooklyn.entity.basic.ConfigKeys
 import brooklyn.entity.basic.DynamicGroupImpl
 import brooklyn.entity.basic.Entities
 import brooklyn.event.AttributeSensor
 import brooklyn.event.basic.BasicAttributeSensor
-import brooklyn.event.basic.BasicConfigKey
 import brooklyn.location.basic.SimulatedLocation
 import brooklyn.test.entity.TestApplication
 import brooklyn.test.entity.TestApplicationImpl
@@ -26,20 +26,20 @@ import brooklyn.util.internal.Repeater
 import com.google.common.base.Preconditions
 
 public class AbstractLoadBalancingPolicyTest {
-    
+
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractLoadBalancingPolicyTest.class)
-    
+
     protected static final long TIMEOUT_MS = 10*1000;
     protected static final long SHORT_WAIT_MS = 250;
-    
+
     protected static final long CONTAINER_STARTUP_DELAY_MS = 100
-    
+
     public static final AttributeSensor<Integer> TEST_METRIC =
         new BasicAttributeSensor<Integer>(Integer.class, "test.metric", "Dummy workrate for test entities")
-    
-    public static final ConfigKey<Double> LOW_THRESHOLD_CONFIG_KEY = new BasicConfigKey<Double>(Double.class, TEST_METRIC.getName()+".threshold.low", "desc", 0.0)
-    public static final ConfigKey<Double> HIGH_THRESHOLD_CONFIG_KEY = new BasicConfigKey<Double>(Double.class, TEST_METRIC.getName()+".threshold.high", "desc", 0.0)
-    
+
+    public static final ConfigKey<Double> LOW_THRESHOLD_CONFIG_KEY = ConfigKeys.newConfigKey(TEST_METRIC.getName()+".threshold.low", "desc", 0.0)
+    public static final ConfigKey<Double> HIGH_THRESHOLD_CONFIG_KEY = ConfigKeys.newConfigKey(TEST_METRIC.getName()+".threshold.high", "desc", 0.0)
+
     protected TestApplication app
     protected SimulatedLocation loc
     protected BalanceableWorkerPool pool
@@ -48,7 +48,7 @@ public class AbstractLoadBalancingPolicyTest {
     protected Group containerGroup
     protected Group itemGroup
     protected Random random = new Random()
-    
+
     @BeforeMethod(alwaysRun=true)
     public void before() {
         LOG.debug("In AbstractLoadBalancingPolicyTest.before()");

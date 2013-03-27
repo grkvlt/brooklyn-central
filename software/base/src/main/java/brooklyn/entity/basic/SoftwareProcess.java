@@ -6,9 +6,8 @@ import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
 import brooklyn.entity.trait.Startable;
 import brooklyn.event.AttributeSensor;
-import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
-import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.event.basic.MapConfigKey;
 import brooklyn.location.MachineProvisioningLocation;
 import brooklyn.util.MutableMap;
 import brooklyn.util.flags.SetFromFlag;
@@ -16,7 +15,7 @@ import brooklyn.util.flags.SetFromFlag;
 public interface SoftwareProcess extends Entity, Startable {
 
     @SetFromFlag("startTimeout")
-    public static final ConfigKey<Integer> START_TIMEOUT = ConfigKeys.START_TIMEOUT;
+    ConfigKey<Integer> START_TIMEOUT = ConfigKeys.START_TIMEOUT;
 
     @SetFromFlag("startLatch")
     ConfigKey<Boolean> START_LATCH = ConfigKeys.START_LATCH;
@@ -46,19 +45,19 @@ public interface SoftwareProcess extends Entity, Startable {
     ConfigKey<String> SUGGESTED_RUN_DIR = ConfigKeys.SUGGESTED_RUN_DIR;
 
     @SetFromFlag("env")
-    ConfigKey<Map> SHELL_ENVIRONMENT = new BasicConfigKey(
-            Map.class, "shell.env", "Map of environment variables to pass to the runtime shell", MutableMap.of());
+    MapConfigKey<?> SHELL_ENVIRONMENT = ConfigKeys.newMapConfigKey(
+            "shell.env", "Map of environment variables to pass to the runtime shell", MutableMap.<String, Object>of());
 
     @SetFromFlag("provisioningProperties")
-    ConfigKey<Map<String,Object>> PROVISIONING_PROPERTIES = new BasicConfigKey(
-            Map.class, "provisioning.properties",
-            "Custom properties to be passed in when provisioning a new machine", MutableMap.of());
+    MapConfigKey<?> PROVISIONING_PROPERTIES = ConfigKeys.newMapConfigKey(
+            "provisioning.properties",
+            "Custom properties to be passed in when provisioning a new machine", MutableMap.<String, Object>of());
 
     AttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
     AttributeSensor<String> ADDRESS = Attributes.ADDRESS;
 
-    AttributeSensor<MachineProvisioningLocation> PROVISIONING_LOCATION = new BasicAttributeSensor<MachineProvisioningLocation>(
-            MachineProvisioningLocation.class, "softwareservice.provisioningLocation", "Location used to provision a machine where this is running");
+    AttributeSensor<MachineProvisioningLocation> PROVISIONING_LOCATION = Attributes.newAttributeSensor(
+            "softwareservice.provisioningLocation", "Location used to provision a machine where this is running");
 
     AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
 

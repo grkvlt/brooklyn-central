@@ -2,7 +2,6 @@ package brooklyn.entity.database.derby;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import javax.management.ObjectName;
 
@@ -12,13 +11,13 @@ import org.slf4j.LoggerFactory;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.SoftwareProcess;
-import brooklyn.entity.SoftwareProcessImpl;
+import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.entity.basic.SoftwareProcess;
+import brooklyn.entity.basic.SoftwareProcessImpl;
 import brooklyn.entity.database.Database;
 import brooklyn.entity.database.Schema;
 import brooklyn.entity.java.UsesJava;
 import brooklyn.entity.java.UsesJmx;
-import brooklyn.event.adapter.FunctionSensorAdapter;
 import brooklyn.event.adapter.JmxHelper;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 import brooklyn.event.basic.BasicConfigKey;
@@ -41,19 +40,19 @@ public class DerbyDatabase extends SoftwareProcessImpl implements Database, Uses
     private static final Logger log = LoggerFactory.getLogger(DerbyDatabase.class);
 
     @SetFromFlag("version")
-    public static final BasicConfigKey<String> SUGGESTED_VERSION =
-            new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "10.8.1.2");
+    public static final ConfigKey<String> SUGGESTED_VERSION =
+            ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "10.8.1.2");
 
-    public static final PortAttributeSensorAndConfigKey JDBC_PORT = new PortAttributeSensorAndConfigKey(
+    public static final PortAttributeSensorAndConfigKey JDBC_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
             "derby.jdbcPort", "Suggested JDBC port");
     
-    public static final ConfigKey<String> VIRTUAL_HOST_NAME = new BasicConfigKey<String>(
-            String.class, "derby.virtualHost", "Derby virtual host name", "localhost");
+    public static final ConfigKey<String> VIRTUAL_HOST_NAME = ConfigKeys.newConfigKey(
+            "derby.virtualHost", "Derby virtual host name", "localhost");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = new BasicAttributeSensorAndConfigKey<String>(
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = ConfigKeys.newAttributeSensorAndConfigKey(
             Attributes.JMX_USER, "admin");
     
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = new BasicAttributeSensorAndConfigKey<String>(
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = ConfigKeys.newAttributeSensorAndConfigKey(
             Attributes.JMX_PASSWORD, "admin");
 
     @SetFromFlag

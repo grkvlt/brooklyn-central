@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.util.MutableMap;
 
 import com.google.common.collect.ImmutableMap;
@@ -152,13 +152,13 @@ public class BrooklynPropertiesTest {
     public void testGetAndPutConfig() {
         BrooklynProperties props = BrooklynProperties.Factory.newEmpty().addFromMap(ImmutableMap.of(
                 "a.key", "aval", "a.key2", "aval2", "akey", "noval", "n.key", "234"));
-        
-        BasicConfigKey<String> aString = new BasicConfigKey<String>(String.class, "a.key");
-        BasicConfigKey<Integer> nNum = new BasicConfigKey<Integer>(Integer.class, "n.key");
-        BasicConfigKey<Integer> aBsent = new BasicConfigKey<Integer>(Integer.class, "ab.sent");
-        BasicConfigKey<Integer> aMisstyped = new BasicConfigKey<Integer>(Integer.class, "am.isstyped");
-        BasicConfigKey<Integer> aDfault = new BasicConfigKey<Integer>(Integer.class, "a.default", "-", 123);
-        
+
+        ConfigKey<String> aString = ConfigKeys.newConfigKey("a.key");
+        ConfigKey<Integer> nNum = ConfigKeys.newConfigKey("n.key");
+        ConfigKey<Integer> aBsent = ConfigKeys.newConfigKey("ab.sent");
+        ConfigKey<Integer> aMisstyped = ConfigKeys.newConfigKey("am.isstyped");
+        ConfigKey<Integer> aDfault = ConfigKeys.newConfigKey("a.default", "-", 123);
+
         assertEquals(props.getConfig(aString), "aval");
         assertEquals(props.getConfig(nNum), (Integer)234);
         

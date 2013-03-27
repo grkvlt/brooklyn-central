@@ -14,8 +14,8 @@ import org.testng.annotations.Test;
 
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.basic.ApplicationBuilder;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Entities;
-import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.DependentConfiguration;
 import brooklyn.test.entity.TestApplication;
 import brooklyn.test.entity.TestEntity;
@@ -33,36 +33,36 @@ public class PolicyConfigMapUsageTest {
 
     public static class MyPolicy extends AbstractPolicy {
         @SetFromFlag("intKey")
-        public static final BasicConfigKey<Integer> INT_KEY = new BasicConfigKey<Integer>(Integer.class, "bkey", "b key");
-        
+        public static final ConfigKey<Integer> INT_KEY = ConfigKeys.newConfigKey("bkey", "b key");
+
         @SetFromFlag("strKey")
-        public static final ConfigKey<String> STR_KEY = new BasicConfigKey<String>(String.class, "akey", "a key");
-        public static final ConfigKey<Integer> INT_KEY_WITH_DEFAULT = new BasicConfigKey<Integer>(Integer.class, "ckey", "c key", 1);
-        public static final ConfigKey<String> STR_KEY_WITH_DEFAULT = new BasicConfigKey<String>(String.class, "strKey", "str key", "str key default");
-        
+        public static final ConfigKey<String> STR_KEY = ConfigKeys.newConfigKey("akey", "a key");
+        public static final ConfigKey<Integer> INT_KEY_WITH_DEFAULT = ConfigKeys.newConfigKey("ckey", "c key", 1);
+        public static final ConfigKey<String> STR_KEY_WITH_DEFAULT = ConfigKeys.newConfigKey("strKey", "str key", "str key default");
+
         MyPolicy(Map flags) {
             super(flags);
         }
-        
+
         MyPolicy() {
             super();
         }
     }
-    
-    private BasicConfigKey<String> differentKey = new BasicConfigKey<String>(String.class, "differentkey", "diffval");
+
+    private ConfigKey<String> differentKey = ConfigKeys.newConfigKey("differentkey", "diffval");
 
     private TestApplication app;
-    
+
     @BeforeMethod(alwaysRun=true)
     public void setUp() {
         app = ApplicationBuilder.newManagedApp(TestApplication.class);
     }
-    
+
     @AfterMethod(alwaysRun=true)
     public void tearDown() throws Exception {
         if (app != null) Entities.destroyAll(app);
     }
-    
+
     @Test
     public void testConfigFlagsPassedInAtConstructionIsAvailable() throws Exception {
         MyPolicy policy = new MyPolicy(MutableMap.builder()

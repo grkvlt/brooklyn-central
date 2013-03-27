@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.testng.annotations.Test
 
 import brooklyn.config.ConfigKey
+import brooklyn.entity.basic.ConfigKeys
 import brooklyn.entity.trait.Configurable
 import brooklyn.event.basic.BasicConfigKey
 import brooklyn.event.basic.BasicConfigKey.StringConfigKey
@@ -172,7 +173,7 @@ public class FlagUtilsTest {
     @Test
     public void testSetFromConfigKeys() {
         FooCK f = []
-        def unused = FlagUtils.setFieldsFromFlags(f, (new BasicConfigKey<Integer>(Integer.class, "f1")): 9, ck1:"do-set", ck2:"dont-set");
+        def unused = FlagUtils.setFieldsFromFlags(f, (ConfigKeys.newConfigKey("f1")): 9, ck1:"do-set", ck2:"dont-set");
         assertEquals(f.bag.get(FooCK.CK1), "do-set")
         assertEquals(f.f1, 9)
         assertEquals(f.bag.containsKey(FooCK.CK2), false)

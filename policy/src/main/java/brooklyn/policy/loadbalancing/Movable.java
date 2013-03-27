@@ -10,24 +10,22 @@ import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
-
 /**
  * Represents an item that can be migrated between balanceable containers.
  */
 public interface Movable extends Entity {
-    
+
     @SetFromFlag("immovable")
-    public static ConfigKey<Boolean> IMMOVABLE = new BasicConfigKey<Boolean>(
-        Boolean.class, "movable.item.immovable", "Indicates whether this item instance is immovable, so cannot be moved by policies", false);
-    
-    public static BasicAttributeSensor<BalanceableContainer> CONTAINER = new BasicAttributeSensor<BalanceableContainer>(
-        BalanceableContainer.class, "movable.item.container", "The container that this item is on");
-    
-    public static final Effector<Void> MOVE = new MethodEffector<Void>(Movable.class, "move");
-    
-    public String getContainerId();
-    
-    @Description("Moves this entity to the given container")
-    public void move(@NamedParameter("destination") Entity destination);
-    
+    ConfigKey<Boolean> IMMOVABLE = ConfigKeys.newConfigKey(
+            "movable.item.immovable", "Indicates whether this item instance is immovable, so cannot be moved by policies", false)
+
+    AttributeSensor<BalanceableContainer> CONTAINER = Attributes.newAttributeSensor(
+            "movable.item.container", "The container that this item is on");
+
+    Effector<Void> MOVE = new MethodEffector<Void>(Movable.class, "move");
+
+    String getContainerId();
+
+    void move(@NamedParameter("destination") Entity destination);
+
 }

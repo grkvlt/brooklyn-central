@@ -27,8 +27,10 @@ import brooklyn.entity.Application;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.AbstractApplication;
 import brooklyn.entity.basic.AbstractEntity;
+import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.basic.BasicGroup;
 import brooklyn.entity.basic.BasicGroupImpl;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Entities;
 import brooklyn.entity.basic.EntityLocal;
 import brooklyn.entity.proxying.ImplementedBy;
@@ -469,16 +471,14 @@ public class RebindEntityTest {
     @ImplementedBy(MyEntityImpl.class)
     public interface MyEntity extends Entity, Startable, EntityLocal {
         @SetFromFlag("myconfig")
-        public static final ConfigKey<String> MY_CONFIG = new BasicConfigKey<String>(
-                        String.class, "test.myentity.myconfig", "My test config");
+        ConfigKey<String> MY_CONFIG = ConfigKeys.newConfigKey("test.myentity.myconfig", "My test config");
 
-        public static final AttributeSensor<String> MY_SENSOR = new BasicAttributeSensor<String>(
-                String.class, "test.myentity.mysensor", "My test sensor");
+        AttributeSensor<String> MY_SENSOR = Attributes.newAttributeSensor("test.myentity.mysensor", "My test sensor");
     }
     
     public static class MyEntityImpl extends AbstractEntity implements MyEntity {
         private static final long serialVersionUID = 1L;
-        
+
         private final Object dummy = new Object(); // so not serializable
 
         public MyEntityImpl() {
@@ -511,43 +511,35 @@ public class RebindEntityTest {
     @ImplementedBy(MyEntityReffingOthersImpl.class)
     public interface MyEntityReffingOthers extends Entity, EntityLocal {
         @SetFromFlag("entityRef")
-        public static final ConfigKey<Entity> ENTITY_REF_CONFIG = new BasicConfigKey<Entity>(
-                        Entity.class, "test.config.entityref", "Ref to other entity");
+        ConfigKey<Entity> ENTITY_REF_CONFIG = ConfigKeys.newConfigKey("test.config.entityref", "Ref to other entity");
 
         @SetFromFlag("locationRef")
-        public static final ConfigKey<Location> LOCATION_REF_CONFIG = new BasicConfigKey<Location>(
-                Location.class, "test.config.locationref", "Ref to other location");
-        
-        public static final AttributeSensor<Entity> ENTITY_REF_SENSOR = new BasicAttributeSensor<Entity>(
-                Entity.class, "test.attribute.entityref", "Ref to other entity");
-        
-        public static final AttributeSensor<Location> LOCATION_REF_SENSOR = new BasicAttributeSensor<Location>(
-                Location.class, "test.attribute.locationref", "Ref to other location");
+        ConfigKey<Location> LOCATION_REF_CONFIG = ConfigKeys.newConfigKey("test.config.locationref", "Ref to other location");
+
+        AttributeSensor<Entity> ENTITY_REF_SENSOR = Attributes.newAttributeSensor("test.attribute.entityref", "Ref to other entity");
+
+        AttributeSensor<Location> LOCATION_REF_SENSOR = Attributes.newAttributeSensor("test.attribute.locationref", "Ref to other location");
     }
-    
+
     public static class MyEntityReffingOthersImpl extends AbstractEntity implements MyEntityReffingOthers {
-        private static final long serialVersionUID = 1L;
-        
+        public static final long serialVersionUID = 1L;
+
         @SetFromFlag("entityRef")
-        public static final ConfigKey<Entity> ENTITY_REF_CONFIG = new BasicConfigKey<Entity>(
-                        Entity.class, "test.config.entityref", "Ref to other entity");
+        public static final ConfigKey<Entity> ENTITY_REF_CONFIG = ConfigKeys.newConfigKey("test.config.entityref", "Ref to other entity");
 
         @SetFromFlag("locationRef")
-        public static final ConfigKey<Location> LOCATION_REF_CONFIG = new BasicConfigKey<Location>(
-                Location.class, "test.config.locationref", "Ref to other location");
-        
-        public static final AttributeSensor<Entity> ENTITY_REF_SENSOR = new BasicAttributeSensor<Entity>(
-                Entity.class, "test.attribute.entityref", "Ref to other entity");
-        
-        public static final AttributeSensor<Location> LOCATION_REF_SENSOR = new BasicAttributeSensor<Location>(
-                Location.class, "test.attribute.locationref", "Ref to other location");
-        
+        public static final ConfigKey<Location> LOCATION_REF_CONFIG = ConfigKeys.newConfigKey("test.config.locationref", "Ref to other location");
+
+        public static final AttributeSensor<Entity> ENTITY_REF_SENSOR = Attributes.newAttributeSensor("test.attribute.entityref", "Ref to other entity");
+
+        public static final AttributeSensor<Location> LOCATION_REF_SENSOR = Attributes.newAttributeSensor(test.attribute.locationref", "Ref to other location");
+
         private final Object dummy = new Object(); // so not serializable
 
         public MyEntityReffingOthersImpl(Entity parent) {
             super(parent);
         }
-        
+
         public MyEntityReffingOthersImpl(Map flags, Entity parent) {
             super(flags, parent);
         }
@@ -556,24 +548,22 @@ public class RebindEntityTest {
     @ImplementedBy(MyEntity2Impl.class)
     public interface MyEntity2 extends Entity {
         @SetFromFlag("myconfig")
-        public static final ConfigKey<String> MY_CONFIG = new BasicConfigKey<String>(
-                        String.class, "test.myconfig", "My test config");
+        ConfigKey<String> MY_CONFIG = ConfigKeys.newConfigKey("test.myconfig", "My test config");
 
         @SetFromFlag("subscribe")
-        public static final ConfigKey<Boolean> SUBSCRIBE = new BasicConfigKey<Boolean>(
-                Boolean.class, "test.subscribe", "Whether to do some subscriptions on re-bind", false);
-        
-        public List<String> getEvents();
-        
-        public String getMyfield();
+        ConfigKey<Boolean> SUBSCRIBE = ConfigKeys.newConfigKey("test.subscribe", "Whether to do some subscriptions on re-bind", false);
+
+        List<String> getEvents();
+
+        String getMyfield();
     }
-    
+
     public static class MyEntity2Impl extends AbstractEntity implements MyEntity2 {
         private static final long serialVersionUID = 1L;
-        
+
         @SetFromFlag
         String myfield;
-        
+
         final List<String> events = new CopyOnWriteArrayList<String>();
 
         private final Object dummy = new Object(); // so not serializable
@@ -623,17 +613,14 @@ public class RebindEntityTest {
     @ImplementedBy(MyLatchingEntityImpl.class)
     public interface MyLatchingEntity extends Entity {
         @SetFromFlag("subscribe")
-        public static final ConfigKey<AttributeSensor<?>> SUBSCRIBE = new BasicConfigKey(
-                AttributeSensor.class, "test.mylatchingentity.subscribe", "Sensor to subscribe to (or null means don't)", null);
-        
-        @SetFromFlag("publish")
-        public static final ConfigKey<String> PUBLISH = new BasicConfigKey<String>(
-                String.class, "test.mylatchingentity.publish", "Value to publish (or null means don't)", null);
+        ConfigKey<AttributeSensor<?>> SUBSCRIBE = ConfigKeys.newConfigKey("test.mylatchingentity.subscribe", "Sensor to subscribe to (or null means don't)", null);
 
-        public static final AttributeSensor<String> MY_SENSOR = new BasicAttributeSensor<String>(
-                String.class, "test.mylatchingentity.mysensor", "My test sensor");
+        @SetFromFlag("publish")
+        ConfigKey<String> PUBLISH = ConfigKeys.newConfigKey("test.mylatchingentity.publish", "Value to publish (or null means don't)", null);
+
+        AttributeSensor<String> MY_SENSOR = Attributes.newAttributeSensor("test.mylatchingentity.mysensor", "My test sensor");
     }
-    
+
     public static class MyLatchingEntityImpl extends AbstractEntity implements MyLatchingEntity {
         private static final long serialVersionUID = 1L;
         static volatile CountDownLatch reconstructStartedLatch;
