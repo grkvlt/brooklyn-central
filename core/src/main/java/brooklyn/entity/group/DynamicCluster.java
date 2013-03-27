@@ -20,7 +20,7 @@ import brooklyn.entity.basic.NamedParameter;
 import brooklyn.entity.proxying.EntitySpec;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.AttributeSensor;
-import brooklyn.event.basic.BasicSensor;
+import brooklyn.event.Sensor;
 import brooklyn.util.flags.SetFromFlag;
 
 import com.google.common.base.Function;
@@ -39,7 +39,7 @@ public interface DynamicCluster extends AbstractGroup, Cluster {
 
     AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
 
-    BasicSensor<Entity> ENTITY_QUARANTINED = Attributes.newNotificationSensor("dynamiccluster.entityQuarantined", "Entity failed to start, and has been quarantined");
+    Sensor<Entity> ENTITY_QUARANTINED = Attributes.newNotificationSensor("dynamiccluster.entityQuarantined", "Entity failed to start, and has been quarantined");
 
     AttributeSensor<Group> QUARANTINE_GROUP = Attributes.newAttributeSensor("dynamiccluster.quarantineGroup", "Group of quarantined entities that failed to start");
 

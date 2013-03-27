@@ -49,8 +49,8 @@ public class DynamicClusterImpl extends AbstractGroupImpl implements DynamicClus
     // Mutex for synchronizing during re-size operations
     private final Object mutex = new Object[0];
     
-    private static final Function<Collection<Entity>, Entity> defaultRemovalStrategy = new Function<Collection<Entity>, Entity>() {
-        public Entity apply(Collection<Entity> contenders) {
+    private static final Function<Collection<? extends Entity>, Entity> defaultRemovalStrategy = new Function<Collection<? extends Entity>, Entity>() {
+        public Entity apply(Collection<? extends Entity> contenders) {
             // choose last (i.e. newest) entity that is stoppable
             Entity result = null;
             for (Entity it : contenders) {
@@ -96,7 +96,7 @@ public class DynamicClusterImpl extends AbstractGroupImpl implements DynamicClus
     }
     
     @Override
-    public void setRemovalStrategy(Function<Collection<Entity>, Entity> val) {
+    public void setRemovalStrategy(Function<Collection<? extends Entity>, Entity> val) {
         setConfig(REMOVAL_STRATEGY, checkNotNull(val, "removalStrategy"));
     }
     
@@ -105,8 +105,8 @@ public class DynamicClusterImpl extends AbstractGroupImpl implements DynamicClus
         setRemovalStrategy(GroovyJavaMethods.functionFromClosure(val));
     }
 
-    protected Function<Collection<Entity>, Entity> getRemovalStrategy() {
-        Function<Collection<Entity>, Entity> result = getConfig(REMOVAL_STRATEGY);
+    protected Function<Collection<? extends Entity>, Entity> getRemovalStrategy() {
+        Function<Collection<? extends Entity>, Entity> result = getConfig(REMOVAL_STRATEGY);
         return (result != null) ? result : defaultRemovalStrategy;
     }
     

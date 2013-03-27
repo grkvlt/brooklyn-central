@@ -532,7 +532,7 @@ public class RebindEntityTest {
 
         public static final AttributeSensor<Entity> ENTITY_REF_SENSOR = Attributes.newAttributeSensor("test.attribute.entityref", "Ref to other entity");
 
-        public static final AttributeSensor<Location> LOCATION_REF_SENSOR = Attributes.newAttributeSensor(test.attribute.locationref", "Ref to other location");
+        public static final AttributeSensor<Location> LOCATION_REF_SENSOR = Attributes.newAttributeSensor("test.attribute.locationref", "Ref to other location");
 
         private final Object dummy = new Object(); // so not serializable
 

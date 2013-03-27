@@ -36,8 +36,8 @@ import com.google.common.reflect.TypeToken;
 @SuppressWarnings("serial")
 public class Attributes {
 
-    public static final BasicSensor<Void> LOCATION_CHANGED = newNotificationSensor(
-            Void.class, "entity.locationChanged", "Indicates that an entity's location has been changed");
+    public static final Sensor<Void> LOCATION_CHANGED = newNotificationSensor(
+            "entity.locationChanged", "Indicates that an entity's location has been changed");
 
     /**
      * Application information sensors.
@@ -45,13 +45,13 @@ public class Attributes {
      * @deprecated since 0.5; see {@link ConfigKeys#SUGGESTED_VERSION}
      */
     @Deprecated
-    public static final AttributeSensor<String> VERSION = newAttributeSensor(String.class, "version", "Version information");
+    public static final AttributeSensor<String> VERSION = newAttributeSensor("version", "Version information");
 
     public static final BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
-            String.class, "download.url", "URL pattern for downloading the installer (will substitute things like ${version} automatically)");
+            "download.url", "URL pattern for downloading the installer (will substitute things like ${version} automatically)");
 
     public static final BasicAttributeSensorAndConfigKey<Map<String, String>> DOWNLOAD_ADDON_URLS = ConfigKeys.newAttributeSensorAndConfigKey(
-            new TypeToken<Map<String, String>>() { }, "download.addon.urls", "URL patterns for downloading named add-ons (will substitute things like ${version} automatically)");
+            "download.addon.urls", "URL patterns for downloading named add-ons (will substitute things like ${version} automatically)");
 
     /*
      * JMX attributes.
@@ -69,27 +69,21 @@ public class Attributes {
     @Deprecated
     public static final PortAttributeSensorAndConfigKey RMI_PORT = RMI_SERVER_PORT;
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = ConfigKeys.newAttributeSensorAndConfigKey(
-            String.class, "jmx.user", "JMX username");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = ConfigKeys.newAttributeSensorAndConfigKey("jmx.user", "JMX username");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = ConfigKeys.newAttributeSensorAndConfigKey(
-            String.class, "jmx.password", "JMX password");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = ConfigKeys.newAttributeSensorAndConfigKey("jmx.password", "JMX password");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_CONTEXT = ConfigKeys.newAttributeSensorAndConfigKey(
-            String.class, "jmx.context", "JMX context path", "jmxrmi");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_CONTEXT = ConfigKeys.newAttributeSensorAndConfigKey("jmx.context", "JMX context path", "jmxrmi");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_SERVICE_URL = ConfigKeys.newAttributeSensorAndConfigKey(
-            String.class, "jmx.serviceurl", "The URL for connecting to the MBean Server");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_SERVICE_URL = ConfigKeys.newAttributeSensorAndConfigKey("jmx.serviceurl", "The URL for connecting to the MBean Server");
 
     /*
      * Port number attributes.
      */
 
-    public static final AttributeSensor<List<Integer>> PORT_NUMBERS = newAttributeSensor(
-            new TypeToken<List<Integer>>() { }, "port.list", "List of port numbers");
+    public static final AttributeSensor<List<Integer>> PORT_NUMBERS = newAttributeSensor("port.list", "List of port numbers");
 
-    public static final AttributeSensor<List<Sensor<Integer>>> PORT_SENSORS = newAttributeSensor(
-            new TypeToken<List<Sensor<Integer>>>() { }, "port.list.sensors", "List of port number attributes");
+    public static final AttributeSensor<List<Sensor<Integer>>> PORT_SENSORS = newAttributeSensor("port.list.sensors", "List of port number attributes");
 
     public static final PortAttributeSensorAndConfigKey HTTP_PORT = new PortAttributeSensorAndConfigKey(
             "http.port", "HTTP port", ImmutableList.of(8080,"18080+"));
@@ -106,18 +100,16 @@ public class Attributes {
      * Location/connection attributes.
      */
 
-    public static final AttributeSensor<String> HOSTNAME = newAttributeSensor(String.class, "host.name", "Host name");
-    public static final AttributeSensor<String> ADDRESS = newAttributeSensor(String.class, "host.address", "Host IP address");
+    public static final AttributeSensor<String> HOSTNAME = newAttributeSensor("host.name", "Host name");
+    public static final AttributeSensor<String> ADDRESS = newAttributeSensor("host.address", "Host IP address");
 	
     /*
      * Lifecycle attributes
      */
 
-    public static final AttributeSensor<Lifecycle> SERVICE_STATE = newAttributeSensor(
-            Lifecycle.class, "service.state", "Service lifecycle state");
+    public static final AttributeSensor<Lifecycle> SERVICE_STATE = newAttributeSensor("service.state", "Service lifecycle state");
 
-    public static final AttributeSensor<String> LOG_FILE_LOCATION = newAttributeSensor(
-            String.class, "log.location", "Log file location (optional)");
+    public static final AttributeSensor<String> LOG_FILE_LOCATION = newAttributeSensor("log.location", "Log file location (optional)");
 
     /*
      * Static methods to build new AttributeSensor instances.

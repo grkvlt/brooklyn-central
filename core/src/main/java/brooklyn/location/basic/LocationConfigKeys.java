@@ -28,7 +28,7 @@ public class LocationConfigKeys {
     public static final ConfigKey<String> PRIVATE_KEY_DATA = ConfigKeys.newConfigKey("privateKeyData");
     public static final ConfigKey<String> PRIVATE_KEY_PASSPHRASE = ConfigKeys.newConfigKey("privateKeyPassphrase");
 
-    public static final ConfigKey<?> CALLER_CONTEXT = ConfigKeys.newConfigKey("callerContext",
+    public static final ConfigKey<Object> CALLER_CONTEXT = ConfigKeys.newConfigKey("callerContext",
             "An object whose toString is used for logging, to indicate wherefore a VM is being created");
 
 }

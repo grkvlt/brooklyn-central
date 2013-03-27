@@ -27,8 +27,6 @@ import brooklyn.config.ConfigKey;
 import brooklyn.config.ConfigKey.HasConfigKey;
 import brooklyn.config.ConfigUtils;
 import brooklyn.entity.basic.ConfigKeys;
-import brooklyn.event.basic.BasicConfigKey;
-import brooklyn.event.basic.BasicConfigKey.StringConfigKey;
 import brooklyn.event.basic.MapConfigKey;
 import brooklyn.location.Location;
 import brooklyn.location.MachineLocation;
@@ -122,7 +120,7 @@ public class SshMachineLocation extends AbstractLocation implements MachineLocat
     public static final ConfigKey<String> PRIVATE_KEY_PASSPHRASE = SshTool.PROP_PRIVATE_KEY_PASSPHRASE;
 
     public static final ConfigKey<String> SCRIPT_DIR = ConfigKeys.newConfigKey("scriptDir", "directory where scripts should be placed and executed on the SSH target machine", null);
-    public static final ConfigKey<Map<String, Object>> SSH_ENV_MAP = ConfigKeys.newMapConfigKey("env", "environment variables to pass to the remote SSH shell session", null);
+    public static final MapConfigKey<Object> SSH_ENV_MAP = ConfigKeys.newMapConfigKey("env", "environment variables to pass to the remote SSH shell session", null);
 
     public static final ConfigKey<Boolean> ALLOCATE_PTY = SshTool.PROP_ALLOCATE_PTY;
 
