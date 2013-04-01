@@ -31,7 +31,8 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
     private static final long serialVersionUID = -6126481503795562602L;
     private static final Logger log = LoggerFactory.getLogger(MapConfigKey.class);
 
-    public final Class<V> subType;
+    @SuppressWarnings("serial")
+    private TypeToken<V> subType = new TypeToken<V>(getClass()) { };
 
     public MapConfigKey(Class<V> subType, String name) {
         this(subType, name, name, null);
@@ -44,51 +45,44 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
     // TODO it isn't clear whether defaultValue is an initialValue, or a value to use when map is empty
     // probably the latter, currently ... but maybe better to say that map configs are never null, 
     // and defaultValue is really an initial value
-    @SuppressWarnings("serial")
     public MapConfigKey(Class<V> subType, String name, String description, Map<String, ? extends V> defaultValue) {
-        super(new TypeToken<Map<String, ? extends V>>(MapConfigKey.class) { }, name, description, defaultValue);
+        super(name, description, defaultValue);
+        this.subType = TypeToken.of(subType);
+    }
+
+    public MapConfigKey(TypeToken<V> subType, String name) {
+        this(subType, name, name);
+    }
+
+    public MapConfigKey(TypeToken<V> subType, String name, String description) {
+        this(subType, name, description, null);
+    }
+
+    public MapConfigKey(TypeToken<V> subType, String name, String description, Map<String, ? extends V> defaultValue) {
+        super(name, description, defaultValue);
         this.subType = subType;
     }
 
-    @SuppressWarnings("unchecked")
-    public MapConfigKey(TypeToken<V> subType, String name) {
-        this((Class<V>) subType.getRawType(), name, name, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    public MapConfigKey(TypeToken<V> subType, String name, String description) {
-        this((Class<V>) subType.getRawType(), name, description, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    public MapConfigKey(TypeToken<V> subType, String name, String description, Map<String, ? extends V> defaultValue) {
-        this((Class<V>) subType.getRawType(), name, description, defaultValue);
-    }
-
-    @SuppressWarnings("serial")
     public MapConfigKey(String name) {
-        this(new TypeToken<V>(MapConfigKey.class) { }, name, name, null);
+        this(name, name, null);
     }
 
-    @SuppressWarnings("serial")
     public MapConfigKey(String name, String description) {
-        this(new TypeToken<V>(MapConfigKey.class) { }, name, description, null);
+        this(name, description, null);
     }
 
-    @SuppressWarnings("serial")
     public MapConfigKey(String name, String description, Map<String, ? extends V> defaultValue) {
-        this(new TypeToken<V>(MapConfigKey.class) { }, name, description, defaultValue);
+        super(name, description, defaultValue);
     }
 
-    @SuppressWarnings({ "serial", "unchecked" })
     public MapConfigKey(MapConfigKey<V> key, Map<String, ? extends V> defaultValue) {
         super(key, defaultValue);
-        this.subType = (Class<V>) new TypeToken<V>(MapConfigKey.class) { }.getRawType();
     }
 
     public ConfigKey<V> subKey(String subName) {
         return subKey(subName, "sub-element of " + getName() + ", named " + subName);
     }
+
     // it is not possible to supply default values
     public ConfigKey<V> subKey(String subName, String description) {
         return new SubElementConfigKey<V>(this, subType, getName() + "." + subName, description, null);
@@ -97,7 +91,7 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
     public boolean isSubKey(Object contender) {
         return contender instanceof ConfigKey && isSubKey((ConfigKey<?>)contender);
     }
-    
+
     public boolean isSubKey(ConfigKey<?> contender) {
         return (contender instanceof SubElementConfigKey && this.equals(((SubElementConfigKey<?>) contender).parent));
     }
@@ -131,7 +125,7 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
         }
         return false;
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Object applyValueToMap(Object value, Map target) {
@@ -143,7 +137,7 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
             return applyEntryValueToMap((Map.Entry)value, target);
         if (!(value instanceof Map)) 
             throw new IllegalArgumentException("Cannot set non-map entries "+value+" on "+this);
-        
+
         Map result = new MutableMap();
         for (Object entry: ((Map)value).entrySet()) {
             Map.Entry entryT = (Map.Entry)entry;
@@ -171,7 +165,7 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
 
     public interface MapModification<V> extends StructuredModification<MapConfigKey<V>>, Map<String,V> {
     }
-    
+
     public static class MapModifications extends StructuredModifications {
         /** when passed as a value to a MapConfigKey, causes each of these items to be put 
          * (this Mod is redundant as no other value is really sensible) */

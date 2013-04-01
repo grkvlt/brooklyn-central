@@ -80,8 +80,10 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
         }
     }
 
+    @SuppressWarnings("serial")
+    private TypeToken<T> type = new TypeToken<T>(getClass()) { };
+
     private String name;
-    private Class<T> type;
     private String description;
     private T defaultValue;
     private boolean reconfigurable;
@@ -89,40 +91,36 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
     // FIXME In groovy, fields were `public final` with a default constructor; do we need the gson?
     public BasicConfigKey() { /* for gson */ }
 
-    // TODO How to do this without cast; the but T in TypeToken could be a ParameterizedType 
-    // so it really could be a super-type of T rather than Class<T>!
-    @SuppressWarnings("unchecked")
-    public BasicConfigKey(TypeToken<T> type, String name) {
-        this((Class<T>) type.getRawType(), name);
-    }
-
-    @SuppressWarnings("unchecked")
-    public BasicConfigKey(TypeToken<T> type, String name, String description) {
-        this((Class<T>) type.getRawType(), name, description);
-    }
-
-    @SuppressWarnings("unchecked")
-    public BasicConfigKey(TypeToken<T> type, String name, String description, T defaultValue) {
-        this((Class<T>) type.getRawType(), name, description, defaultValue);
-    }
-
-    @SuppressWarnings("serial")
     public BasicConfigKey(String name) {
-        this(new TypeToken<T>(BasicConfigKey.class) { }, name);
+        this(name, name);
     }
 
-    @SuppressWarnings("serial")
     public BasicConfigKey(String name, String description) {
-        this(new TypeToken<T>(BasicConfigKey.class) { }, name, description);
+        this(name, description, null);
     }
 
-    @SuppressWarnings("serial")
     public BasicConfigKey(String name, String description, T defaultValue) {
-        this(new TypeToken<T>(BasicConfigKey.class) { }, name, description, defaultValue);
+        this.description = description;
+        this.name = checkNotNull(name, "name");
+        this.defaultValue = defaultValue;
+        this.reconfigurable = false;
+    }
+
+    public BasicConfigKey(TypeToken<T> type, String name) {
+        this(type, name, name);
+    }
+
+    public BasicConfigKey(TypeToken<T> type, String name, String description) {
+        this(type, name, description, null);
+    }
+
+    public BasicConfigKey(TypeToken<T> type, String name, String description, T defaultValue) {
+        this(name, description, defaultValue);
+        this.type = type;
     }
 
     public BasicConfigKey(Class<T> type, String name) {
-        this(type, name, name, null);
+        this(type, name, name);
     }
 
     public BasicConfigKey(Class<T> type, String name, String description) {
@@ -130,24 +128,21 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
     }
 
     public BasicConfigKey(Class<T> type, String name, String description, T defaultValue) {
-        this.description = description;
-        this.name = checkNotNull(name, "name");
-        this.type = checkNotNull(type, "type");
-        this.defaultValue = defaultValue;
-        this.reconfigurable = false;
+        this(name, description, defaultValue);
+        this.type = TypeToken.of(type);
     }
 
     public BasicConfigKey(ConfigKey<T> key, T defaultValue) {
         this.description = key.getDescription();
         this.name = checkNotNull(key.getName(), "name");
-        this.type = checkNotNull(key.getType(), "type");
+        this.type = TypeToken.of(checkNotNull(key.getType(), "type"));
         this.defaultValue = defaultValue;
         this.reconfigurable = false;
     }
 
     protected BasicConfigKey(Builder<T> builder) {
         this.name = checkNotNull(builder.name, "name");
-        this.type = checkNotNull(builder.type, "type");
+        this.type = TypeToken.of(checkNotNull(builder.type, "type"));
         this.description = builder.description;
         this.defaultValue = builder.defaultValue;
         this.reconfigurable = builder.reconfigurable;
@@ -157,10 +152,11 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
     public String getName() { return name; }
 
     /** @see ConfigKey#getTypeName() */
-    public String getTypeName() { return type.getName(); }
+    public String getTypeName() { return type.getRawType().getName(); }
 
     /** @see ConfigKey#getType() */
-    public Class<T> getType() { return type; }
+    @SuppressWarnings("unchecked")
+    public Class<T> getType() { return (Class<T>) type.getRawType(); }
 
     /** @see ConfigKey#getDescription() */
     public String getDescription() { return description; }
@@ -226,7 +222,7 @@ public class BasicConfigKey<T> implements ConfigKeySelfExtracting<T>, Serializab
     }
 
     protected Object resolveValue(Object v, ExecutionContext exec) throws ExecutionException, InterruptedException {
-        return Tasks.resolveValue(v, type, exec, "config "+name);
+        return Tasks.resolveValue(v, type.getRawType(), exec, "config "+name);
     }
 
     /**
