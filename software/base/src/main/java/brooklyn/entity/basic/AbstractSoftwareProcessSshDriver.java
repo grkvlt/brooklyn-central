@@ -18,13 +18,13 @@ import brooklyn.config.BrooklynLogging;
 import brooklyn.config.ConfigKey;
 import brooklyn.config.ConfigUtils;
 import brooklyn.config.StringConfigMap;
-import brooklyn.entity.basic.lifecycle.CommonCommands;
 import brooklyn.entity.basic.lifecycle.ScriptHelper;
 import brooklyn.entity.basic.lifecycle.ScriptRunner;
 import brooklyn.entity.drivers.downloads.DownloadResolverManager;
 import brooklyn.location.basic.SshMachineLocation;
 import brooklyn.util.MutableMap;
 import brooklyn.util.internal.ssh.SshTool;
+import brooklyn.util.ssh.CommonCommands;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
@@ -45,9 +45,8 @@ public abstract class AbstractSoftwareProcessSshDriver extends AbstractSoftwareP
     public static final Logger log = LoggerFactory.getLogger(AbstractSoftwareProcessSshDriver.class);
     public static final Logger logSsh = LoggerFactory.getLogger(BrooklynLogging.SSH_IO);
 
-    public static final String BROOKLYN_HOME_DIR = "/tmp/brooklyn-"+System.getProperty("user.name");
-    public static final String DEFAULT_INSTALL_BASEDIR = BROOKLYN_HOME_DIR+File.separator+"installs";
-    public static final String DEFAULT_RUN_BASEDIR = BROOKLYN_HOME_DIR+File.separator+"apps";
+    public static final String BROOKLYN_DIRS_INSTALL = "brooklyn.dirs.install";
+    public static final String BROOKLYN_DIRS_RUN = "brooklyn.dirs.run";
     public static final String NO_VERSION_INFO = "no-version-info";
 
     /** include this flag in newScript creation to prevent entity-level flags from being included;
@@ -123,10 +122,13 @@ public abstract class AbstractSoftwareProcessSshDriver extends AbstractSoftwareP
         // Cache it; evaluate lazily (and late) to ensure managementContext.config is accessible and completed its setup
         // Caching has the benefit that the driver is usable, even if the entity is unmanaged (useful in some tests!)
         if (installDir == null) {
-            String installBasedir = ((EntityInternal)entity).getManagementContext().getConfig().getFirst("brooklyn.dirs.install");
-            if (installBasedir == null) installBasedir = DEFAULT_INSTALL_BASEDIR;
+            String installBasedir = ((EntityInternal)entity).getManagementContext().getConfig().getFirst(BROOKLYN_DIRS_INSTALL);
+            if (installBasedir == null) {
+                String dataDir = entity.getConfig(ConfigKeys.BROOKLYN_DATA_DIR);
+                installBasedir = dataDir + File.separator + "installs";
+            }
             if (installBasedir.endsWith(File.separator)) installBasedir.substring(0, installBasedir.length()-1);
-            
+
             installDir = elvis(entity.getConfig(SoftwareProcess.SUGGESTED_INSTALL_DIR),
                     installBasedir+"/"+getEntityVersionLabel("/"));
         }
@@ -135,10 +137,13 @@ public abstract class AbstractSoftwareProcessSshDriver extends AbstractSoftwareP
     
     public String getRunDir() {
         if (runDir == null) {
-            String runBasedir = ((EntityInternal)entity).getManagementContext().getConfig().getFirst("brooklyn.dirs.run");
-            if (runBasedir == null) runBasedir = DEFAULT_RUN_BASEDIR;
+            String runBasedir = ((EntityInternal)entity).getManagementContext().getConfig().getFirst(BROOKLYN_DIRS_RUN);
+            if (runBasedir == null) {
+                String dataDir = entity.getConfig(ConfigKeys.BROOKLYN_DATA_DIR);
+                runBasedir = dataDir + File.separator + "apps";
+            }
             if (runBasedir.endsWith(File.separator)) runBasedir.substring(0, runBasedir.length()-1);
-            
+
             runDir = elvis(entity.getConfig(SoftwareProcess.SUGGESTED_RUN_DIR), 
                     runBasedir+"/"+entity.getApplication().getId()+"/"+"entities"+"/"+
                     getEntityVersionLabel()+"_"+entity.getId());

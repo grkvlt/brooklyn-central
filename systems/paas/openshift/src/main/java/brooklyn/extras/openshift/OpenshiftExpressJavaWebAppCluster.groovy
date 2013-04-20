@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory
 
 import brooklyn.entity.Entity
 import brooklyn.entity.basic.AbstractEntity
-import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
+import brooklyn.entity.basic.Attributes
+import brooklyn.entity.basic.ConfigKeys
+import brooklyn.entity.basic.Lifecycle
 import brooklyn.entity.trait.Startable
 import brooklyn.entity.webapp.JavaWebAppService
 import brooklyn.event.basic.BasicConfigKey
@@ -27,7 +29,7 @@ class OpenshiftExpressJavaWebAppCluster extends AbstractEntity implements Starta
         super(flags, parent)
         setConfigIfValNonNull(ROOT_WAR, flags.war)
         setConfigIfValNonNull(APP_NAME, flags.appName)
-        setAttribute(AbstractService.SERVICE_STATUS, "uninitialized")
+        setAttribute(Attributes.SERVICE_STATE, Lifecycle.CREATED)
     }
 
     public String getAppName() {
@@ -123,7 +125,7 @@ class OpenshiftExpressJavaWebAppCluster extends AbstractEntity implements Starta
         //checkout app
         String server = getAppName()+"-"+userInfo.namespace+"."+userInfo.rhc_domain;
         String gitUrl = "ssh://"+appInfo.uuid+"@"+server+"/~/git/"+getAppName()+".git/"
-        String openshiftDir = AbstractSoftwareProcessSshDriver.BROOKLYN_HOME_DIR+"/"+application.id+"/openshift-"+id;
+        String openshiftDir = getConfig(ConfigKeys.BROOKLYN_DATA_DIR)+"/"+application.id+"/openshift-"+id;
         String openshiftGitDir = openshiftDir + "/git";
         
         log.debug "{} gitting app {}, ", this, getAppName()
