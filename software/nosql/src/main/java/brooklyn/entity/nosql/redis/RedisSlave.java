@@ -1,7 +1,7 @@
 package brooklyn.entity.nosql.redis;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.config.ConfigKeys;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;

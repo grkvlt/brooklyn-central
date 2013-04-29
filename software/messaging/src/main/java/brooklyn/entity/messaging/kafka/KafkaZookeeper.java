@@ -16,6 +16,7 @@
 package brooklyn.entity.messaging.kafka;
 
 import brooklyn.config.ConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.zookeeper.Zookeeper;
@@ -37,7 +38,7 @@ public interface KafkaZookeeper extends Zookeeper, Kafka {
 
     /** Location of the kafka configuration file template to be copied to the server. */
     @SetFromFlag("kafkaZookeeperConfig")
-    ConfigKey<String> KAFKA_ZOOKEEPER_CONFIG_TEMPLATE = new BasicConfigKey<String>(String.class,
+    ConfigKey<String> KAFKA_ZOOKEEPER_CONFIG_TEMPLATE = ConfigKeys.newConfigKey(
             "kafka.zookeeper.configTemplate", "Kafka zookeeper configuration template (in freemarker format)",
             "classpath://brooklyn/entity/messaging/kafka/zookeeper.properties");
 

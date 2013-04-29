@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.Entity;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.basic.SoftwareProcessImpl;
 import brooklyn.entity.java.UsesJmx;
@@ -23,20 +24,18 @@ import brooklyn.util.flags.SetFromFlag;
 public class Infinispan5Server extends SoftwareProcessImpl implements UsesJmx {
     private static final Logger log = LoggerFactory.getLogger(Infinispan5Server.class);
     
-    public static final BasicAttributeSensorAndConfigKey<String> PROTOCOL = new BasicAttributeSensorAndConfigKey<String>(
-            String.class, "infinispan.server.protocol", 
-            "Infinispan protocol (e.g. memcached, hotrod, or websocket)", "memcached");
+    public static final BasicAttributeSensorAndConfigKey<String> PROTOCOL = ConfigKeys.newAttributeSensorAndConfigKey(
+            "infinispan.server.protocol", "Infinispan protocol (e.g. memcached, hotrod, or websocket)", "memcached");
     
-    public static final PortAttributeSensorAndConfigKey PORT = new PortAttributeSensorAndConfigKey(
+    public static final PortAttributeSensorAndConfigKey PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
             "infinispan.server.port", "TCP port number to listen on");
 
     @SetFromFlag("version")
-    public static final BasicConfigKey<String> SUGGESTED_VERSION =
-            new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "5.0.0.CR8");
+    public static final ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "5.0.0.CR8");
 
     // Default filename is "infinispan-${version}-all.zip"
     @SetFromFlag("downloadUrl")
-    public static final BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
+    public static final BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
             SoftwareProcess.DOWNLOAD_URL, "http://sourceforge.net/projects/infinispan/files/infinispan/${version}/infinispan-${version}-all.zip/download");
 
     public Infinispan5Server() {

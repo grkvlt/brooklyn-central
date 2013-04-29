@@ -16,6 +16,8 @@
 package brooklyn.entity.zookeeper;
 
 import brooklyn.config.ConfigKey;
+import brooklyn.entity.basic.Attributes;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.java.UsesJmx;
 import brooklyn.entity.proxying.ImplementedBy;
@@ -34,14 +36,14 @@ import brooklyn.util.flags.SetFromFlag;
 public interface Zookeeper extends SoftwareProcess, UsesJmx {
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "3.3.3");
+    ConfigKey<String> SUGGESTED_VERSION = Configkeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "3.3.3");
 
     @SetFromFlag("zookeeperPort")
-    PortAttributeSensorAndConfigKey ZOOKEEPER_PORT = new PortAttributeSensorAndConfigKey("zookeeper.port", "Zookeeper port", "2181+");
+    PortAttributeSensorAndConfigKey ZOOKEEPER_PORT = Configkeys.newAttributeSensorAndConfigKey("zookeeper.port", "Zookeeper port", "2181+");
 
-    AttributeSensor<Long> OUTSTANDING_REQUESTS = new BasicAttributeSensor<Long>(Long.class, "zookeeper.outstandingRequests", "Outstanding request count");
-    AttributeSensor<Long> PACKETS_RECEIVED = new BasicAttributeSensor<Long>(Long.class, "zookeeper.packets.received", "Total packets received");
-    AttributeSensor<Long> PACKETS_SENT = new BasicAttributeSensor<Long>(Long.class, "zookeeper.packets.sent", "Total packets sent");
+    AttributeSensor<Long> OUTSTANDING_REQUESTS = Attributes.newAttributeSensor("zookeeper.outstandingRequests", "Outstanding request count");
+    AttributeSensor<Long> PACKETS_RECEIVED = Attributes.newAttributeSensor("zookeeper.packets.received", "Total packets received");
+    AttributeSensor<Long> PACKETS_SENT = Attributes.newAttributeSensor("zookeeper.packets.sent", "Total packets sent");
 
     Integer getZookeeperPort();
 

@@ -19,6 +19,7 @@ import brooklyn.catalog.Catalog;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
 import brooklyn.entity.Group;
+import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.group.Cluster;
 import brooklyn.entity.group.DynamicCluster;
@@ -59,26 +60,26 @@ public interface KafkaCluster extends Entity, Startable, Resizable, Group  {
     ConfigKey<Integer> START_TIMEOUT = ConfigKeys.START_TIMEOUT;
 
     @SetFromFlag("initialSize")
-    ConfigKey<Integer> INITIAL_SIZE = new BasicConfigKey<Integer>(Cluster.INITIAL_SIZE, 1);
+    ConfigKey<Integer> INITIAL_SIZE = ConfigKeys.newConfigKey(Cluster.INITIAL_SIZE, 1);
 
     /** Zookeeper for the cluster. If null a default be will created. */
     @SetFromFlag("zookeeper")
-    BasicAttributeSensorAndConfigKey<Zookeeper> ZOOKEEPER = new BasicAttributeSensorAndConfigKey<Zookeeper>(
-            Zookeeper.class, "kafka.cluster.zookeeper", "The zookeeper for the cluster; if null a default be will created");
+    BasicAttributeSensorAndConfigKey<Zookeeper> ZOOKEEPER = ConfigKeys.newAttributeSensorAndConfigKey(
+            "kafka.cluster.zookeeper", "The zookeeper for the cluster; if null a default be will created");
 
     /** Spec for creating the default Kafka zookeeper entity. */
     @SetFromFlag("zookeeperSpec")
-    BasicAttributeSensorAndConfigKey<EntitySpec<KafkaZookeeper>> ZOOKEEPER_SPEC = new BasicAttributeSensorAndConfigKey(
-            EntitySpec.class, "kafka.cluster.zookeeperSpec", "Spec for creating the kafka zookeeper");
+    BasicAttributeSensorAndConfigKey<EntitySpec<KafkaZookeeper>> ZOOKEEPER_SPEC = ConfigKeys.newAttributeSensorAndConfigKey(
+            "kafka.cluster.zookeeperSpec", "Spec for creating the kafka zookeeper");
 
     /** Spec for Kafka broker entities to be created. */
     @SetFromFlag("brokerSpec")
-    BasicAttributeSensorAndConfigKey<EntitySpec<KafkaBroker>> BROKER_SPEC = new BasicAttributeSensorAndConfigKey(
-            EntitySpec.class, "kafka.cluster.brokerSpec", "Spec for Kafka broker entiites to be created");
+    BasicAttributeSensorAndConfigKey<EntitySpec<KafkaBroker>> BROKER_SPEC = ConfigKeys.newAttributeSensorAndConfigKey(
+            "kafka.cluster.brokerSpec", "Spec for Kafka broker entiites to be created");
 
     /** Underlying Kafka broker cluster. */
-    AttributeSensor<DynamicCluster> CLUSTER = new BasicAttributeSensor<DynamicCluster>(
-            DynamicCluster.class, "kafka.cluster.brokerCluster", "Underlying Kafka broker cluster");
+    AttributeSensor<DynamicCluster> CLUSTER = Attributes.newAttributeSensor(
+            "kafka.cluster.brokerCluster", "Underlying Kafka broker cluster");
 
     Zookeeper getZookeeper();
 
