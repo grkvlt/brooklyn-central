@@ -67,19 +67,19 @@ public class MapListAndOtherStructuredConfigKeyTest {
         assertEquals(entity.getConfig(TestEntity.CONF_MAP_THING), ImmutableMap.of("akey", "aval", "bkey", "bval"));
     }
 
-//    @Test
-//    public void testConfigKeyStringWontStoreAndRetrieveMaps() throws Exception {
-//        Map<String, ?> v1 = ImmutableMap.of("a", 1, "b", "bb");
-//        //it only allows strings
-//        try {
-//            entity.setConfig(TestEntity.CONF_MAP_THING.subKey("akey"), v1); // XXX
-//            fail();
-//        } catch (Exception e) {
-//            ClassCastException cce = Exceptions.getFirstThrowableOfType(e, ClassCastException.class);
-//            if (cce == null) throw e;
-//            if (!cce.getMessage().contains("Cannot coerce type")) throw e;
-//        }
-//    }
+    @Test
+    public void testConfigKeyStringWontStoreAndRetrieveMaps() throws Exception {
+        Map<String, ?> v1 = ImmutableMap.of("a", 1, "b", "bb");
+        //it only allows strings
+        try {
+            entity.setConfig(TestEntity.CONF_MAP_THING.subKey("akey"), v1); // XXX
+            fail();
+        } catch (Exception e) {
+            ClassCastException cce = Exceptions.getFirstThrowableOfType(e, ClassCastException.class);
+            if (cce == null) throw e;
+            if (!cce.getMessage().contains("Cannot coerce type")) throw e;
+        }
+    }
 
     @Test
     public void testConfigKeyCanStoreAndRetrieveMaps() throws Exception {
@@ -107,20 +107,20 @@ public class MapListAndOtherStructuredConfigKeyTest {
         assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), ImmutableMap.of("akey", "aval", "bkey", "bval"));
     }
 
-//    @Test
-//    public void testListConfigKeyAddDirect() throws Exception {
-//        entity.setConfig(TestEntity.CONF_LIST_THING.subKey(), "aval");
-//        entity.setConfig(TestEntity.CONF_LIST_THING, "bval"); // XXX
-//        assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), ImmutableList.of("aval", "bval"));
-//    }
+    @Test
+    public void testListConfigKeyAddDirect() throws Exception {
+        entity.setConfig(TestEntity.CONF_LIST_THING.subKey(), "aval");
+        entity.setConfig(TestEntity.CONF_LIST_THING, "bval"); // XXX
+        assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), ImmutableList.of("aval", "bval"));
+    }
 
-//    @Test
-//    public void testListConfigKeyClear() throws Exception {
-//        entity.setConfig(TestEntity.CONF_LIST_THING.subKey(), "aval");
-//        entity.setConfig(TestEntity.CONF_LIST_THING, ListModifications.clearing()); // XXX
-//        // for now defaults to null, but empty list might be better? or whatever the default is?
-//        assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), null);
-//    }
+    @Test
+    public void testListConfigKeyClear() throws Exception {
+        entity.setConfig(TestEntity.CONF_LIST_THING.subKey(), "aval");
+        entity.setConfig(TestEntity.CONF_LIST_THING, ListModifications.clearing()); // XXX
+        // for now defaults to null, but empty list might be better? or whatever the default is?
+        assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), null);
+    }
 
     @Test
     public void testListConfigKeyAddMod() throws Exception {
@@ -136,12 +136,12 @@ public class MapListAndOtherStructuredConfigKeyTest {
         assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), ImmutableList.of("aval", "bval", "cval"));
     }
 
-//    @Test
-//    public void testListConfigKeyAddItemMod() throws Exception {
-//        entity.setConfig(TestEntity.CONF_LIST_THING.subKey(), "aval");
-//        entity.setConfig(TestEntity.CONF_LIST_THING, ListModifications.addItem(ImmutableList.of("bval", "cval"))); // XXX
-//        assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), ImmutableList.of("aval", ImmutableList.of("bval", "cval")));
-//    }
+    @Test
+    public void testListConfigKeyAddItemMod() throws Exception {
+        entity.setConfig(TestEntity.CONF_LIST_THING.subKey(), "aval");
+        entity.setConfig(TestEntity.CONF_LIST_THING, ListModifications.addItem(ImmutableList.of("bval", "cval"))); // XXX
+        assertEquals(entity.getConfig(TestEntity.CONF_LIST_THING), ImmutableList.of("aval", ImmutableList.of("bval", "cval")));
+    }
 
     @Test
     public void testListConfigKeySetMod() throws Exception {
@@ -164,13 +164,13 @@ public class MapListAndOtherStructuredConfigKeyTest {
         assertEquals(entity.getConfig(TestEntity.CONF_MAP_THING), ImmutableMap.of("akey", "aval", "bkey", "bval"));
     }
 
-//    @Test
-//    public void testMapConfigClearMod() throws Exception {
-//        entity.setConfig(TestEntity.CONF_MAP_THING.subKey("akey"), "aval");
-//        entity.setConfig(TestEntity.CONF_MAP_THING, MapModifications.clearing()); // XXX
-//        // for now defaults to null, but empty map might be better? or whatever the default is?
-//        assertEquals(entity.getConfig(TestEntity.CONF_MAP_THING), null);
-//    }
+    @Test
+    public void testMapConfigClearMod() throws Exception {
+        entity.setConfig(TestEntity.CONF_MAP_THING.subKey("akey"), "aval");
+        entity.setConfig(TestEntity.CONF_MAP_THING, MapModifications.clearing()); // XXX
+        // for now defaults to null, but empty map might be better? or whatever the default is?
+        assertEquals(entity.getConfig(TestEntity.CONF_MAP_THING), null);
+    }
 
     @Test
     public void testMapConfigSetMode() throws Exception {

@@ -54,16 +54,17 @@ public interface EntityInternal extends Entity {
     @Beta // for internal use only
     EntityInternal configure(Map flags);
 
-    /** sets the value of the given attribute sensor from the config key value herein,
+    /**
+     * Sets the value of the given attribute sensor from the config key value herein,
      * if the config key resolves to a non-null value as a sensor
      * 
      * @deprecated since 0.5; use {@link #setAttribute(AttributeSensor, Object)}, such as 
-     * <pre>
+     * <pre>{@code
      * T val = getConfig(KEY.getConfigKey());
      * if (val != null) {
      *     setAttribute(KEY, val)
      * }
-     * </pre>
+     * }</pre>
      * 
      * @return old value
      */

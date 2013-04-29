@@ -164,8 +164,13 @@ public abstract class AbstractLocation implements Location, HasHostGeoInfo, Conf
         return configBag;
     }
     
-    public <T> T setConfig(ConfigKey<T> key, T value) {
-        return configBag.put(key, value);
+    public <T> T setConfig(ConfigKey<T> key, Object v) {
+        try {
+            T val = TypeCoercions.coerce(v, key.getType());
+            return configBag.put(key, val);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Cannot coerce or set "+v+" to "+key, e);
+        }
     }
     
     public void setName(String name) {

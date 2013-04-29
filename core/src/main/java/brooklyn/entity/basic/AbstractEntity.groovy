@@ -738,39 +738,32 @@ public abstract class AbstractEntity extends GroovyObjectSupport implements Enti
     }
 
     @Override
-    public <T> T setConfig(ConfigKey<T> key, T val) {
-        assertNotYetOwned()
-        configsInternal.setConfig(key, val);
-    }
-
-    public <T> T setConfig(ConfigKey<T> key, Task<T> val) {
-        assertNotYetOwned()
-        configsInternal.setConfig(key, val);
-    }
-
-    public <T> T setConfig(ConfigKey<T> key, DeferredSupplier val) {
+    public <T> T setConfig(ConfigKey<T> key, Object val) {
         assertNotYetOwned()
         configsInternal.setConfig(key, val);
     }
 
     @Override
-    public <T> T setConfig(HasConfigKey<T> key, T val) {
-        setConfig(key.configKey, val)
-    }
-
-    public <T> T setConfig(HasConfigKey<T> key, Task<T> val) {
-        setConfig(key.configKey, val)
-    }
-
-    public <T> T setConfig(HasConfigKey<T> key, DeferredSupplier val) {
-        setConfig(key.configKey, val)
-    }
-
-    public <T> T setConfigEvenIfOwned(ConfigKey<T> key, T val) {
+    public <T> T setConfig(ConfigKey<T> key, Task val) {
+        assertNotYetOwned()
         configsInternal.setConfig(key, val);
     }
 
-    public <T> T setConfigEvenIfOwned(HasConfigKey<T> key, T val) {
+    @Override
+    public <T> T setConfig(HasConfigKey<T> key, Object val) {
+        setConfig(key.configKey, val)
+    }
+
+    @Override
+    public <T> T setConfig(HasConfigKey<T> key, Task val) {
+        setConfig(key.configKey, val)
+    }
+
+    public <T> T setConfigEvenIfOwned(ConfigKey<T> key, Object val) {
+        configsInternal.setConfig(key, val);
+    }
+
+    public <T> T setConfigEvenIfOwned(HasConfigKey<T> key, Object val) {
         setConfigEvenIfOwned(key.getConfigKey(), val);
     }
 

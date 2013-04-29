@@ -109,7 +109,7 @@ public abstract class AbstractPolicy extends AbstractEntityAdjunct implements Po
         return configsInternal.getConfig(key);
     }
     
-    public <T> T setConfig(ConfigKey<T> key, T val) {
+    public <T> T setConfig(ConfigKey<T> key, Object val) {
         if (entity != null && isRunning()) {
             doReconfigureConfig(key, val);
         }
@@ -127,7 +127,7 @@ public abstract class AbstractPolicy extends AbstractEntityAdjunct implements Po
         return configsInternal;
     }
     
-    protected <T> void doReconfigureConfig(ConfigKey<T> key, T val) {
+    protected <T> void doReconfigureConfig(ConfigKey<T> key, Object val) {
         throw new UnsupportedOperationException("reconfiguring "+key+" unsupported for "+this);
     }
     

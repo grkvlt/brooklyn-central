@@ -49,7 +49,7 @@ public interface Policy extends EntityAdjunct, Rebindable {
     
     <T> T getConfig(ConfigKey<T> key);
     
-    <T> T setConfig(ConfigKey<T> key, T val);
+    <T> T setConfig(ConfigKey<T> key, Object val);
     
     Map<ConfigKey<?>, Object> getAllConfig();
 
