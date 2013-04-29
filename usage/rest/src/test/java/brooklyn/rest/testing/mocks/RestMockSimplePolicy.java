@@ -24,7 +24,7 @@ public class RestMockSimplePolicy extends AbstractPolicy {
     }
 
     @SetFromFlag("sampleConfig")
-    public static final ConfigKey<String> SAMPLE_CONFIG = BasicConfigKey.builder(String.class)
+    public static final ConfigKey<String> SAMPLE_CONFIG = BasicConfigKey.<String>builder()
             .name("brooklyn.rest.mock.sample.config")
             .description("Mock sample config")
             .defaultValue("DEFAULT_VALUE")
@@ -32,7 +32,7 @@ public class RestMockSimplePolicy extends AbstractPolicy {
             .build();
     
     @Override
-    protected <T> void doReconfigureConfig(ConfigKey<T> key, T val) {
+    protected <T> void doReconfigureConfig(ConfigKey<T> key, Object val) {
         // no-op
     }
 }

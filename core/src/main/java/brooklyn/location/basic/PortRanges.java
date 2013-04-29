@@ -20,13 +20,13 @@ public class PortRanges {
 
     public static final int MAX_PORT = 65535;
     public static final PortRange ANY_HIGH_PORT = new LinearPortRange(1024, MAX_PORT);
-    
+
     public static class SinglePort implements PortRange, Serializable {
-		private static final long serialVersionUID = 7446781416534230401L;
-		
-		final int port;
+        private static final long serialVersionUID = 7446781416534230401L;
+
+        final int port;
         private SinglePort(int port) { this.port = port; }
-        
+
         @Override
         public Iterator<Integer> iterator() {
             return Collections.singletonList(port).iterator();
@@ -41,28 +41,28 @@ public class PortRanges {
         }
         @Override
         public String toString() {
-            return //getClass().getName()+"["+
-                    ""+port; //+"]";
+            return Integer.toString(port);
         }
         public int hashCode() {
             return Objects.hashCode(port);
         }
         @Override
         public boolean equals(Object obj) {
-            return (obj instanceof SinglePort) && port == ((SinglePort)obj).port;
+            return (obj instanceof SinglePort) && port == ((SinglePort) obj).port;
         }
     }
 
+    /** @deprecated since 0.5.0; use {@link LinearPortRange} */
     @Deprecated
     public static class BasicPortRange extends LinearPortRange {
-		private static final long serialVersionUID = 2604690520893353582L;
-		public static final int MAX_PORT = PortRanges.MAX_PORT;
+        private static final long serialVersionUID = 2604690520893353582L;
+        public static final int MAX_PORT = PortRanges.MAX_PORT;
         public static final PortRange ANY_HIGH_PORT = PortRanges.ANY_HIGH_PORT;
+
         public BasicPortRange(int start, int end) { super(start, end); }
         @Override
         public String toString() {
-            return //getClass().getName()+"["+
-                    start+"-"+end; //+"]";
+            return start+"-"+end;
         }
         @Override
         public boolean equals(Object obj) {
@@ -73,11 +73,12 @@ public class PortRanges {
             return toString().hashCode();
         }
     }
-    
+
     public static class LinearPortRange implements PortRange, Serializable {
-		private static final long serialVersionUID = -9165280509363743508L;
-		
-		final int start, end, delta;
+        private static final long serialVersionUID = -9165280509363743508L;
+
+        final int start, end, delta;
+
         private LinearPortRange(int start, int end, int delta) {
             this.start = start;
             this.end = end;
@@ -87,13 +88,13 @@ public class PortRanges {
         public LinearPortRange(int start, int end) {
             this(start, end, (start<=end?1:-1));
         }
-        
+
         @Override
         public Iterator<Integer> iterator() {
             return new Iterator<Integer>() {
                 int next = start;
                 boolean hasNext = true;
-                
+
                 @Override
                 public boolean hasNext() {
                     return hasNext;
@@ -108,14 +109,14 @@ public class PortRanges {
                     if ((delta>0 && next>end) || (delta<0 && next<end)) hasNext = false;
                     return result;
                 }
-                
+
                 @Override
                 public void remove() {
                     throw new UnsupportedOperationException();
                 }
             };
         }
-        
+
         @Override
         public boolean isEmpty() {
             return false;
@@ -140,11 +141,11 @@ public class PortRanges {
             return start == o.start && end == o.end && delta == o.delta;
         }
     }
-    
+
     public static class AggregatePortRange implements PortRange, Serializable {
-		private static final long serialVersionUID = 7332682500816739660L;
-		
-		final List<PortRange> ranges;
+        private static final long serialVersionUID = 7332682500816739660L;
+
+        final List<PortRange> ranges;
         private AggregatePortRange(List<PortRange> ranges) {
             this.ranges = ImmutableList.copyOf(ranges);
         }
@@ -184,7 +185,7 @@ public class PortRanges {
     public static PortRange fromInteger(int x) {
         return new SinglePort(x);
     }
-    
+
     public static PortRange fromCollection(Collection<?> c) {
         List<PortRange> l = new ArrayList<PortRange>();
         for (Object o: c) {
@@ -239,9 +240,9 @@ public class PortRanges {
             public PortRange apply(Collection x) { return fromCollection(x); }
         });
     }
-    
+
     static {
         init();
     }
-    
+
 }

@@ -23,20 +23,17 @@ import brooklyn.event.Sensor;
 import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 import brooklyn.event.basic.BasicNotificationSensor;
-import brooklyn.event.basic.BasicSensor;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.location.basic.PortRanges;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.reflect.TypeToken;
 
 /**
  * Dictionary of {@link Sensor} entries.
  */
-@SuppressWarnings("serial")
 public class Attributes {
 
-    public static final Sensor<Void> LOCATION_CHANGED = newNotificationSensor(
+    public static final Sensor<Void> LOCATION_CHANGED = new BasicNotificationSensor<Void>(
             "entity.locationChanged", "Indicates that an entity's location has been changed");
 
     /**
@@ -45,12 +42,12 @@ public class Attributes {
      * @deprecated since 0.5; see {@link ConfigKeys#SUGGESTED_VERSION}
      */
     @Deprecated
-    public static final AttributeSensor<String> VERSION = newAttributeSensor("version", "Version information");
+    public static final AttributeSensor<String> VERSION = new BasicAttributeSensor<String>("version", "Version information");
 
-    public static final BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    public static final BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             "download.url", "URL pattern for downloading the installer (will substitute things like ${version} automatically)");
 
-    public static final BasicAttributeSensorAndConfigKey<Map<String, String>> DOWNLOAD_ADDON_URLS = ConfigKeys.newAttributeSensorAndConfigKey(
+    public static final BasicAttributeSensorAndConfigKey<Map<String, String>> DOWNLOAD_ADDON_URLS = new BasicAttributeSensorAndConfigKey<Map<String, String>>(
             "download.addon.urls", "URL patterns for downloading named add-ons (will substitute things like ${version} automatically)");
 
     /*
@@ -58,38 +55,38 @@ public class Attributes {
      */
 
     /** 1099 is standard, sometimes 9999. */
-    public static final PortAttributeSensorAndConfigKey JMX_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
+    public static final PortAttributeSensorAndConfigKey JMX_PORT = new PortAttributeSensorAndConfigKey(
             "jmx.port", "JMX port (RMI registry port)", PortRanges.fromString("1099, 31099+"));
 
     /** Usually chosen by java; setting this will often not have any effect. */
-    public static final PortAttributeSensorAndConfigKey RMI_SERVER_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
+    public static final PortAttributeSensorAndConfigKey RMI_SERVER_PORT = new PortAttributeSensorAndConfigKey(
             "rmi.server.port", "RMI server port", PortRanges.fromString("9001, 39001+"));
 
     /** @deprecated since 0.4, use {@link #RMI_REGISTRY_PORT} instead */
     @Deprecated
     public static final PortAttributeSensorAndConfigKey RMI_PORT = RMI_SERVER_PORT;
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = ConfigKeys.newAttributeSensorAndConfigKey("jmx.user", "JMX username");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = new BasicAttributeSensorAndConfigKey<String>("jmx.user", "JMX username");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = ConfigKeys.newAttributeSensorAndConfigKey("jmx.password", "JMX password");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = new BasicAttributeSensorAndConfigKey<String>("jmx.password", "JMX password");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_CONTEXT = ConfigKeys.newAttributeSensorAndConfigKey("jmx.context", "JMX context path", "jmxrmi");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_CONTEXT = new BasicAttributeSensorAndConfigKey<String>("jmx.context", "JMX context path", "jmxrmi");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_SERVICE_URL = ConfigKeys.newAttributeSensorAndConfigKey("jmx.serviceurl", "The URL for connecting to the MBean Server");
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_SERVICE_URL = new BasicAttributeSensorAndConfigKey<String>("jmx.serviceurl", "The URL for connecting to the MBean Server");
 
     /*
      * Port number attributes.
      */
 
-    public static final AttributeSensor<List<Integer>> PORT_NUMBERS = newAttributeSensor("port.list", "List of port numbers");
+    public static final AttributeSensor<List<Integer>> PORT_NUMBERS = new BasicAttributeSensor<List<Integer>>("port.list", "List of port numbers");
 
-    public static final AttributeSensor<List<Sensor<Integer>>> PORT_SENSORS = newAttributeSensor("port.list.sensors", "List of port number attributes");
+    public static final AttributeSensor<List<Sensor<Integer>>> PORT_SENSORS = new BasicAttributeSensor<List<Sensor<Integer>>>("port.list.sensors", "List of port number attributes");
 
     public static final PortAttributeSensorAndConfigKey HTTP_PORT = new PortAttributeSensorAndConfigKey(
-            "http.port", "HTTP port", ImmutableList.of(8080,"18080+"));
+            "http.port", "HTTP port", ImmutableList.of(8080, "18080+"));
 
     public static final PortAttributeSensorAndConfigKey HTTPS_PORT = new PortAttributeSensorAndConfigKey(
-            "https.port", "HTTP port (with SSL/TLS)", ImmutableList.of(8443,"18443+"));
+            "https.port", "HTTP port (with SSL/TLS)", ImmutableList.of(8443, "18443+"));
 
     public static final PortAttributeSensorAndConfigKey SSH_PORT = new PortAttributeSensorAndConfigKey("ssh.port", "SSH port", 22);
     public static final PortAttributeSensorAndConfigKey SMTP_PORT = new PortAttributeSensorAndConfigKey("smtp.port", "SMTP port", 25);
@@ -100,95 +97,15 @@ public class Attributes {
      * Location/connection attributes.
      */
 
-    public static final AttributeSensor<String> HOSTNAME = newAttributeSensor("host.name", "Host name");
-    public static final AttributeSensor<String> ADDRESS = newAttributeSensor("host.address", "Host IP address");
+    public static final AttributeSensor<String> HOSTNAME = new BasicAttributeSensor<String>("host.name", "Host name");
+    public static final AttributeSensor<String> ADDRESS = new BasicAttributeSensor<String>("host.address", "Host IP address");
 	
     /*
      * Lifecycle attributes
      */
 
-    public static final AttributeSensor<Lifecycle> SERVICE_STATE = newAttributeSensor("service.state", "Service lifecycle state");
+    public static final AttributeSensor<Lifecycle> SERVICE_STATE = new BasicAttributeSensor<Lifecycle>("service.state", "Service lifecycle state");
 
-    public static final AttributeSensor<String> LOG_FILE_LOCATION = newAttributeSensor("log.location", "Log file location (optional)");
-
-    /*
-     * Static methods to build new AttributeSensor instances.
-     */
-
-    public static <T> AttributeSensor<T> newAttributeSensor(Class<T> type, String name) {
-        return new BasicAttributeSensor<T>(type, name);
-    }
-
-    public static <T> AttributeSensor<T> newAttributeSensor(Class<T> type, String name, String description) {
-        return new BasicAttributeSensor<T>(type, name, description);
-    }
-
-    public static <T> AttributeSensor<T> newAttributeSensor(TypeToken<T> type, String name) {
-        return new BasicAttributeSensor<T>(type, name);
-    }
-
-    public static <T> AttributeSensor<T> newAttributeSensor(TypeToken<T> type, String name, String description) {
-        return new BasicAttributeSensor<T>(type, name, description);
-    }
-
-    public static <T> AttributeSensor<T> newAttributeSensor(String name) {
-        return new BasicAttributeSensor<T>(name);
-    }
-
-    public static <T> AttributeSensor<T> newAttributeSensor(String name, String description) {
-        return new BasicAttributeSensor<T>(name, description);
-    }
-
-    /*
-     * Static methods to build new Sensor instances.
-     */
-
-    public static <T> Sensor<T> newNotificationSensor(Class<T> type, String name) {
-        return new BasicNotificationSensor<T>(type, name);
-    }
-
-    public static <T> Sensor<T> newNotificationSensor(Class<T> type, String name, String description) {
-        return new BasicNotificationSensor<T>(type, name, description);
-    }
-
-    public static <T> Sensor<T> newNotificationSensor(TypeToken<T> type, String name) {
-        return new BasicNotificationSensor<T>(type, name);
-    }
-
-    public static <T> Sensor<T> newNotificationSensor(TypeToken<T> type, String name, String description) {
-        return new BasicNotificationSensor<T>(type, name, description);
-    }
-
-    public static <T> Sensor<T> newNotificationSensor(String name) {
-        return new BasicNotificationSensor<T>(name);
-    }
-
-    public static <T> Sensor<T> newNotificationSensor(String name, String description) {
-        return new BasicNotificationSensor<T>(name, description);
-    }
-
-    public static <T> Sensor<T> newSensor(Class<T> type, String name) {
-        return new BasicSensor<T>(type, name);
-    }
-
-    public static <T> Sensor<T> newSensor(Class<T> type, String name, String description) {
-        return new BasicSensor<T>(type, name, description);
-    }
-
-    public static <T> Sensor<T> newSensor(TypeToken<T> type, String name) {
-        return new BasicSensor<T>(type, name);
-    }
-
-    public static <T> Sensor<T> newSensor(TypeToken<T> type, String name, String description) {
-        return new BasicSensor<T>(type, name, description);
-    }
-
-    public static <T> Sensor<T> newSensor(String name) {
-        return new BasicSensor<T>(name);
-    }
-
-    public static <T> Sensor<T> newSensor(String name, String description) {
-        return new BasicSensor<T>(name, description);
-    }
+    public static final AttributeSensor<String> LOG_FILE_LOCATION = new BasicAttributeSensor<String>("log.location", "Log file location (optional)");
 
 }

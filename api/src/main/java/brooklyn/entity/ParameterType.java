@@ -13,7 +13,7 @@ public interface ParameterType<T> extends Serializable {
     
     public String getName();
 
-    public Class<T> getParameterClass();
+    public Class<? super T> getParameterClass();
 
     /**
      * The canonical name of the parameter class; especially useful if the class 

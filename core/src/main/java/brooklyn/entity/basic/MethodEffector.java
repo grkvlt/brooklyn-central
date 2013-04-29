@@ -46,7 +46,7 @@ public class MethodEffector<T> extends AbstractEffector<T> {
             Class<?>[] parameterTypes = best.getParameterTypes();
             for (int i = 0; i < parameterAnnotations.length; i++) {
                 Annotation[] anns = parameterAnnotations[i];
-                Class<?> type = parameterTypes[i];
+                Class type = parameterTypes[i];
                 NamedParameter nameAnnotation = findAnnotation(anns, NamedParameter.class);
                 Description descriptionAnnotation = findAnnotation(anns, Description.class);
                 DefaultValue dvAnnotation = findAnnotation(anns, DefaultValue.class);

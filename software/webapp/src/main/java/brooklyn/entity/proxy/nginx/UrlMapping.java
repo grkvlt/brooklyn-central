@@ -6,8 +6,6 @@ import brooklyn.config.ConfigKey;
 import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.AbstractGroup;
-import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.MethodEffector;
 import brooklyn.entity.proxy.AbstractController;
@@ -15,6 +13,8 @@ import brooklyn.entity.proxy.ProxySslConfig;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.webapp.WebAppService;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
 /**
@@ -29,13 +29,13 @@ public interface UrlMapping extends AbstractGroup {
     Effector<Void> DISCARD = new MethodEffector<Void>(UrlMapping.class, "discard");
 
     @SetFromFlag("label")
-    ConfigKey<String> LABEL = ConfigKeys.newConfigKey("urlmapping.label", "optional human-readable label to identify a server");
+    ConfigKey<String> LABEL = new BasicConfigKey<String>("urlmapping.label", "optional human-readable label to identify a server");
 
     @SetFromFlag("domain")
-    ConfigKey<String> DOMAIN = ConfigKeys.newConfigKey("urlmapping.domain", "domain (hostname, e.g. www.foo.com) to present for this URL map rule; required.");
+    ConfigKey<String> DOMAIN = new BasicConfigKey<String>("urlmapping.domain", "domain (hostname, e.g. www.foo.com) to present for this URL map rule; required.");
 
     @SetFromFlag("path")
-    ConfigKey<String> PATH = ConfigKeys.newConfigKey("urlmapping.path",
+    ConfigKey<String> PATH = new BasicConfigKey<String>("urlmapping.path",
                 "URL path (pattern) for this URL map rule. Currently only supporting regex matches " +
                 "(if not supplied, will match all paths at the indicated domain)");
 
@@ -43,12 +43,12 @@ public interface UrlMapping extends AbstractGroup {
     ConfigKey<ProxySslConfig> SSL_CONFIG = AbstractController.SSL_CONFIG;
 
     @SetFromFlag("rewrites")
-    ConfigKey<Collection<UrlRewriteRule>> REWRITES = ConfigKeys.newConfigKey("urlmapping.rewrites", "Set of URL rewrite rules to apply");
+    ConfigKey<Collection<UrlRewriteRule>> REWRITES = new BasicConfigKey<Collection<UrlRewriteRule>>("urlmapping.rewrites", "Set of URL rewrite rules to apply");
 
     @SetFromFlag("target")
-    ConfigKey<Entity> TARGET_PARENT = ConfigKeys.newConfigKey("urlmapping.target.parent", "optional target entity whose children will be pointed at by this mapper");
+    ConfigKey<Entity> TARGET_PARENT = new BasicConfigKey<Entity>("urlmapping.target.parent", "optional target entity whose children will be pointed at by this mapper");
 
-    AttributeSensor<Collection<String>> TARGET_ADDRESSES = Attributes.newAttributeSensor("urlmapping.target.addresses", "set of addresses which should be forwarded to by this URL mapping");
+    AttributeSensor<Collection<String>> TARGET_ADDRESSES = new BasicAttributeSensor<Collection<String>>("urlmapping.target.addresses", "set of addresses which should be forwarded to by this URL mapping");
 
     AttributeSensor<String> ROOT_URL = WebAppService.ROOT_URL;
 

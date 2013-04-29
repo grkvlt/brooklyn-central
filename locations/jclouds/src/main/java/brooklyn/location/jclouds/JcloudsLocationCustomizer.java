@@ -4,7 +4,6 @@ import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.compute.options.TemplateOptions;
 
-
 import com.google.common.annotations.Beta;
 
 /**

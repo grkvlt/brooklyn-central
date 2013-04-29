@@ -7,7 +7,6 @@ import brooklyn.catalog.Catalog;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Effector;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.MethodEffector;
 import brooklyn.entity.basic.NamedParameter;
@@ -15,8 +14,10 @@ import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.java.UsesJava;
 import brooklyn.entity.java.UsesJmx;
 import brooklyn.entity.proxying.ImplementedBy;
-import brooklyn.event.Sensor;
+import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.MapConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.util.flags.SetFromFlag;
@@ -42,52 +43,52 @@ public interface KarafContainer extends SoftwareProcess, UsesJava, UsesJmx {
     Effector<Void> UPDATE_SERVICE_PROPERTIES = new MethodEffector<Void>(KarafContainer.class, "updateServiceProperties");
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(
             SoftwareProcess.SUGGESTED_VERSION, "2.3.0");
 
     @SetFromFlag("downloadUrl")
-    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             SoftwareProcess.DOWNLOAD_URL, "http://apache.mirror.anlx.net/karaf/${version}/apache-karaf-${version}.tar.gz");
 
     @SetFromFlag("karafName")
-    BasicAttributeSensorAndConfigKey<String> KARAF_NAME = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> KARAF_NAME = new BasicAttributeSensorAndConfigKey<String>(
             "karaf.name", "Karaf instance name", "root");
 
     // TODO too complicated? Used by KarafContainer; was in JavaApp; where should it be in brave new world?
-    MapConfigKey<Map<String,String>> NAMED_PROPERTY_FILES = ConfigKeys.newMapConfigKey(
+    MapConfigKey<Map<String,String>> NAMED_PROPERTY_FILES = new MapConfigKey<Map<String, String>>(
             "karaf.runtime.files", "Property files to be generated, referenced by name relative to runDir");
 
     @SetFromFlag("jmxUser")
-    BasicAttributeSensorAndConfigKey<String> JMX_USER = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> JMX_USER = new BasicAttributeSensorAndConfigKey<String>(
             Attributes.JMX_USER, "karaf");
 
     @SetFromFlag("jmxPassword")
-    BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = new BasicAttributeSensorAndConfigKey<String>(
             Attributes.JMX_PASSWORD, "karaf");
 
     @SetFromFlag("jmxPort")
-    PortAttributeSensorAndConfigKey JMX_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
+    PortAttributeSensorAndConfigKey JMX_PORT = new PortAttributeSensorAndConfigKey(
             UsesJmx.JMX_PORT, "1099+");
 
     @SetFromFlag("rmiServerPort")
-    PortAttributeSensorAndConfigKey RMI_SERVER_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
+    PortAttributeSensorAndConfigKey RMI_SERVER_PORT = new PortAttributeSensorAndConfigKey(
             UsesJmx.RMI_SERVER_PORT, "44444+");
     @Deprecated // since 0.4 use RMI_SERVER_PORT
     PortAttributeSensorAndConfigKey RMI_PORT = RMI_SERVER_PORT;
 
     @SetFromFlag("jmxContext")
-    BasicAttributeSensorAndConfigKey<String> JMX_CONTEXT = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> JMX_CONTEXT = new BasicAttributeSensorAndConfigKey<String>(
             UsesJmx.JMX_CONTEXT, "karaf-"+KARAF_NAME.getConfigKey().getDefaultValue());
 
-    Sensor<Map<?, ?>> KARAF_INSTANCES = Attributes.newAttributeSensor("karaf.admin.instances", "Karaf admin instances");
-    Sensor<Boolean> KARAF_ROOT = Attributes.newAttributeSensor("karaf.admin.isRoot", "Karaf admin isRoot");
-    Sensor<String> KARAF_JAVA_OPTS = Attributes.newAttributeSensor("karaf.admin.java_opts", "Karaf Java opts");
-    Sensor<String> KARAF_INSTALL_LOCATION  = Attributes.newAttributeSensor("karaf.admin.location", "Karaf install location");
-    Sensor<Integer> KARAF_PID = Attributes.newAttributeSensor("karaf.admin.pid", "Karaf instance PID");
-    Sensor<Integer> KARAF_SSH_PORT = Attributes.newAttributeSensor("karaf.admin.ssh_port", "Karaf SSH Port");
-    Sensor<Integer> KARAF_RMI_REGISTRY_PORT = Attributes.newAttributeSensor("karaf.admin.rmi_registry_port", "Karaf instance RMI registry port");
-    Sensor<Integer> KARAF_RMI_SERVER_PORT = Attributes.newAttributeSensor("karaf.admin.rmi_server_port", "Karaf RMI (JMX) server port");
-    Sensor<String> KARAF_STATE = Attributes.newAttributeSensor("karaf.admin.state", "Karaf instance state");
+    AttributeSensor<Map<?, ?>> KARAF_INSTANCES = new BasicAttributeSensor<Map<?, ?>>("karaf.admin.instances", "Karaf admin instances");
+    AttributeSensor<Boolean> KARAF_ROOT = new BasicAttributeSensor<Boolean>("karaf.admin.isRoot", "Karaf admin isRoot");
+    AttributeSensor<String> KARAF_JAVA_OPTS = new BasicAttributeSensor<String>("karaf.admin.java_opts", "Karaf Java opts");
+    AttributeSensor<String> KARAF_INSTALL_LOCATION  = new BasicAttributeSensor<String>("karaf.admin.location", "Karaf install location");
+    AttributeSensor<Integer> KARAF_PID = new BasicAttributeSensor<Integer>("karaf.admin.pid", "Karaf instance PID");
+    AttributeSensor<Integer> KARAF_SSH_PORT = new BasicAttributeSensor<Integer>("karaf.admin.ssh_port", "Karaf SSH Port");
+    AttributeSensor<Integer> KARAF_RMI_REGISTRY_PORT = new BasicAttributeSensor<Integer>("karaf.admin.rmi_registry_port", "Karaf instance RMI registry port");
+    AttributeSensor<Integer> KARAF_RMI_SERVER_PORT = new BasicAttributeSensor<Integer>("karaf.admin.rmi_server_port", "Karaf RMI (JMX) server port");
+    AttributeSensor<String> KARAF_STATE = new BasicAttributeSensor<String>("karaf.admin.state", "Karaf instance state");
 
     @Description("Updates the OSGi Service's properties, adding (and overriding) the given key-value pairs")
     void updateServiceProperties(
@@ -100,7 +101,7 @@ public interface KarafContainer extends SoftwareProcess, UsesJava, UsesJmx {
             throws Exception;
 
     @Description("Lists all the karaf bundles")
-    Map<Long,Map<String,?>> listBundles();
+    Map<Long,Map<String, ?>> listBundles();
 
     /**
      * throws URISyntaxException If bundle name is not a valid URI

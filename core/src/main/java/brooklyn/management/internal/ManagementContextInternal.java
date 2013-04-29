@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutionException;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
-import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.management.ManagementContext;
 import brooklyn.management.Task;
 
@@ -16,7 +16,7 @@ public interface ManagementContextInternal extends ManagementContext {
     String EFFECTOR_TAG = "EFFECTOR";
     String NON_TRANSIENT_TASK_TAG = "NON-TRANSIENT";
 
-    ConfigKey<String> BROOKLYN_CATALOG_URL = ConfigKeys.newConfigKey("brooklyn.catalog.url",
+    ConfigKey<String> BROOKLYN_CATALOG_URL = new BasicConfigKey<String>("brooklyn.catalog.url",
             "The URL of a catalog.xml descriptor; absent for default (~/.brooklyn/catalog.xml), " +
             "or empty for no URL (use default scanner)", "file://~/.brooklyn/catalog.xml");
 

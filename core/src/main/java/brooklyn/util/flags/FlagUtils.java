@@ -335,7 +335,7 @@ public class FlagUtils {
 
             Object newValue;
             try {
-                newValue = TypeCoercions.coerce(value, f.getType());
+                newValue = TypeCoercions.coerce(value, (Class) f.getType());
             } catch (Exception e) {
                 throw new IllegalArgumentException("Cannot set "+f+" in "+objectOfField+" from type "+value.getClass()+" ("+value+"): "+e, e);
             }

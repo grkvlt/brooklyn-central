@@ -11,10 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.rebind.BasicLocationRebindSupport;
 import brooklyn.entity.rebind.RebindSupport;
 import brooklyn.entity.trait.Configurable;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.location.Location;
 import brooklyn.location.geo.HasHostGeoInfo;
 import brooklyn.location.geo.HostGeoInfo;
@@ -44,7 +44,7 @@ public abstract class AbstractLocation implements Location, HasHostGeoInfo, Conf
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractLocation.class);
 
-    public static final ConfigKey<Location> PARENT_LOCATION = ConfigKeys.newConfigKey("parentLocation");
+    public static final ConfigKey<Location> PARENT_LOCATION = new BasicConfigKey<Location>("parentLocation");
 
     @SetFromFlag
     String id;

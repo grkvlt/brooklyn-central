@@ -5,15 +5,12 @@ import java.util.Map;
 
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.AbstractEntity;
-import brooklyn.entity.basic.BasicConfigurableEntityFactory;
 import brooklyn.entity.basic.Entities;
 import brooklyn.entity.group.DynamicCluster;
 import brooklyn.entity.proxying.EntitySpecs;
 import brooklyn.entity.trait.Startable;
 import brooklyn.location.Location;
 import brooklyn.util.MutableMap;
-
-import com.google.common.collect.Maps;
 
 public class RedisClusterImpl extends AbstractEntity implements RedisCluster {
 

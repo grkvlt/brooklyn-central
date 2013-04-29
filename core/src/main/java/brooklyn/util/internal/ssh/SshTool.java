@@ -34,59 +34,59 @@ public interface SshTool {
      * and have this prefix pre-prended to the config keys in this class. */
     String BROOKLYN_CONFIG_KEY_PREFIX = "brooklyn.ssh.config.";
     
-    ConfigKey<String> PROP_TOOL_CLASS = ConfigKeys.newConfigKey("tool.class", "SshTool implementation to use", null);
+    ConfigKey<String> PROP_TOOL_CLASS = new BasicConfigKey<String>("tool.class", "SshTool implementation to use", null);
     
-    ConfigKey<String> PROP_HOST = ConfigKeys.newConfigKey("host", "Host to connect to (required)", null);
-    ConfigKey<Integer> PROP_PORT = ConfigKeys.newConfigKey("port", "Port on host to connect to", 22);
-    ConfigKey<String> PROP_USER = ConfigKeys.newConfigKey("user", "User to connect as", System.getProperty("user.name"));
-    ConfigKey<String> PROP_PASSWORD = ConfigKeys.newConfigKey("password", "Password to use to connect", null);
+    ConfigKey<String> PROP_HOST = new BasicConfigKey<String>("host", "Host to connect to (required)", null);
+    ConfigKey<Integer> PROP_PORT = new BasicConfigKey<Integer>("port", "Port on host to connect to", 22);
+    ConfigKey<String> PROP_USER = new BasicConfigKey<String>("user", "User to connect as", System.getProperty("user.name"));
+    ConfigKey<String> PROP_PASSWORD = new BasicConfigKey<String>("password", "Password to use to connect", null);
     
-    ConfigKey<String> PROP_PRIVATE_KEY_FILE = ConfigKeys.newConfigKey("privateKeyFile", "the path of an ssh private key file; leave blank to use defaults (i.e. ~/.ssh/id_rsa and id_dsa)", null);
-    ConfigKey<String> PROP_PRIVATE_KEY_DATA = ConfigKeys.newConfigKey("privateKeyData", "the private ssh key (e.g. contents of an id_rsa.pub or id_dsa.pub file)", null);
-    ConfigKey<String> PROP_PRIVATE_KEY_PASSPHRASE = ConfigKeys.newConfigKey("privateKeyPassphrase", "the passphrase for the ssh private key", null);
-    ConfigKey<Boolean> PROP_STRICT_HOST_KEY_CHECKING = ConfigKeys.newConfigKey("strictHostKeyChecking", "whether to check the remote host's identification; defaults to false", false);
-    ConfigKey<Boolean> PROP_ALLOCATE_PTY = ConfigKeys.newConfigKey("allocatePTY", "whether to allocate PTY (vt100); if true then stderr is sent to stdout, but sometimes required for sudo'ing due to requiretty", false);
+    ConfigKey<String> PROP_PRIVATE_KEY_FILE = new BasicConfigKey<String>("privateKeyFile", "the path of an ssh private key file; leave blank to use defaults (i.e. ~/.ssh/id_rsa and id_dsa)", null);
+    ConfigKey<String> PROP_PRIVATE_KEY_DATA = new BasicConfigKey<String>("privateKeyData", "the private ssh key (e.g. contents of an id_rsa.pub or id_dsa.pub file)", null);
+    ConfigKey<String> PROP_PRIVATE_KEY_PASSPHRASE = new BasicConfigKey<String>("privateKeyPassphrase", "the passphrase for the ssh private key", null);
+    ConfigKey<Boolean> PROP_STRICT_HOST_KEY_CHECKING = new BasicConfigKey<Boolean>("strictHostKeyChecking", "whether to check the remote host's identification; defaults to false", false);
+    ConfigKey<Boolean> PROP_ALLOCATE_PTY = new BasicConfigKey<Boolean>("allocatePTY", "whether to allocate PTY (vt100); if true then stderr is sent to stdout, but sometimes required for sudo'ing due to requiretty", false);
 
-    ConfigKey<Integer> PROP_CONNECT_TIMEOUT = ConfigKeys.newConfigKey("connectTimeout", "The timeout when establishing an SSH connection; if 0 then uses default", 0);
-    ConfigKey<Integer> PROP_SESSION_TIMEOUT = ConfigKeys.newConfigKey("sessionTimeout", "The timeout for an ssh session; if 0 then uses default", 0);
-    ConfigKey<Integer> PROP_SSH_TRIES = ConfigKeys.newConfigKey("sshTries", "Max number of attempts to connect when doing ssh operations", 4);
-    ConfigKey<Integer> PROP_SSH_TRIES_TIMEOUT = ConfigKeys.newConfigKey("sshTriesTimeout", "Timeout when attempting to connect for ssh operations; so if too slow trying sshTries times, will abort anyway", 2*60*1000);
-    ConfigKey<Long> PROP_SSH_RETRY_DELAY = ConfigKeys.newConfigKey("sshRetryDelay", "Time (in milliseconds) before first ssh-retry, after which it will do exponential backoff", 50L);
+    ConfigKey<Integer> PROP_CONNECT_TIMEOUT = new BasicConfigKey<Integer>("connectTimeout", "The timeout when establishing an SSH connection; if 0 then uses default", 0);
+    ConfigKey<Integer> PROP_SESSION_TIMEOUT = new BasicConfigKey<Integer>("sessionTimeout", "The timeout for an ssh session; if 0 then uses default", 0);
+    ConfigKey<Integer> PROP_SSH_TRIES = new BasicConfigKey<Integer>("sshTries", "Max number of attempts to connect when doing ssh operations", 4);
+    ConfigKey<Integer> PROP_SSH_TRIES_TIMEOUT = new BasicConfigKey<Integer>("sshTriesTimeout", "Timeout when attempting to connect for ssh operations; so if too slow trying sshTries times, will abort anyway", 2*60*1000);
+    ConfigKey<Long> PROP_SSH_RETRY_DELAY = new BasicConfigKey<Long>("sshRetryDelay", "Time (in milliseconds) before first ssh-retry, after which it will do exponential backoff", 50L);
 
-    ConfigKey<File> PROP_LOCAL_TEMP_DIR = ConfigKeys.newConfigKey("localTempDir", "The directory on the local machine (i.e. running brooklyn) for writing temp files", 
+    ConfigKey<File> PROP_LOCAL_TEMP_DIR = new BasicConfigKey<File>("localTempDir", "The directory on the local machine (i.e. running brooklyn) for writing temp files", 
             new File(System.getProperty("java.io.tmpdir"), "tmpssh"));
     
     // NB -- items above apply for _session_ (a tool), below apply for a _call_
     // TODO would be nice to track which arguments are used, so we can indicate whether extras are supplied
 
-    ConfigKey<OutputStream> PROP_OUT_STREAM = ConfigKeys.newConfigKey("out", "Stream to which to capture stdout");
-    ConfigKey<OutputStream> PROP_ERR_STREAM = ConfigKeys.newConfigKey("err", "Stream to which to capture stderr");
+    ConfigKey<OutputStream> PROP_OUT_STREAM = new BasicConfigKey<OutputStream>("out", "Stream to which to capture stdout");
+    ConfigKey<OutputStream> PROP_ERR_STREAM = new BasicConfigKey<OutputStream>("err", "Stream to which to capture stderr");
     
-    ConfigKey<String> PROP_SEPARATOR = ConfigKeys.newConfigKey("separator", "string to insert between caller-supplied commands being executed as commands", " ; ");
+    ConfigKey<String> PROP_SEPARATOR = new BasicConfigKey<String>("separator", "string to insert between caller-supplied commands being executed as commands", " ; ");
     
-    ConfigKey<String> PROP_SCRIPT_DIR = ConfigKeys.newConfigKey("scriptDir", "directory where scripts should be copied", "/tmp");
-    ConfigKey<String> PROP_SCRIPT_HEADER = ConfigKeys.newConfigKey("scriptHeader", "lines to insert at the start of scripts generated for caller-supplied commands for script execution", "#!/bin/bash -e\n");
-    ConfigKey<String> PROP_DIRECT_HEADER = ConfigKeys.newConfigKey("directHeader", "commands to run remotely before any caller-supplied commands for direct execution", "exec bash -e");
+    ConfigKey<String> PROP_SCRIPT_DIR = new BasicConfigKey<String>("scriptDir", "directory where scripts should be copied", "/tmp");
+    ConfigKey<String> PROP_SCRIPT_HEADER = new BasicConfigKey<String>("scriptHeader", "lines to insert at the start of scripts generated for caller-supplied commands for script execution", "#!/bin/bash -e\n");
+    ConfigKey<String> PROP_DIRECT_HEADER = new BasicConfigKey<String>("directHeader", "commands to run remotely before any caller-supplied commands for direct execution", "exec bash -e");
 
-    ConfigKey<String> PROP_PERMISSIONS = ConfigKeys.newConfigKey("permissions", "Default permissions for files copied/created on remote machine; must be four-digit octal string, default '0644'", "0644");
-    ConfigKey<Long> PROP_LAST_MODIFICATION_DATE = ConfigKeys.newConfigKey("lastModificationDate", "Last-modification-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to current)", 0L);
-    ConfigKey<Long> PROP_LAST_ACCESS_DATE = ConfigKeys.newConfigKey("lastAccessDate", "Last-access-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to lastModificationDate)", 0L);
+    ConfigKey<String> PROP_PERMISSIONS = new BasicConfigKey<String>("permissions", "Default permissions for files copied/created on remote machine; must be four-digit octal string, default '0644'", "0644");
+    ConfigKey<Long> PROP_LAST_MODIFICATION_DATE = new BasicConfigKey<Long>("lastModificationDate", "Last-modification-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to current)", 0L);
+    ConfigKey<Long> PROP_LAST_ACCESS_DATE = new BasicConfigKey<Long>("lastAccessDate", "Last-access-date to be set on files copied/created (should be UTC/1000, ie seconds since 1970; defaults to lastModificationDate)", 0L);
 
     // TODO Could define the following in SshMachineLocation, or some such?
-    // ConfigKey<String> PROP_LOG_PREFIX = ConfigKeys.newConfigKey("logPrefix", "???", ???);
-    // ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = ConfigKeys.newConfigKey("noStdoutLogging", "???", ???);
-    // ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = ConfigKeys.newConfigKey("noStdoutLogging", "???", ???);
+    // ConfigKey<String> PROP_LOG_PREFIX = new BasicConfigKey<String>("logPrefix", "???", ???);
+    // ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = new BasicConfigKey<Boolean>("noStdoutLogging", "???", ???);
+    // ConfigKey<Boolean> PROP_NO_STDOUT_LOGGING = new BasicConfigKey<Boolean>("noStdoutLogging", "???", ???);
 
     /**
      * @deprecated since 0.4; use PROP_PRIVATE_KEY_FILE; if this contains more than one element then it will fail.
      */
-    ConfigKey<List<String>> PROP_KEY_FILES = ConfigKeys.newConfigKey("keyFiles", "DEPRECATED: see privateKeyFile", Collections.<String>emptyList());
+    ConfigKey<List<String>> PROP_KEY_FILES = new BasicConfigKey<List<String>>("keyFiles", "DEPRECATED: see privateKeyFile", Collections.<String>emptyList());
 
     /**
      * @deprecated since 0.4; use PROP_PRIVATE_KEY_DATA instead
      */
     @Deprecated
-    ConfigKey<String> PROP_PRIVATE_KEY = ConfigKeys.newConfigKey("privateKey", "DEPRECATED: see privateKeyData", null);
+    ConfigKey<String> PROP_PRIVATE_KEY = new BasicConfigKey<String>("privateKey", "DEPRECATED: see privateKeyData", null);
 
     /**
      * @throws SshException

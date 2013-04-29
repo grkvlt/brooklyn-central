@@ -3,9 +3,7 @@ package brooklyn.entity.messaging.qpid;
 import static java.lang.String.format;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.management.MalformedObjectNameException;
@@ -26,7 +24,6 @@ import brooklyn.util.exceptions.Exceptions;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Objects.ToStringHelper;
-import com.google.common.collect.Sets;
 
 /**
  * An {@link brooklyn.entity.Entity} that represents a single Qpid broker instance, using AMQP 0-10.

@@ -5,7 +5,6 @@ import java.util.List;
 
 import brooklyn.config.render.RendererHints;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
@@ -21,28 +20,28 @@ public interface WebAppServiceConstants {
     PortAttributeSensorAndConfigKey HTTPS_PORT = Attributes.HTTPS_PORT;
 
     @SetFromFlag("enabledProtocols")
-    BasicAttributeSensorAndConfigKey<List<String>> ENABLED_PROTOCOLS = ConfigKeys.newAttributeSensorAndConfigKey("webapp.enabledProtocols", "List of enabled protocols (e.g. http, https)", Collections.singletonList("http"));
+    BasicAttributeSensorAndConfigKey<List<String>> ENABLED_PROTOCOLS = new BasicAttributeSensorAndConfigKey<List<String>>("webapp.enabledProtocols", "List of enabled protocols (e.g. http, https)", Collections.singletonList("http"));
 
     @SetFromFlag("httpsSsl")
-    BasicAttributeSensorAndConfigKey<HttpsSslConfig> HTTPS_SSL_CONFIG = ConfigKeys.newAttributeSensorAndConfigKey("webapp.https.ssl", "SSL Configuration for HTTPS", null);
+    BasicAttributeSensorAndConfigKey<HttpsSslConfig> HTTPS_SSL_CONFIG = new BasicAttributeSensorAndConfigKey<HttpsSslConfig>("webapp.https.ssl", "SSL Configuration for HTTPS", null);
 
-    AttributeSensor<Integer> REQUEST_COUNT = Attributes.newAttributeSensor("webapp.reqs.total", "Request count");
-    AttributeSensor<Integer> ERROR_COUNT = Attributes.newAttributeSensor("webapp.reqs.errors", "Request errors");
-    AttributeSensor<Integer> TOTAL_PROCESSING_TIME = Attributes.newAttributeSensor("webapp.reqs.processingTime.total", "Total processing time (millis)");
-    AttributeSensor<Integer> MAX_PROCESSING_TIME = Attributes.newAttributeSensor("webapp.reqs.processingTime.max", "Max processing time (millis)");
+    AttributeSensor<Integer> REQUEST_COUNT = new BasicAttributeSensor<Integer>("webapp.reqs.total", "Request count");
+    AttributeSensor<Integer> ERROR_COUNT = new BasicAttributeSensor<Integer>("webapp.reqs.errors", "Request errors");
+    AttributeSensor<Integer> TOTAL_PROCESSING_TIME = new BasicAttributeSensor<Integer>("webapp.reqs.processingTime.total", "Total processing time (millis)");
+    AttributeSensor<Integer> MAX_PROCESSING_TIME = new BasicAttributeSensor<Integer>("webapp.reqs.processingTime.max", "Max processing time (millis)");
 
-    AttributeSensor<Long> BYTES_RECEIVED = Attributes.newAttributeSensor("webapp.reqs.bytes.received", "Total bytes received by the webserver");
-    AttributeSensor<Long> BYTES_SENT = Attributes.newAttributeSensor("webapp.reqs.bytes.sent", "Total bytes sent by the webserver");
+    AttributeSensor<Long> BYTES_RECEIVED = new BasicAttributeSensor<Long>("webapp.reqs.bytes.received", "Total bytes received by the webserver");
+    AttributeSensor<Long> BYTES_SENT = new BasicAttributeSensor<Long>("webapp.reqs.bytes.sent", "Total bytes sent by the webserver");
 
     /** req/second computed from the delta of the last request count and an associated timestamp */
-    AttributeSensor<Double> REQUESTS_PER_SECOND_LAST = Attributes.newAttributeSensor("webapp.reqs.perSec.last", "Reqs/sec (last datapoint)");
+    AttributeSensor<Double> REQUESTS_PER_SECOND_LAST = new BasicAttributeSensor<Double>("webapp.reqs.perSec.last", "Reqs/sec (last datapoint)");
     /** @deprecated since 0.5.0, use REQUESTS_PER_SECOND_LAST */
     AttributeSensor<Double> REQUESTS_PER_SECOND = REQUESTS_PER_SECOND_LAST;
 
     // TODO make this a config key
     Integer REQUESTS_PER_SECOND_WINDOW_PERIOD = 10 * 1000;
     /** rolled-up req/second for a window */
-    AttributeSensor<Double> REQUESTS_PER_SECOND_IN_WINDOW = Attributes.newAttributeSensor(
+    AttributeSensor<Double> REQUESTS_PER_SECOND_IN_WINDOW = new BasicAttributeSensor<Double>(
                     String.format("webapp.reqs.perSec.windowed", REQUESTS_PER_SECOND_WINDOW_PERIOD),
                     String.format("Reqs/sec (over time window)", REQUESTS_PER_SECOND_WINDOW_PERIOD));
     /** @deprecated since 0.5.0, use REQUESTS_PER_SECOND_WINDOW_PERIOD */

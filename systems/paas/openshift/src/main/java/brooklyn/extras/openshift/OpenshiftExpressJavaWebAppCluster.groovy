@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory
 
 import brooklyn.entity.Entity
 import brooklyn.entity.basic.AbstractEntity
-import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
+import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver
+import brooklyn.entity.basic.Attributes
+import brooklyn.entity.basic.Lifecycle
 import brooklyn.entity.trait.Startable
 import brooklyn.entity.webapp.JavaWebAppService
 import brooklyn.event.basic.BasicConfigKey
@@ -27,7 +29,7 @@ class OpenshiftExpressJavaWebAppCluster extends AbstractEntity implements Starta
         super(flags, parent)
         setConfigIfValNonNull(ROOT_WAR, flags.war)
         setConfigIfValNonNull(APP_NAME, flags.appName)
-        setAttribute(AbstractService.SERVICE_STATUS, "uninitialized")
+        setAttribute(Attributes.SERVICE_STATE, Lifecycle.CREATED)
     }
 
     public String getAppName() {
@@ -70,17 +72,17 @@ class OpenshiftExpressJavaWebAppCluster extends AbstractEntity implements Starta
     boolean shouldDestroy = false;
     
     public void start(Collection<Location> locations) {
-//        setAttribute(SERVICE_STATE, Lifecycle.STARTING)
+        setAttribute(SERVICE_STATE, Lifecycle.STARTING)
 //        attributePoller = new AttributePoller(this)
 //        
 //        preStart()
         startInLocation locations
-//        setAttribute(SERVICE_STATE, Lifecycle.STARTED)
+        setAttribute(SERVICE_STATE, Lifecycle.STARTED)
 //
 //        initSensors()
 //        postStart()
 //
-//        setAttribute(SERVICE_STATE, Lifecycle.RUNNING)
+        setAttribute(SERVICE_STATE, Lifecycle.RUNNING)
     }
 
     public void startInLocation(Collection<? extends Location> locations) {

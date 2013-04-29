@@ -1,11 +1,11 @@
 package brooklyn.location.jclouds;
 
-import brooklyn.util.MutableMap;
-
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import brooklyn.util.MutableMap;
 
 public class JcloudsLocationFactory {
 

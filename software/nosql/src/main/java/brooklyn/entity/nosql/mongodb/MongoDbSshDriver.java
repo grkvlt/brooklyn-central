@@ -1,6 +1,6 @@
 package brooklyn.entity.nosql.mongodb;
 
-import static brooklyn.entity.basic.lifecycle.CommonCommands.downloadUrlAs;
+import static brooklyn.util.ssh.CommonCommands.downloadUrlAs;
 
 import java.util.LinkedList;
 import java.util.List;

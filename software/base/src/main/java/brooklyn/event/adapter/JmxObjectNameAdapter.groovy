@@ -1,6 +1,8 @@
 package brooklyn.event.adapter;
 
-import javax.management.ObjectName
+import java.util.Map;
+
+import javax.management.ObjectName;
 
 
 /** 

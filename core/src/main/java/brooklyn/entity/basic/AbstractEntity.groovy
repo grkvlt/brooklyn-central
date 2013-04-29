@@ -1,7 +1,5 @@
 package brooklyn.entity.basic
 
-import static com.google.common.base.Preconditions.checkNotNull
-
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -45,12 +43,12 @@ import brooklyn.policy.basic.AbstractPolicy
 import brooklyn.util.BrooklynLanguageExtensions
 import brooklyn.util.flags.FlagUtils
 import brooklyn.util.flags.SetFromFlag
-import brooklyn.util.task.DeferredSupplier
 import brooklyn.util.text.Identifiers
 
 import com.google.common.annotations.Beta
 import com.google.common.base.Objects
 import com.google.common.base.Objects.ToStringHelper
+import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Iterables
 import com.google.common.collect.Maps
@@ -242,7 +240,7 @@ public abstract class AbstractEntity extends GroovyObjectSupport implements Enti
     
     public void setProxy(Entity proxy) {
         if (selfProxy != null) throw new IllegalStateException("Proxy is already set; cannot reset proxy for "+toString());
-        this.@selfProxy = checkNotNull(proxy, "proxy");
+        this.@selfProxy = Preconditions.checkNotNull(proxy, "proxy");
     }
     
     public Entity getProxy() {

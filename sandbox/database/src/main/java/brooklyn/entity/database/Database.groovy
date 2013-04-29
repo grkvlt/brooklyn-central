@@ -1,6 +1,9 @@
 package brooklyn.entity.database
 
-import brooklyn.event.basic.BasicConfigKey
+import java.util.Collection;
+import java.util.Map;
+
+import brooklyn.event.basic.BasicConfigKey;
 
 /**
  * Intended to represent a SQL relational database service.

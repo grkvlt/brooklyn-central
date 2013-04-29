@@ -1,10 +1,10 @@
 package brooklyn.entity.database.mysql;
 
-import static brooklyn.entity.basic.lifecycle.CommonCommands.downloadUrlAs;
-import static brooklyn.entity.basic.lifecycle.CommonCommands.installPackage;
-import static brooklyn.entity.basic.lifecycle.CommonCommands.ok;
 import static brooklyn.util.GroovyJavaMethods.elvis;
 import static brooklyn.util.GroovyJavaMethods.truth;
+import static brooklyn.util.ssh.CommonCommands.downloadUrlAs;
+import static brooklyn.util.ssh.CommonCommands.installPackage;
+import static brooklyn.util.ssh.CommonCommands.ok;
 import static java.lang.String.format;
 
 import java.io.InputStreamReader;

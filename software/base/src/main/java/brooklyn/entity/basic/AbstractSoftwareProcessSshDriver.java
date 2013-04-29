@@ -5,7 +5,6 @@ import static brooklyn.util.GroovyJavaMethods.truth;
 
 import java.io.File;
 import java.io.StringReader;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,7 +182,8 @@ public abstract class AbstractSoftwareProcessSshDriver extends AbstractSoftwareP
     public int execute(List<String> script, String summaryForLogging) {
         return execute(Maps.newLinkedHashMap(), script, summaryForLogging);
     }
-    
+
+    @SuppressWarnings({ "rawtypes", "unchecked" }) // TODO fix generics
     @Override
     public int execute(Map flags2, List<String> script, String summaryForLogging) {
         Map flags = new LinkedHashMap();
@@ -199,7 +199,7 @@ public abstract class AbstractSoftwareProcessSshDriver extends AbstractSoftwareP
      * The environment variables to be set when executing the commands (for install, run, check running, etc).
      */
     public Map<String, String> getShellEnvironment() {
-        return Maps.newLinkedHashMap(entity.getConfig(SoftwareProcess.SHELL_ENVIRONMENT, Collections.emptyMap()));
+        return Maps.newLinkedHashMap(entity.getConfig(SoftwareProcess.SHELL_ENVIRONMENT));
     }
 
     /** @deprecated since 0.5.0, should use {@link copyResource(File, String)}. */

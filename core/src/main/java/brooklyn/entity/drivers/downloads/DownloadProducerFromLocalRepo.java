@@ -18,17 +18,15 @@ public class DownloadProducerFromLocalRepo implements Function<DownloadRequireme
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(DownloadProducerFromLocalRepo.class);
 
-    public static final ConfigKey<String> LOCAL_REPO_PATH = BasicConfigKey.builder(String.class)
-            .name(DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.local.path")
-            .description("Fully qualified path of the local repo")
-            .defaultValue("$HOME/.brooklyn/repository")
-            .build();
+    public static final ConfigKey<String> LOCAL_REPO_PATH = new BasicConfigKey<String>(
+            DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.local.path",
+            "Fully qualified path of the local repo",
+            "$HOME/.brooklyn/repository");
 
-    public static final ConfigKey<Boolean> LOCAL_REPO_ENABLED = BasicConfigKey.builder(Boolean.class)
-            .name(DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.local.enabled")
-            .description("Whether to use the local repo for downloading entities, during installs")
-            .defaultValue(true)
-            .build();
+    public static final ConfigKey<Boolean> LOCAL_REPO_ENABLED = new BasicConfigKey<Boolean>(
+            DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.local.enabled",
+            "Whether to use the local repo for downloading entities, during installs",
+            true);
 
     public static final String LOCAL_REPO_URL_PATTERN = "file://%s/"+
             "${simpletype}/${version}/"+

@@ -5,8 +5,6 @@ import java.util.Map;
 import brooklyn.entity.Entity;
 import brooklyn.util.MutableMap;
 
-import com.google.common.base.Preconditions;
-
 /**
  * A {@link RedisStore} configured as a slave.
  */

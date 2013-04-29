@@ -1,15 +1,15 @@
-package brooklyn.event.adapter
+package brooklyn.event.adapter;
 
-import javax.management.openmbean.CompositeData
-import javax.management.openmbean.TabularData
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.TabularData;
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JmxPostProcessors {
 
     private static final Logger log = LoggerFactory.getLogger(JmxPostProcessors.class);
-    
+
     /**
      * @return a closure that converts a TabularDataSupport to a map.
      */
@@ -24,7 +24,7 @@ public class JmxPostProcessors {
     public static Closure compositeDataToMap() {
         return { return compositeDataToMap(it) }
     }
-    
+
     public static Map tabularDataToMap(TabularData table) {
         HashMap<String, Object> out = []
         for (Object entry : table.values()) {
@@ -38,7 +38,7 @@ public class JmxPostProcessors {
         }
         return out
     }
-    
+
     public static Map<List<?>, Map<String,Object>> tabularDataToMapOfMaps(TabularData table) {
         HashMap<List<?>,Map<String,Object>> out = []
         table.keySet().each { k ->
@@ -48,7 +48,7 @@ public class JmxPostProcessors {
         }
         return out
     }
-    
+
     public static Map<String,Object> compositeDataToMap(CompositeData data) {
         HashMap<String, Object> out = []
         data.getCompositeType().keySet().each { String key ->

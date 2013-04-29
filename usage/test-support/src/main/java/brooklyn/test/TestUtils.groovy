@@ -1,6 +1,5 @@
 package brooklyn.test
 
-import static org.testng.Assert.*
 import groovy.time.TimeDuration
 
 import java.util.concurrent.Callable
@@ -25,6 +24,7 @@ import com.google.common.collect.Iterables
  * Note that methods will migrate from here to {@link Asserts} in future releases.
  */
 public class TestUtils {
+
     private static final Logger log = LoggerFactory.getLogger(TestUtils.class)
 
     private TestUtils() { }

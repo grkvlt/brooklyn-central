@@ -1,10 +1,6 @@
 package brooklyn.mgmt.federated
 
-import org.infinispan.Cache
-import org.infinispan.config.Configuration
-import org.infinispan.config.GlobalConfiguration
-import org.infinispan.manager.DefaultCacheManager
-import org.infinispan.manager.EmbeddedCacheManager
+import org.infinispan.manager.EmbeddedCacheManager;
 
 class BrooklynManagementNode {
 

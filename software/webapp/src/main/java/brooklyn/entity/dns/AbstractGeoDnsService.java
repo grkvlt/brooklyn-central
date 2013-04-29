@@ -5,17 +5,18 @@ import java.util.Map;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Lifecycle;
 import brooklyn.entity.trait.Startable;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.location.geo.HostGeoInfo;
 import brooklyn.util.flags.SetFromFlag;
 
 public interface AbstractGeoDnsService extends Entity {
 
     @SetFromFlag("pollPeriod")
-    ConfigKey<Long> POLL_PERIOD = ConfigKeys.newConfigKey("geodns.pollperiod", "Poll period (in milliseconds) for refreshing target hosts", 5000L);
+    ConfigKey<Long> POLL_PERIOD = new BasicConfigKey<Long>("geodns.pollperiod", "Poll period (in milliseconds) for refreshing target hosts", 5000L);
 
     AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
 
@@ -23,7 +24,7 @@ public interface AbstractGeoDnsService extends Entity {
 
     AttributeSensor<String> HOSTNAME = Attributes.HOSTNAME;
 
-    AttributeSensor<Map<String, String>> TARGETS = Attributes.newAttributeSensor(
+    AttributeSensor<Map<String, String>> TARGETS = new BasicAttributeSensor<Map<String, String>>(
             "geodns.targets", "Map of targets currently being managed (entity ID to URL)");
 
     void setServiceState(Lifecycle state);

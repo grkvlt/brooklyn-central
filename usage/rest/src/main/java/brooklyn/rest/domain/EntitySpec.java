@@ -1,11 +1,13 @@
 package brooklyn.rest.domain;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.common.collect.ImmutableMap;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.Collections;
 import java.util.Map;
+
+import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.google.common.collect.ImmutableMap;
 
 public class EntitySpec {
 

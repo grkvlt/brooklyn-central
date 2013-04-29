@@ -14,8 +14,8 @@ import org.testng.annotations.Test;
 
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.basic.ApplicationBuilder;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Entities;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.DependentConfiguration;
 import brooklyn.test.entity.TestApplication;
 import brooklyn.test.entity.TestEntity;
@@ -33,12 +33,12 @@ public class PolicyConfigMapUsageTest {
 
     public static class MyPolicy extends AbstractPolicy {
         @SetFromFlag("intKey")
-        public static final ConfigKey<Integer> INT_KEY = ConfigKeys.newConfigKey("bkey", "b key");
+        public static final ConfigKey<Integer> INT_KEY = new BasicConfigKey<Integer>("bkey", "b key");
 
         @SetFromFlag("strKey")
-        public static final ConfigKey<String> STR_KEY = ConfigKeys.newConfigKey("akey", "a key");
-        public static final ConfigKey<Integer> INT_KEY_WITH_DEFAULT = ConfigKeys.newConfigKey("ckey", "c key", 1);
-        public static final ConfigKey<String> STR_KEY_WITH_DEFAULT = ConfigKeys.newConfigKey("strKey", "str key", "str key default");
+        public static final ConfigKey<String> STR_KEY = new BasicConfigKey<String>("akey", "a key");
+        public static final ConfigKey<Integer> INT_KEY_WITH_DEFAULT = new BasicConfigKey<Integer>("ckey", "c key", 1);
+        public static final ConfigKey<String> STR_KEY_WITH_DEFAULT = new BasicConfigKey<String>("strKey", "str key", "str key default");
 
         MyPolicy(Map flags) {
             super(flags);
@@ -49,7 +49,7 @@ public class PolicyConfigMapUsageTest {
         }
     }
 
-    private ConfigKey<String> differentKey = ConfigKeys.newConfigKey("differentkey", "diffval");
+    private ConfigKey<String> differentKey = new BasicConfigKey<String>("differentkey", "diffval");
 
     private TestApplication app;
 

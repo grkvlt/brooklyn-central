@@ -1,10 +1,11 @@
 package brooklyn.entity.basic;
 
-import brooklyn.entity.Entity;
 import groovy.lang.Closure;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import brooklyn.entity.Entity;
 
 public class ClosureEntityFactory<T extends Entity> extends AbstractConfigurableEntityFactory<T> {
     private final Closure<T> closure;

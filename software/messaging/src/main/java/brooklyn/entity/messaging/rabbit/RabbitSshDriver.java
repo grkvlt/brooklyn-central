@@ -1,6 +1,6 @@
 package brooklyn.entity.messaging.rabbit;
 
-import static brooklyn.entity.basic.lifecycle.CommonCommands.installPackage;
+import static brooklyn.util.ssh.CommonCommands.installPackage;
 import static java.lang.String.format;
 
 import java.util.List;

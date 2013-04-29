@@ -23,11 +23,11 @@ import brooklyn.test.entity.TestEntityImpl
  * Uses legacy mechanism of calling entity constructors.
  */
 public class EntityConfigMapUsageLegacyTest {
-    private BasicConfigKey intKey = [ Integer, "bkey", "b key"]
-    private BasicConfigKey strKey = [ String, "akey", "a key"]
-    private BasicConfigKey intKeyWithDefault = [ Integer, "ckey", "c key", 1]
-    private BasicConfigKey strKeyWithDefault = [ String, "strKey", "str key", "str key default"]
-    
+    private ConfigKey<Integer> intKey = new BasicConfigKey<Integer>("bkey", "b key")
+    private ConfigKey<String> strKey = new BasicConfigKey<String>("akey", "a key")
+    private ConfigKey<Integer> intKeyWithDefault = new BasicConfigKey<Integer>("ckey", "c key", 1)
+    private ConfigKey<String> strKeyWithDefault = new BasicConfigKey<String>("strKey", "str key", "str key default")
+
     private TestApplication app;
     
     @BeforeMethod

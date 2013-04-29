@@ -9,9 +9,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.MutableMap;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.reflect.TypeToken;
 
 @Test
 public class BrooklynPropertiesTest {
@@ -149,31 +152,31 @@ public class BrooklynPropertiesTest {
     }
 
     @Test
-    public void testGetAndPutConfig() {
+    public <T> void testGetAndPutConfig() {
         BrooklynProperties props = BrooklynProperties.Factory.newEmpty().addFromMap(ImmutableMap.of(
                 "a.key", "aval", "a.key2", "aval2", "akey", "noval", "n.key", "234"));
 
-        ConfigKey<String> aString = ConfigKeys.newConfigKey("a.key");
-        ConfigKey<Integer> nNum = ConfigKeys.newConfigKey("n.key");
-        ConfigKey<Integer> aBsent = ConfigKeys.newConfigKey("ab.sent");
-        ConfigKey<Integer> aMisstyped = ConfigKeys.newConfigKey("am.isstyped");
-        ConfigKey<Integer> aDfault = ConfigKeys.newConfigKey("a.default", "-", 123);
+        ConfigKey<String> aString = new BasicConfigKey<String>("a.key");
+        ConfigKey<Integer> nNum = new BasicConfigKey<Integer>("n.key");
+        ConfigKey<Integer> aBsent = new BasicConfigKey<Integer>("ab.sent");
+        ConfigKey<Integer> aMisstyped = new BasicConfigKey<Integer>("am.isstyped");
+        ConfigKey<Integer> aDfault = new BasicConfigKey<Integer>("a.default", "-", 123);
 
         assertEquals(props.getConfig(aString), "aval");
-        assertEquals(props.getConfig(nNum), (Integer)234);
-        
+        assertEquals(props.getConfig(nNum).intValue(), 234);
+
         props.put(aString, "aval2");
         assertEquals(props.getConfig(aString), "aval2");
         assertEquals(props.get("a.key"), "aval2");
 
         props.put(nNum, "345");
-        assertEquals(props.getConfig(nNum), (Integer)345);
+        assertEquals(props.getConfig(nNum).intValue(), 345);
         assertEquals(props.get("n.key"), "345");
 
         assertEquals(props.getConfig(aBsent), null);
-        assertEquals(props.getConfig(aBsent, 123), (Integer)123);
-        assertEquals(props.getConfig(aDfault), (Integer)123);
-        
+        assertEquals(props.getConfig(aBsent, 123).intValue(), 123);
+        assertEquals(props.getConfig(aDfault).intValue(), 123);
+
         props.put(aMisstyped, "x1");
         assertEquals(props.get("am.isstyped"), "x1");
         boolean workedWhenShouldntHave = false;

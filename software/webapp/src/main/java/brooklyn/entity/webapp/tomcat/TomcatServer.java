@@ -3,7 +3,6 @@ package brooklyn.entity.webapp.tomcat;
 import brooklyn.catalog.Catalog;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.java.UsesJmx;
 import brooklyn.entity.proxying.BasicEntitySpec;
@@ -11,7 +10,9 @@ import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.trait.HasShortName;
 import brooklyn.entity.webapp.JavaWebAppSoftwareProcess;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.location.basic.PortRanges;
 import brooklyn.util.flags.SetFromFlag;
@@ -41,10 +42,10 @@ public interface TomcatServer extends JavaWebAppSoftwareProcess, UsesJmx, HasSho
     }
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "7.0.39");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "7.0.39");
 
     @SetFromFlag("downloadUrl")
-    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             SoftwareProcess.DOWNLOAD_URL, "http://download.nextag.com/apache/tomcat/tomcat-7/v${version}/bin/apache-tomcat-${version}.tar.gz");
 
     /**
@@ -53,10 +54,10 @@ public interface TomcatServer extends JavaWebAppSoftwareProcess, UsesJmx, HasSho
      * so override default here to a high-numbered port.
      */
     @SetFromFlag("shutdownPort")
-    PortAttributeSensorAndConfigKey SHUTDOWN_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
+    PortAttributeSensorAndConfigKey SHUTDOWN_PORT = new PortAttributeSensorAndConfigKey(
             "tomcat.shutdownport", "Suggested shutdown port", PortRanges.fromString("31880+"));
 
-    AttributeSensor<String> CONNECTOR_STATUS = Attributes.newAttributeSensor("webapp.tomcat.connectorStatus", "Catalina connector state name");
+    AttributeSensor<String> CONNECTOR_STATUS = new BasicAttributeSensor<String>("webapp.tomcat.connectorStatus", "Catalina connector state name");
 
     AttributeSensor<String> JMX_SERVICE_URL = Attributes.JMX_SERVICE_URL;
 

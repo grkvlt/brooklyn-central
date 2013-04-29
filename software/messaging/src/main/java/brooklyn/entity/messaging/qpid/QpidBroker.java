@@ -5,13 +5,13 @@ import java.util.Map;
 import brooklyn.catalog.Catalog;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.java.UsesJmx;
 import brooklyn.entity.messaging.MessageBroker;
 import brooklyn.entity.messaging.amqp.AmqpServer;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
@@ -29,10 +29,10 @@ public interface QpidBroker extends SoftwareProcess, MessageBroker, UsesJmx, Amq
     String PASSWD = "etc/passwd";
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "0.20");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "0.20");
 
     @SetFromFlag("downloadUrl")
-    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             Attributes.DOWNLOAD_URL, "http://download.nextag.com/apache/qpid/${version}/qpid-java-broker-${version}.tar.gz");
 
     @SetFromFlag("amqpPort")
@@ -42,22 +42,22 @@ public interface QpidBroker extends SoftwareProcess, MessageBroker, UsesJmx, Amq
     BasicAttributeSensorAndConfigKey<String> VIRTUAL_HOST_NAME = AmqpServer.VIRTUAL_HOST_NAME;
 
     @SetFromFlag("amqpVersion")
-    BasicAttributeSensorAndConfigKey<String> AMQP_VERSION = ConfigKeys.newAttributeSensorAndConfigKey(AmqpServer.AMQP_VERSION, AmqpServer.AMQP_0_10);
+    BasicAttributeSensorAndConfigKey<String> AMQP_VERSION = new BasicAttributeSensorAndConfigKey<String>(AmqpServer.AMQP_VERSION, AmqpServer.AMQP_0_10);
 
     @SetFromFlag("httpManagementPort")
-    PortAttributeSensorAndConfigKey HTTP_MANAGEMENT_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey("qpid.http-management.port", "Qpid HTTP management plugin port");
+    PortAttributeSensorAndConfigKey HTTP_MANAGEMENT_PORT = new PortAttributeSensorAndConfigKey("qpid.http-management.port", "Qpid HTTP management plugin port");
 
     /** Files to be copied to the server, map of "subpath/file.name": "classpath://foo/file.txt" (or other url) */
     @SetFromFlag("runtimeFiles")
-    ConfigKey<Map<String, String>> RUNTIME_FILES = ConfigKeys.newConfigKey("qpid.files.runtime", "Map of files to be copied, keyed by destination name relative to runDir");
+    ConfigKey<Map<String, String>> RUNTIME_FILES = new BasicConfigKey<Map<String, String>>("qpid.files.runtime", "Map of files to be copied, keyed by destination name relative to runDir");
 
     /** Templates to be filled in and then copied to the server. See {@link #RUNTIME_FILES}. */
     @SetFromFlag("runtimeTemplates")
-    ConfigKey<Map<String, String>> RUNTIME_TEMPLATES = ConfigKeys.newConfigKey("qpid.templates.runtime", "Map of templates to be filled in and copied, keyed by destination name relative to runDir");
+    ConfigKey<Map<String, String>> RUNTIME_TEMPLATES = new BasicConfigKey<Map<String, String>>("qpid.templates.runtime", "Map of templates to be filled in and copied, keyed by destination name relative to runDir");
 
     @SetFromFlag("jmxUser")
-    BasicAttributeSensorAndConfigKey<String> JMX_USER = ConfigKeys.newAttributeSensorAndConfigKey(Attributes.JMX_USER, "admin");
+    BasicAttributeSensorAndConfigKey<String> JMX_USER = new BasicAttributeSensorAndConfigKey<String>(Attributes.JMX_USER, "admin");
 
     @SetFromFlag("jmxPassword")
-    BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = ConfigKeys.newAttributeSensorAndConfigKey(Attributes.JMX_PASSWORD, "admin");
+    BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = new BasicAttributeSensorAndConfigKey<String>(Attributes.JMX_PASSWORD, "admin");
 }

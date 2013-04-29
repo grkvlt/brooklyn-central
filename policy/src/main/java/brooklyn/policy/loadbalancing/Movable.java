@@ -3,9 +3,9 @@ package brooklyn.policy.loadbalancing;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
-import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.MethodEffector;
 import brooklyn.entity.basic.NamedParameter;
+import brooklyn.event.AttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;
@@ -16,10 +16,10 @@ import brooklyn.util.flags.SetFromFlag;
 public interface Movable extends Entity {
 
     @SetFromFlag("immovable")
-    ConfigKey<Boolean> IMMOVABLE = ConfigKeys.newConfigKey(
-            "movable.item.immovable", "Indicates whether this item instance is immovable, so cannot be moved by policies", false)
+    ConfigKey<Boolean> IMMOVABLE = new BasicConfigKey<Boolean>(
+            "movable.item.immovable", "Indicates whether this item instance is immovable, so cannot be moved by policies", false);
 
-    AttributeSensor<BalanceableContainer> CONTAINER = Attributes.newAttributeSensor(
+    AttributeSensor<BalanceableContainer<?>> CONTAINER = new BasicAttributeSensor<BalanceableContainer<?>>(
             "movable.item.container", "The container that this item is on");
 
     Effector<Void> MOVE = new MethodEffector<Void>(Movable.class, "move");

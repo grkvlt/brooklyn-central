@@ -1,9 +1,9 @@
 package brooklyn.entity.basic;
 
+import java.util.Map;
+
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
-
-import java.util.Map;
 
 public interface ConfigurableEntityFactory<T extends Entity> extends EntityFactory<T> {
    ConfigurableEntityFactory<T> configure(Map flags);

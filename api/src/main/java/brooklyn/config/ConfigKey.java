@@ -17,6 +17,8 @@ package brooklyn.config;
 
 import java.util.Collection;
 
+import com.google.common.reflect.TypeToken;
+
 /**
  * Represents the name of a piece of typed configuration data for an entity.
  * <p>
@@ -41,7 +43,12 @@ public interface ConfigKey<T> {
     /**
      * Returns the type of the configuration parameter data.
      */
-    Class<T> getType();
+    Class<? super T> getType();
+
+    /**
+     * Returns the type of the configuration parameter data.
+     */
+    TypeToken<T> getTypeToken();
 
     /**
      * Returns the name of of the configuration parameter data type, as a {@link String}.

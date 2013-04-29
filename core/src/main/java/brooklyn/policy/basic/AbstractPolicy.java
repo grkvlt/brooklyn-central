@@ -30,7 +30,6 @@ import com.google.common.collect.Maps;
  * Base {@link Policy} implementation; all policies should extend this or its children
  */
 public abstract class AbstractPolicy extends AbstractEntityAdjunct implements Policy, Configurable {
-    @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(AbstractPolicy.class);
 
     protected String policyStatus;

@@ -2,9 +2,6 @@ package brooklyn.entity.messaging.qpid;
 
 import static java.lang.String.format;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +15,6 @@ import brooklyn.entity.java.JavaSoftwareProcessSshDriver;
 import brooklyn.location.basic.SshMachineLocation;
 import brooklyn.util.MutableMap;
 import brooklyn.util.NetworkUtils;
-import brooklyn.util.ResourceUtils;
-import brooklyn.util.exceptions.Exceptions;
 
 import com.google.common.collect.ImmutableMap;
 

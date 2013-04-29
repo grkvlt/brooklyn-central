@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.location.Location;
 import brooklyn.location.basic.SupportsPortForwarding;
 import brooklyn.util.net.Cidr;
@@ -20,9 +20,9 @@ public class BrooklynAccessUtils {
 
     private static final Logger log = LoggerFactory.getLogger(BrooklynAccessUtils.class);
 
-    public static final ConfigKey<PortForwardManager> PORT_FORWARDING_MANAGER = ConfigKeys.newConfigKey("brooklyn.portforwarding.manager");
+    public static final ConfigKey<PortForwardManager> PORT_FORWARDING_MANAGER = new BasicConfigKey<PortForwardManager>("brooklyn.portforwarding.manager");
 
-    public static final ConfigKey<Cidr> MANAGEMENT_ACCESS_CIDR = ConfigKeys.newConfigKey(
+    public static final ConfigKey<Cidr> MANAGEMENT_ACCESS_CIDR = new BasicConfigKey<Cidr>(
             "brooklyn.portforwarding.management.cidr", "CIDR to enable by default for port-forwarding for management",
             null);  // TODO should be a list
 

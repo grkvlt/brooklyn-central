@@ -93,8 +93,8 @@ public class EntityConfigResource extends AbstractBrooklynRestResource {
   ) {
     EntityLocal entity = brooklyn().getEntity(application, entityToken);
     ConfigKey<?> ck = entity.getEntityType().getConfigKey(configKeyName);
-    if (ck==null) ck = new BasicConfigKey<Object>(Object.class, configKeyName);
-    return getValueForDisplay(entity, ((AbstractEntity)entity).getConfigMap().getRawConfig(ck));
+    if (ck==null) ck = new BasicConfigKey<Object>(configKeyName);
+    return getValueForDisplay(entity, ((AbstractEntity) entity).getConfigMap().getRawConfig(ck));
   }
 
   private String getValueForDisplay(EntityLocal entity, Object value) {

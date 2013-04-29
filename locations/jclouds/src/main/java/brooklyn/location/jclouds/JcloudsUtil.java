@@ -39,18 +39,18 @@ import org.jclouds.ec2.domain.PasswordData;
 import org.jclouds.ec2.services.WindowsClient;
 import org.jclouds.encryption.bouncycastle.config.BouncyCastleCryptoModule;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.jclouds.util.Predicates2;
 import org.jclouds.scriptbuilder.domain.Statement;
 import org.jclouds.scriptbuilder.domain.Statements;
 import org.jclouds.ssh.SshClient;
 import org.jclouds.sshj.config.SshjSshClientModule;
+import org.jclouds.util.Predicates2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.basic.Entities;
 import brooklyn.util.MutableMap;
-import brooklyn.util.internal.Repeater;
 import brooklyn.util.config.ConfigBag;
+import brooklyn.util.internal.Repeater;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Predicate;

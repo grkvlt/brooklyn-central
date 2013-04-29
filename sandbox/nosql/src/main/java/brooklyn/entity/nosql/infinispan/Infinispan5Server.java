@@ -24,18 +24,18 @@ import brooklyn.util.flags.SetFromFlag;
 public class Infinispan5Server extends SoftwareProcessImpl implements UsesJmx {
     private static final Logger log = LoggerFactory.getLogger(Infinispan5Server.class);
     
-    public static final BasicAttributeSensorAndConfigKey<String> PROTOCOL = ConfigKeys.newAttributeSensorAndConfigKey(
+    public static final BasicAttributeSensorAndConfigKey<String> PROTOCOL = new BasicAttributeSensorAndConfigKey<String>(
             "infinispan.server.protocol", "Infinispan protocol (e.g. memcached, hotrod, or websocket)", "memcached");
     
-    public static final PortAttributeSensorAndConfigKey PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
+    public static final PortAttributeSensorAndConfigKey PORT = new PortAttributeSensorAndConfigKey(
             "infinispan.server.port", "TCP port number to listen on");
 
     @SetFromFlag("version")
-    public static final ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "5.0.0.CR8");
+    public static final ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "5.0.0.CR8");
 
     // Default filename is "infinispan-${version}-all.zip"
     @SetFromFlag("downloadUrl")
-    public static final BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    public static final BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             SoftwareProcess.DOWNLOAD_URL, "http://sourceforge.net/projects/infinispan/files/infinispan/${version}/infinispan-${version}-all.zip/download");
 
     public Infinispan5Server() {

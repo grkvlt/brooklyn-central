@@ -16,8 +16,6 @@
 package brooklyn.entity.messaging.kafka;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.java.UsesJmx;
 import brooklyn.entity.messaging.MessageBroker;
@@ -42,29 +40,29 @@ public interface KafkaBroker extends SoftwareProcess, MessageBroker, UsesJmx, Ka
     ConfigKey<String> SUGGESTED_VERSION = Kafka.SUGGESTED_VERSION;
 
     @SetFromFlag("kafkaPort")
-    PortAttributeSensorAndConfigKey KAFKA_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey("kafka.port", "Kafka port", "9092+");
+    PortAttributeSensorAndConfigKey KAFKA_PORT = new PortAttributeSensorAndConfigKey("kafka.port", "Kafka port", "9092+");
 
     /** Location of the configuration file template to be copied to the server.*/
     @SetFromFlag("kafkaServerConfig")
-    ConfigKey<String> KAFKA_BROKER_CONFIG_TEMPLATE = ConfigKeys.newConfigKey(
+    ConfigKey<String> KAFKA_BROKER_CONFIG_TEMPLATE = new BasicConfigKey<String>(
             "kafka.broker.configTemplate", "Kafka broker configuration template (in freemarker format)",
             "classpath://brooklyn/entity/messaging/kafka/server.properties");
 
     @SetFromFlag("zookeeper")
-    ConfigKey<Zookeeper> ZOOKEEPER = ConfigKeys.newConfigKey("kafka.broker.zookeeper", "Kafka zookeeper entity");
+    ConfigKey<Zookeeper> ZOOKEEPER = new BasicConfigKey<Zookeeper>("kafka.broker.zookeeper", "Kafka zookeeper entity");
 
-    AttributeSensor<Integer> BROKER_ID = Attributes.newAttributeSensor("kafka.broker.id", "Kafka unique broker ID");
+    AttributeSensor<Integer> BROKER_ID = new BasicAttributeSensor<Integer>("kafka.broker.id", "Kafka unique broker ID");
 
-    AttributeSensor<Long> FETCH_REQUEST_COUNT = Attributes.newAttributeSensor("kafka.broker.fetch.total", "Fetch request count");
-    AttributeSensor<Long> TOTAL_FETCH_TIME = Attributes.newAttributeSensor("kafka.broker.fetch.time.total", "Total fetch request processing time (millis)");
-    AttributeSensor<Double> MAX_FETCH_TIME = Attributes.newAttributeSensor("kafka.broker.fetch.time.max", "Max fetch request processing time (millis)");
+    AttributeSensor<Long> FETCH_REQUEST_COUNT = new BasicAttributeSensor<Long>("kafka.broker.fetch.total", "Fetch request count");
+    AttributeSensor<Long> TOTAL_FETCH_TIME = new BasicAttributeSensor<Long>("kafka.broker.fetch.time.total", "Total fetch request processing time (millis)");
+    AttributeSensor<Double> MAX_FETCH_TIME = new BasicAttributeSensor<Double>("kafka.broker.fetch.time.max", "Max fetch request processing time (millis)");
 
-    AttributeSensor<Long> PRODUCE_REQUEST_COUNT = Attributes.newAttributeSensor("kafka.broker.produce.total", "Produce request count");
-    AttributeSensor<Long> TOTAL_PRODUCE_TIME = Attributes.newAttributeSensor("kafka.broker.produce.time.total", "Total produce request processing time (millis)");
-    AttributeSensor<Double> MAX_PRODUCE_TIME = Attributes.newAttributeSensor("kafka.broker.produce.time.max", "Max produce request processing time (millis)");
+    AttributeSensor<Long> PRODUCE_REQUEST_COUNT = new BasicAttributeSensor<Long>("kafka.broker.produce.total", "Produce request count");
+    AttributeSensor<Long> TOTAL_PRODUCE_TIME = new BasicAttributeSensor<Long>("kafka.broker.produce.time.total", "Total produce request processing time (millis)");
+    AttributeSensor<Double> MAX_PRODUCE_TIME = new BasicAttributeSensor<Double>("kafka.broker.produce.time.max", "Max produce request processing time (millis)");
 
-    AttributeSensor<Long> BYTES_RECEIVED = Attributes.newAttributeSensor("kafka.broker.bytes.received", "Total bytes received");
-    AttributeSensor<Long> BYTES_SENT = Attributes.newAttributeSensor("kafka.broker.bytes.sent", "Total bytes sent");
+    AttributeSensor<Long> BYTES_RECEIVED = new BasicAttributeSensor<Long>("kafka.broker.bytes.received", "Total bytes received");
+    AttributeSensor<Long> BYTES_SENT = new BasicAttributeSensor<Long>("kafka.broker.bytes.sent", "Total bytes sent");
 
     Integer getKafkaPort();
 

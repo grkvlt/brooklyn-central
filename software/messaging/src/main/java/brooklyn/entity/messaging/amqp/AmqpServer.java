@@ -2,7 +2,6 @@ package brooklyn.entity.messaging.amqp;
 
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 
@@ -21,9 +20,9 @@ public interface AmqpServer extends Entity {
 
     PortAttributeSensorAndConfigKey AMQP_PORT = Attributes.AMQP_PORT;
 
-    BasicAttributeSensorAndConfigKey<String> VIRTUAL_HOST_NAME = ConfigKeys.newAttributeSensorAndConfigKey("amqp.virtualHost", "AMQP virtual host name", "localhost");
+    BasicAttributeSensorAndConfigKey<String> VIRTUAL_HOST_NAME = new BasicAttributeSensorAndConfigKey<String>("amqp.virtualHost", "AMQP virtual host name", "localhost");
 
-    BasicAttributeSensorAndConfigKey<String> AMQP_VERSION = ConfigKeys.newAttributeSensorAndConfigKey("amqp.version", "AMQP protocol version");
+    BasicAttributeSensorAndConfigKey<String> AMQP_VERSION = new BasicAttributeSensorAndConfigKey<String>("amqp.version", "AMQP protocol version");
 
     String getVirtualHost();
 

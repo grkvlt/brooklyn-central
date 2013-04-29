@@ -1,8 +1,9 @@
 package brooklyn.launcher;
 
-import brooklyn.config.BrooklynServiceAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import brooklyn.config.BrooklynServiceAttributes;
 
 /**
  * Launches just the brooklyn web-console.

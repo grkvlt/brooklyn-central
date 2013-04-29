@@ -4,7 +4,6 @@ import java.util.Map;
 
 import brooklyn.catalog.Catalog;
 import brooklyn.config.ConfigKey;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.MethodEffector;
 import brooklyn.entity.basic.SoftwareProcess;
@@ -13,6 +12,7 @@ import brooklyn.entity.proxy.ProxySslConfig;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.trait.HasShortName;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
 import com.google.common.collect.ImmutableMap;
@@ -43,38 +43,38 @@ public interface NginxController extends AbstractController, HasShortName {
             new MethodEffector<Void>(NginxController.class, "getCurrentConfiguration");
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "1.3.7");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.3.7");
 
     @SetFromFlag("stickyVersion")
-    ConfigKey<String> STICKY_VERSION = ConfigKeys.newConfigKey(
+    ConfigKey<String> STICKY_VERSION = new BasicConfigKey<String>(
             "nginx.sticky.version", "Version of ngnix-sticky-module to be installed, if required", "1.0");
 
     @SetFromFlag("pcreVersion")
-    ConfigKey<String> PCRE_VERSION = ConfigKeys.newConfigKey(
+    ConfigKey<String> PCRE_VERSION = new BasicConfigKey<String>(
             "pcre.version", "Version of PCRE to be installed, if required", "8.32");
 
     @SetFromFlag("downloadUrl")
-    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             SoftwareProcess.DOWNLOAD_URL, "http://nginx.org/download/nginx-${version}.tar.gz");
 
     @SetFromFlag("downloadAddonUrls")
-    BasicAttributeSensorAndConfigKey<Map<String,String>> DOWNLOAD_ADDON_URLS = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<Map<String,String>> DOWNLOAD_ADDON_URLS = new BasicAttributeSensorAndConfigKey<Map<String,String>>(
             SoftwareProcess.DOWNLOAD_ADDON_URLS, ImmutableMap.of(
                     "stickymodule", "http://nginx-sticky-module.googlecode.com/files/nginx-sticky-module-${addonversion}.tar.gz",
                     "pcre", "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${addonversion}.tar.gz"));
 
     @SetFromFlag("sticky")
-    ConfigKey<Boolean> STICKY = ConfigKeys.newConfigKey("nginx.sticky", "whether to use sticky sessions", true);
+    ConfigKey<Boolean> STICKY = new BasicConfigKey<Boolean>("nginx.sticky", "whether to use sticky sessions", true);
 
     @SetFromFlag("httpPollPeriod")
-    ConfigKey<Long> HTTP_POLL_PERIOD = ConfigKeys.newConfigKey("nginx.sensorpoll.http", "poll period (in milliseconds)", 1000L);
+    ConfigKey<Long> HTTP_POLL_PERIOD = new BasicConfigKey<Long>("nginx.sensorpoll.http", "poll period (in milliseconds)", 1000L);
 
     @SetFromFlag("withLdOpt")
-    ConfigKey<String> WITH_LD_OPT = ConfigKeys.newConfigKey(
+    ConfigKey<String> WITH_LD_OPT = new BasicConfigKey<String>(
             "nginx.install.withLdOpt", "String to pass in with --with-ld-opt=\"<val>\" (and for OS X has pcre auto-appended to this)", "-L /usr/local/lib");
 
     @SetFromFlag("withCcOpt")
-    ConfigKey<String> WITH_CC_OPT = ConfigKeys.newConfigKey(
+    ConfigKey<String> WITH_CC_OPT = new BasicConfigKey<String>(
             "nginx.install.withCcOpt", "String to pass in with --with-cc-opt=\"<val>\"", "-I /usr/local/include");
 
     boolean isSticky();

@@ -31,10 +31,10 @@ import com.google.common.util.concurrent.Callables;
 public class EntityConfigMapUsageTest {
     private static final int EARLY_RETURN_GRACE = 10;
     
-    private ConfigKey<Integer> intKey = ConfigKeys.newConfigKey("bkey", "b key");
-    private ConfigKey<String> strKey = ConfigKeys.newConfigKey("akey", "a key");
-    private ConfigKey<Integer> intKeyWithDefault = ConfigKeys.newConfigKey("ckey", "c key", 1);
-    private ConfigKey<String> strKeyWithDefault = ConfigKeys.newConfigKey("strKey", "str key", "str key default");
+    private ConfigKey<Integer> intKey = new BasicConfigKey<Integer>("bkey", "b key");
+    private ConfigKey<String> strKey = new BasicConfigKey<String>("akey", "a key");
+    private ConfigKey<Integer> intKeyWithDefault = new BasicConfigKey<Integer>("ckey", "c key", 1);
+    private ConfigKey<String> strKeyWithDefault = new BasicConfigKey<String>("strKey", "str key", "str key default");
     
     private TestApplication app;
     private List<SimulatedLocation> locs;

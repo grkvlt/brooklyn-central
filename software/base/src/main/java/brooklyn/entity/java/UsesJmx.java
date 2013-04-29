@@ -5,9 +5,10 @@ import java.security.cert.Certificate;
 
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
@@ -16,7 +17,7 @@ public interface UsesJmx extends UsesJava {
     int DEFAULT_JMX_PORT = 1099;   // RMI port?
 
     @SetFromFlag("useJmx")
-    ConfigKey<Boolean> USE_JMX = ConfigKeys.newConfigKey("jmx.enabled", "JMX enabled", Boolean.TRUE);
+    ConfigKey<Boolean> USE_JMX = new BasicConfigKey<Boolean>("jmx.enabled", "JMX enabled", Boolean.TRUE);
 
     @SetFromFlag("jmxPort")
     PortAttributeSensorAndConfigKey JMX_PORT = Attributes.JMX_PORT;
@@ -31,12 +32,12 @@ public interface UsesJmx extends UsesJava {
     @SetFromFlag("jmxContext")
     BasicAttributeSensorAndConfigKey<String> JMX_CONTEXT = Attributes.JMX_CONTEXT;
 
-    AttributeSensor<String> JMX_URL = Attributes.newAttributeSensor("jmx.url", "JMX URL");
+    AttributeSensor<String> JMX_URL = new BasicAttributeSensor<String>("jmx.url", "JMX URL");
 
     /** forces JMX to be secured, using JMXMP so it gets through firewalls _and_ SSL/TLS
      * (NB: there is not currently any corresponding JMXMP without SSL/TLS) */
     @SetFromFlag("jmxSecure")
-    ConfigKey<Boolean> JMX_SSL_ENABLED = ConfigKeys.newConfigKey("jmx.ssl.enabled", "JMX over JMXMP enabled with SSL/TLS", Boolean.FALSE);
+    ConfigKey<Boolean> JMX_SSL_ENABLED = new BasicConfigKey<Boolean>("jmx.ssl.enabled", "JMX over JMXMP enabled with SSL/TLS", Boolean.FALSE);
 
     /*
      * Synopsis of how the keys work for JMX_SSL:
@@ -63,12 +64,12 @@ public interface UsesJmx extends UsesJava {
 
     /* TODO brooklyn ROOT key
      *
-    ConfigKey<String> BROOKLYN_SSL_ROOT_KEYSTORE_URL = ConfigKeys.newConfigKey(
+    ConfigKey<String> BROOKLYN_SSL_ROOT_KEYSTORE_URL = new BasicConfigKey<String>(
             "brooklyn.ssl.root.keyStoreUrl", "URL to keystore Brooklyn should use as root private key and certificate-signing authority", null);
 
-    ConfigKey<String> BROOKLYN_SSL_ROOT_KEY_DATA = ConfigKeys.newConfigKey(
+    ConfigKey<String> BROOKLYN_SSL_ROOT_KEY_DATA = new BasicConfigKey<String>(
             "brooklyn.ssl.root.key", "root private key (RSA string format), used to sign managed servers", null);
-    ConfigKey<String> BROOKLYN_SSL_ROOT_CERT_DATA = ConfigKeys.newConfigKey(
+    ConfigKey<String> BROOKLYN_SSL_ROOT_CERT_DATA = new BasicConfigKey<String>(
             "brooklyn.ssl.root.cert", "certificate for root private key (RSA string format)", null);
 
      * brooklyn.ssl.root.keyStorePassword
@@ -76,9 +77,9 @@ public interface UsesJmx extends UsesJava {
      * brooklyn.ssl.root.keyPassword
      */
 
-    ConfigKey<PrivateKey> JMX_SSL_ACCESS_KEY = ConfigKeys.newConfigKey(
+    ConfigKey<PrivateKey> JMX_SSL_ACCESS_KEY = new BasicConfigKey<PrivateKey>(
             "jmx.ssl.access.key", "key used to access a JMX agent (typically per entity, embedded in the managed JVM)", null);
-    ConfigKey<Certificate> JMX_SSL_ACCESS_CERT = ConfigKeys.newConfigKey(
+    ConfigKey<Certificate> JMX_SSL_ACCESS_CERT = new BasicConfigKey<Certificate>(
             "jmx.ssl.access.cert", "certificate of key used to access a JMX agent", null);
 
     /* TODO specify a keystore from which to get the access key

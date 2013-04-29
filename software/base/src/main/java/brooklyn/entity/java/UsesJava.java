@@ -3,7 +3,7 @@ package brooklyn.entity.java;
 import java.util.ArrayList;
 import java.util.Map;
 
-import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.config.ConfigKey;
 import brooklyn.event.basic.ListConfigKey;
 import brooklyn.event.basic.MapConfigKey;
 import brooklyn.util.flags.SetFromFlag;
@@ -12,10 +12,14 @@ import com.google.common.collect.Maps;
 
 public interface UsesJava {
 
-    /** system properties (-D) to append to JAVA_OPTS; normally accessed through {@link JavaEntityMethods#javaSysProp(String)} */
+    /**
+     * System properties ({@code -Dkey=value}) to append to {@code JAVA_OPTS}.
+     * <p>
+     * Normally accessed through {@link JavaEntityMethods#javaSysProp(String)}
+     */
     @SetFromFlag("javaSysProps")
-    public static final MapConfigKey<String> JAVA_SYSPROPS = new MapConfigKey<String>(String.class,
-            "java.sysprops", "Java command line system properties", Maps.<String,String>newLinkedHashMap());
+    public static final MapConfigKey<String> JAVA_SYSPROPS = new MapConfigKey<String>(
+            "java.sysprops", "Java command line system properties", Maps.<String, String>newLinkedHashMap());
 
     /**
      * Used to set java options. These options are pre-pended to the defaults.
@@ -37,12 +41,10 @@ public interface UsesJava {
      * </ul> 
      */
     @SetFromFlag("javaOpts")
-    public static final ListConfigKey<String> JAVA_OPTS = new ListConfigKey<String>(String.class, 
+    public static final ListConfigKey<String> JAVA_OPTS = new ListConfigKey<String>(
             "java.opts", "Java command line options", new ArrayList<String>());
 
-    /**
-     * @deprecated Use JAVA_SYSPROPS instead; was deprecated in 0.4.0
-     */
+    /** @deprecated Use {@link #JAVA_SYSPROPS} instead; was deprecated in 0.4.0 */
     @Deprecated
-    public static final BasicConfigKey<Map<String, String>> JAVA_OPTIONS = JAVA_SYSPROPS;
+    public static final ConfigKey<Map<String, String>> JAVA_OPTIONS = JAVA_SYSPROPS;
 }

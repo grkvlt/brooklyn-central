@@ -1,8 +1,5 @@
 package brooklyn.event.adapter
 
-import groovy.lang.Closure
-
-import java.util.Map
 import java.util.concurrent.CopyOnWriteArrayList
 
 import javax.management.Notification
@@ -19,8 +16,7 @@ import brooklyn.event.Sensor
  * Adapter that subscribes to a JMX notification.
  * 
  * @see {@link JmxSensorAdapter} for recommended way of using this
- * 
- * @deprecated See brooklyn.event.feed.jmx.JmxFeed
+ * @deprecated eSince 0.5.0; Use {@link brooklyn.event.feed.jmx.JmxFeed}
  */
 @Deprecated
 class JmxNotificationAdapter extends AbstractSensorAdapter {

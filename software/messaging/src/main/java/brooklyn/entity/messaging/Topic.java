@@ -1,6 +1,5 @@
 package brooklyn.entity.messaging;
 
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 
 /**
@@ -8,7 +7,7 @@ import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
  */
 public interface Topic {
 
-    BasicAttributeSensorAndConfigKey<String> TOPIC_NAME = ConfigKeys.newAttributeSensorAndConfigKey("topic.name", "Topic name");
+    BasicAttributeSensorAndConfigKey<String> TOPIC_NAME = new BasicAttributeSensorAndConfigKey<String>("topic.name", "Topic name");
 
     /**
      * Create the topic.

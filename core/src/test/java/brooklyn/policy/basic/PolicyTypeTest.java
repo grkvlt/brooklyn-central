@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.policy.PolicyType;
 
 import com.google.common.collect.ImmutableSet;
@@ -34,7 +34,7 @@ public class PolicyTypeTest {
     }
     
     public static class MyPolicy extends AbstractPolicy {
-        public static final ConfigKey<String> CONF1 = ConfigKeys.newConfigKey("test.conf1", "my descr, conf1", "defaultval1");
-        public static final ConfigKey<Integer> CONF2 = ConfigKeys.newConfigKey("test.conf2", "my descr, conf2", 2);
+        public static final ConfigKey<String> CONF1 = new BasicConfigKey<String>("test.conf1", "my descr, conf1", "defaultval1");
+        public static final ConfigKey<Integer> CONF2 = new BasicConfigKey<Integer>("test.conf2", "my descr, conf2", 2);
     }
 }

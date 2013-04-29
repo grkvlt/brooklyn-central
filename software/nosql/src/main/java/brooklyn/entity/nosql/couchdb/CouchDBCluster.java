@@ -15,11 +15,10 @@
  */
 package brooklyn.entity.nosql.couchdb;
 
-import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.group.DynamicCluster;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
@@ -32,11 +31,11 @@ import brooklyn.util.flags.SetFromFlag;
 public interface CouchDBCluster extends DynamicCluster {
 
     @SetFromFlag("clusterName")
-    BasicAttributeSensorAndConfigKey<String> CLUSTER_NAME = ConfigKeys.newAttributeSensorAndConfigKey("couchdb.cluster.name", "Name of the CouchDB cluster", "BrooklynCluster");
+    BasicAttributeSensorAndConfigKey<String> CLUSTER_NAME = new BasicAttributeSensorAndConfigKey<String>("couchdb.cluster.name", "Name of the CouchDB cluster", "BrooklynCluster");
 
-    AttributeSensor<String> HOSTNAME = Attributes.newAttributeSensor("couchdb.cluster.hostname", "Hostname to connect to cluster with");
+    AttributeSensor<String> HOSTNAME = new BasicAttributeSensor<String>("couchdb.cluster.hostname", "Hostname to connect to cluster with");
 
-    AttributeSensor<Integer> HTTP_PORT = Attributes.newAttributeSensor("couchdb.cluster.http.port", "CouchDB HTTP port to connect to cluster with");
+    AttributeSensor<Integer> HTTP_PORT = new BasicAttributeSensor<Integer>("couchdb.cluster.http.port", "CouchDB HTTP port to connect to cluster with");
 
     /**
      * The name of the cluster.

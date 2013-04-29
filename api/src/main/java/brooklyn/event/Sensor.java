@@ -17,7 +17,7 @@ public interface Sensor<T> extends Serializable {
     /**
      * Returns the Java {@link Class} for the sensor data.
      */
-    Class<? extends T> getType();
+    Class<? super T> getType();
  
     /**
      * Returns the type of the sensor data, as a {@link String} representation of the class name.

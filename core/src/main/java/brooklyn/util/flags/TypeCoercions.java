@@ -1,15 +1,14 @@
 package brooklyn.util.flags;
 
 import groovy.lang.Closure;
-import groovy.time.TimeDuration;
 import groovy.time.Duration;
+import groovy.time.TimeDuration;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,27 +34,27 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Primitives;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class TypeCoercions {
 
     private TypeCoercions() {}
 
     private static Map<Class,Map<Class,Function>> registeredAdapters = Collections.synchronizedMap(
             new LinkedHashMap<Class,Map<Class,Function>>());
-    
-    
-    /** attempts to coerce 'value' to 'targetType', 
-     * using a variety of strategies,
-     * including looking at:
-     * 
+
+    /**
+     * Attempts to coerce 'value' to 'targetType' using a variety of strategies.
+     * <p>
+     * Looking at:
+     * <pre>{@code
      * value.asTargetType()
-     * static TargetType.fromType(value) where value instanceof Type
-     * 
-     * value.targetTypeValue()  //handy for primitives
-     * 
+     * static TargetType.fromType(value) // where value instanceof Type
+     * value.targetTypeValue()  // handy for primitives
      * registeredAdapters.get(targetType).findFirst({ k,v -> k.isInstance(value) }, { k,v -> v.apply(value) })
-     **/
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static <T> T coerce(Object value, Class<T> targetType) {
+     * }
+     * </pre>
+     */
+    public static <T> T coerce(Object value, Class<? super T> targetType) {
         if (value==null) return null;
         if (targetType.isInstance(value)) return (T) value;
 
@@ -93,7 +92,7 @@ public class TypeCoercions {
                 }
             }
         }
-        
+
         //now look for static TargetType.fromType(Type t) where value instanceof Type  
         for (Method m: targetType.getMethods()) {
             if (((m.getModifiers()&Modifier.STATIC)==Modifier.STATIC) && 
@@ -108,9 +107,9 @@ public class TypeCoercions {
                 }
             }
         }
-        
-       //ENHANCEMENT could look in type hierarchy of both types for a conversion method...
-        
+
+        //TODO could look in type hierarchy of both types for a conversion method...
+
         //primitives get run through again boxed up
         Class boxedT = UNBOXED_TO_BOXED_TYPES.get(targetType);
         Class boxedVT = UNBOXED_TO_BOXED_TYPES.get(value.getClass());
@@ -144,18 +143,18 @@ public class TypeCoercions {
                 }
             }
         }
-                
+
         //not found
         throw new ClassCastException("Cannot coerce type "+value.getClass()+" to "+targetType.getCanonicalName()+" ("+value+"): no adapter known");
     }
 
     /**
      * Sometimes need to explicitly cast primitives, rather than relying on Java casting.
+     * <p>
      * For example, when using generics then type-erasure means it doesn't actually cast,
      * which causes tests to fail with 0 != 0.0
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T castPrimitive(Object value, Class<T> targetType) {
+    public static <T> T castPrimitive(Object value, Class<? super T> targetType) {
         assert isPrimitiveOrBoxer(targetType) : "targetType="+targetType;
         assert isPrimitiveOrBoxer(value.getClass()) : "value="+targetType+"; valueType="+value.getClass();
 
@@ -225,13 +224,11 @@ public class TypeCoercions {
         }
     }
     
-    @SuppressWarnings("unchecked")
     public static boolean isPrimitiveOrBoxer(Class<?> type) {
         return Primitives.allPrimitiveTypes().contains(type) || Primitives.allWrapperTypes().contains(type);
     }
     
-    @SuppressWarnings("unchecked")
-    public static <T> T stringToPrimitive(String value, Class<T> targetType) {
+    public static <T> T stringToPrimitive(String value, Class<? super T> targetType) {
         assert Primitives.allPrimitiveTypes().contains(targetType) || Primitives.allWrapperTypes().contains(targetType) : "targetType="+targetType;
 
         // If char, then need to do explicit conversion
@@ -260,7 +257,7 @@ public class TypeCoercions {
         }
     }
     
-    /** returns the simple class name, and for any inner class the portion after the $ */
+    /** Returns the simple class name, and for any inner class the portion after the {@literal $}. */
     public static String getVerySimpleName(Class c) {
         String s = c.getSimpleName();
         if (s.indexOf('$')>=0)

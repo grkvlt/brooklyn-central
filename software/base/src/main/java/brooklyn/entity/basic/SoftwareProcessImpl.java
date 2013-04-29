@@ -1,8 +1,6 @@
 package brooklyn.entity.basic;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import brooklyn.entity.drivers.EntityDriverManager;
 import groovy.time.TimeDuration;
 
 import java.net.InetAddress;
@@ -18,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Entity;
 import brooklyn.entity.drivers.DriverDependentEntity;
+import brooklyn.entity.drivers.EntityDriverManager;
 import brooklyn.event.adapter.SensorRegistry;
 import brooklyn.event.feed.ConfigToAttributes;
 import brooklyn.event.feed.function.FunctionFeed;

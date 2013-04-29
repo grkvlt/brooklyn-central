@@ -9,14 +9,14 @@ import brooklyn.config.ConfigKey;
 import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
-import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.EntityLocal;
 import brooklyn.entity.basic.MethodEffector;
 import brooklyn.entity.basic.NamedParameter;
 import brooklyn.entity.basic.SoftwareProcessImpl;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.location.basic.SshMachineLocation;
 import brooklyn.util.flags.SetFromFlag;
 
@@ -41,10 +41,10 @@ public class RestMockSimpleEntity extends SoftwareProcessImpl {
     }
 
     @SetFromFlag("sampleConfig")
-    public static final ConfigKey<String> SAMPLE_CONFIG = ConfigKeys.newConfigKey(
+    public static final ConfigKey<String> SAMPLE_CONFIG = new BasicConfigKey<String>(
             "brooklyn.rest.mock.sample.config", "Mock sample config", "DEFAULT_VALUE");
 
-    public static final AttributeSensor<String> SAMPLE_SENSOR = Attributes.newAttributeSensor(
+    public static final AttributeSensor<String> SAMPLE_SENSOR = new BasicAttributeSensor<String>(
             "brooklyn.rest.mock.sample.sensor", "Mock sample sensor");
 
     public static final Effector<String> SAMPLE_EFFECTOR = new MethodEffector<String>(RestMockSimpleEntity.class, "sampleEffector");

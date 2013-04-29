@@ -26,7 +26,6 @@ import brooklyn.event.Sensor;
 import brooklyn.location.Location;
 import brooklyn.location.PortRange;
 import brooklyn.location.PortSupplier;
-import brooklyn.util.flags.TypeCoercions;
 
 /**
  * A {@link Sensor} describing a port on a system,
@@ -49,11 +48,11 @@ public class PortAttributeSensorAndConfigKey extends AttributeSensorAndConfigKey
     }
 
     public PortAttributeSensorAndConfigKey(String name, String description, Object defaultValue) {
-        super(PortRange.class, Integer.class, name, description, defaultValue);
+        super(Integer.class, name, description, defaultValue);
     }
 
     public PortAttributeSensorAndConfigKey(PortAttributeSensorAndConfigKey orig, Object defaultValue) {
-        super(orig, TypeCoercions.coerce(defaultValue, PortRange.class));
+        super(orig, defaultValue);
     }
 
     protected Integer convertConfigToSensor(PortRange value, Entity entity) {

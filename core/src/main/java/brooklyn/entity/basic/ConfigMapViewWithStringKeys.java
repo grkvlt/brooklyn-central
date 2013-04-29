@@ -46,7 +46,7 @@ public class ConfigMapViewWithStringKeys implements Map<String,Object> {
 
     @Override
     public Object get(Object key) {
-        return target.getConfig(new BasicConfigKey<Object>(Object.class, (String)key));
+        return target.getConfig(new BasicConfigKey<String>((String)key));
     }
 
     @Override

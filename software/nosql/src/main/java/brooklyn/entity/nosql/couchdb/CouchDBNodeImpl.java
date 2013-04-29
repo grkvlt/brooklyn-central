@@ -16,7 +16,6 @@
 package brooklyn.entity.nosql.couchdb;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
@@ -26,9 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.SoftwareProcessImpl;
+import brooklyn.entity.webapp.JavaWebAppSoftwareProcessImpl;
 import brooklyn.entity.webapp.WebAppServiceMethods;
-import brooklyn.event.feed.function.FunctionFeed;
-import brooklyn.event.feed.function.FunctionPollConfig;
 import brooklyn.event.feed.http.HttpFeed;
 import brooklyn.event.feed.http.HttpPollConfig;
 import brooklyn.event.feed.http.HttpValueFunctions;

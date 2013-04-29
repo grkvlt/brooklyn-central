@@ -1,15 +1,10 @@
 package brooklyn.entity.database.rubyrep;
 
+import java.net.URI;
+
 import brooklyn.entity.basic.SoftwareProcessImpl;
 import brooklyn.entity.database.DatabaseNode;
 import brooklyn.event.basic.DependentConfiguration;
-import brooklyn.event.feed.function.FunctionFeed;
-import brooklyn.event.feed.function.FunctionPollConfig;
-import com.google.common.base.Functions;
-
-import java.net.URI;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 public class RubyRepNodeImpl extends SoftwareProcessImpl implements RubyRepNode {
 

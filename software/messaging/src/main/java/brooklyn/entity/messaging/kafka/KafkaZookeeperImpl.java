@@ -20,8 +20,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Objects.ToStringHelper;
-
 import brooklyn.entity.Entity;
 import brooklyn.entity.zookeeper.AbstractZookeeperImpl;
 import brooklyn.util.MutableMap;

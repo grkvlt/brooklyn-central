@@ -8,7 +8,6 @@ import brooklyn.config.ConfigKey;
 import brooklyn.entity.rebind.RebindSupport;
 import brooklyn.entity.rebind.Rebindable;
 import brooklyn.mementos.LocationMemento;
-import brooklyn.mementos.PolicyMemento;
 
 /**
  * A location that an entity can be in. Examples of locations include a single machine

@@ -23,6 +23,9 @@ import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.trait.Startable;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.Sensor;
+import brooklyn.event.basic.BasicAttributeSensor;
+import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.event.basic.BasicNotificationSensor;
 import brooklyn.event.basic.ListConfigKey;
 import brooklyn.event.basic.MapConfigKey;
 import brooklyn.util.MutableMap;
@@ -53,15 +56,15 @@ public interface TestEntity extends Entity, Startable, EntityLocal, EntityIntern
     }
 
     @SetFromFlag("confName")
-    public static final ConfigKey<String> CONF_NAME = ConfigKeys.newConfigKey("test.confName", "Configuration key, my name", "defaultval");
-    public static final ConfigKey<Map<?, ?>> CONF_MAP_PLAIN = ConfigKeys.newConfigKey("test.confMapPlain", "Configuration key that's a plain map", MutableMap.of());
-    public static final ConfigKey<List<?>> CONF_LIST_PLAIN = ConfigKeys.newConfigKey("test.confListPlain", "Configuration key that's a plain list", Lists.newArrayList());
-    public static final MapConfigKey<String> CONF_MAP_THING = ConfigKeys.newMapConfigKey("test.confMapThing", "Configuration key that's a map thing");
-    public static final ListConfigKey<String> CONF_LIST_THING = ConfigKeys.newListConfigKey("test.confListThing", "Configuration key that's a list thing");
+    public static final ConfigKey<String> CONF_NAME = new BasicConfigKey<String>("test.confName", "Configuration key, my name", "defaultval");
+    public static final ConfigKey<Map<?, ?>> CONF_MAP_PLAIN = new BasicConfigKey<Map<?, ?>>("test.confMapPlain", "Configuration key that's a plain map", MutableMap.of());
+    public static final ConfigKey<List<?>> CONF_LIST_PLAIN = new BasicConfigKey<List<?>>("test.confListPlain", "Configuration key that's a plain list", Lists.newArrayList());
+    public static final MapConfigKey<String> CONF_MAP_THING = new MapConfigKey<String>("test.confMapThing", "Configuration key that's a map thing");
+    public static final ListConfigKey<String> CONF_LIST_THING = new ListConfigKey<String>("test.confListThing", "Configuration key that's a list thing");
     
-    public static final AttributeSensor<Integer> SEQUENCE = Attributes.newAttributeSensor("test.sequence", "Test Sequence");
-    public static final AttributeSensor<String> NAME = Attributes.newAttributeSensor("test.name", "Test name");
-    public static final Sensor<Integer> MY_NOTIF = Attributes.newNotificationSensor("test.myNotif", "Test notification");
+    public static final AttributeSensor<Integer> SEQUENCE = new BasicAttributeSensor<Integer>("test.sequence", "Test Sequence");
+    public static final AttributeSensor<String> NAME = new BasicAttributeSensor<String>("test.name", "Test name");
+    public static final Sensor<Integer> MY_NOTIF = new BasicNotificationSensor<Integer>("test.myNotif", "Test notification");
     
     public static final AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
     

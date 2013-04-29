@@ -11,7 +11,6 @@ import brooklyn.entity.Entity;
 import brooklyn.entity.Group;
 import brooklyn.entity.basic.AbstractGroup;
 import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.Description;
 import brooklyn.entity.basic.EntityFactory;
 import brooklyn.entity.basic.Lifecycle;
@@ -21,6 +20,9 @@ import brooklyn.entity.proxying.EntitySpec;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.Sensor;
+import brooklyn.event.basic.BasicAttributeSensor;
+import brooklyn.event.basic.BasicConfigKey;
+import brooklyn.event.basic.BasicNotificationSensor;
 import brooklyn.util.flags.SetFromFlag;
 
 import com.google.common.base.Function;
@@ -35,22 +37,22 @@ public interface DynamicCluster extends AbstractGroup, Cluster {
     Effector<String> REPLACE_MEMBER = new MethodEffector<String>(DynamicCluster.class, "replaceMember");
 
     @SetFromFlag("quarantineFailedEntities")
-    ConfigKey<Boolean> QUARANTINE_FAILED_ENTITIES = ConfigKeys.newConfigKey("dynamiccluster.quarantineFailedEntities", "Whether to guarantine entities that fail to start, or to try to clean them up", false);
+    ConfigKey<Boolean> QUARANTINE_FAILED_ENTITIES = new BasicConfigKey<Boolean>("dynamiccluster.quarantineFailedEntities", "Whether to guarantine entities that fail to start, or to try to clean them up", false);
 
     AttributeSensor<Lifecycle> SERVICE_STATE = Attributes.SERVICE_STATE;
 
-    Sensor<Entity> ENTITY_QUARANTINED = Attributes.newNotificationSensor("dynamiccluster.entityQuarantined", "Entity failed to start, and has been quarantined");
+    Sensor<Entity> ENTITY_QUARANTINED = new BasicNotificationSensor<Entity>("dynamiccluster.entityQuarantined", "Entity failed to start, and has been quarantined");
 
-    AttributeSensor<Group> QUARANTINE_GROUP = Attributes.newAttributeSensor("dynamiccluster.quarantineGroup", "Group of quarantined entities that failed to start");
+    AttributeSensor<Group> QUARANTINE_GROUP = new BasicAttributeSensor<Group>("dynamiccluster.quarantineGroup", "Group of quarantined entities that failed to start");
 
     @SetFromFlag("memberSpec")
-    ConfigKey<EntitySpec<?>> MEMBER_SPEC = ConfigKeys.newConfigKey("dynamiccluster.memberspec", "entity spec for creating new cluster members", null);
+    ConfigKey<EntitySpec<?>> MEMBER_SPEC = new BasicConfigKey<EntitySpec<?>>("dynamiccluster.memberspec", "entity spec for creating new cluster members", null);
 
     @SetFromFlag("factory")
-    ConfigKey<EntityFactory<?>> FACTORY = ConfigKeys.newConfigKey("dynamiccluster.factory", "factory for creating new cluster members", null);
+    ConfigKey<EntityFactory<?>> FACTORY = new BasicConfigKey<EntityFactory<?>>("dynamiccluster.factory", "factory for creating new cluster members", null);
 
     @SetFromFlag("removalStrategy")
-    ConfigKey<Function<Collection<? extends Entity>, Entity>> REMOVAL_STRATEGY = ConfigKeys.newConfigKey("dynamiccluster.removalstrategy", "strategy for deciding what to remove when down-sizing", null);
+    ConfigKey<Function<Collection<? extends Entity>, Entity>> REMOVAL_STRATEGY = new BasicConfigKey<Function<Collection<? extends Entity>, Entity>>("dynamiccluster.removalstrategy", "strategy for deciding what to remove when down-sizing", null);
 
     /**
      * Replaces the entity with the given ID.

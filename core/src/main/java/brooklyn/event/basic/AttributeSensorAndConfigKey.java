@@ -23,40 +23,43 @@ import brooklyn.event.Sensor;
 import brooklyn.event.feed.ConfigToAttributes;
 import brooklyn.util.flags.TypeCoercions;
 
+import com.google.common.reflect.TypeToken;
+
 /**
  * A {@link Sensor} describing an attribute that can be configured with inputs that are used to derive the final value.
  * <p>
  * The {@link ConfigKey} will have the same name and description as the sensor but not necessarily the same type.
  * Conversion to set the sensor value from the config key must be supplied in a subclass.
  */
-public abstract class AttributeSensorAndConfigKey<ConfigType, SensorType> extends BasicAttributeSensor<SensorType> 
-        implements ConfigKey.HasConfigKey<ConfigType> {
+public abstract class AttributeSensorAndConfigKey<T, S> extends BasicAttributeSensor<S> 
+        implements ConfigKey.HasConfigKey<T> {
     private static final long serialVersionUID = -3103809215973264600L;
 
-    private ConfigKey<ConfigType> configKey;
+    @SuppressWarnings("serial")
+    private TypeToken<T> configType = new TypeToken<T>(getClass()) { };
+    private ConfigKey<T> configKey;
 
-    public AttributeSensorAndConfigKey(Class<ConfigType> configType, Class<SensorType> sensorType, String name) {
-        this(configType, sensorType, name, name, null);
+    public AttributeSensorAndConfigKey(Class<S> sensorType, String name) {
+        this(sensorType, name, name, null);
     }
 
-    public AttributeSensorAndConfigKey(Class<ConfigType> configType, Class<SensorType> sensorType, String name, String description) {
-        this(configType, sensorType, name, description, null);
+    public AttributeSensorAndConfigKey(Class<S> sensorType, String name, String description) {
+        this(sensorType, name, description, null);
     }
 
-    public AttributeSensorAndConfigKey(Class<ConfigType> configType, Class<SensorType> sensorType, String name, String description, Object defaultValue) {
+    public AttributeSensorAndConfigKey(Class<S> sensorType, String name, String description, Object defaultValue) {
         super(sensorType, name, description);
-        configKey = new BasicConfigKey<ConfigType>(configType, name, description, TypeCoercions.coerce(defaultValue, configType));
+        configKey = new BasicConfigKey<T>(name, description, TypeCoercions.coerce(defaultValue, configType.getRawType()));
     }
 
-    public AttributeSensorAndConfigKey(AttributeSensorAndConfigKey<ConfigType,SensorType> orig, ConfigType defaultValue) {
+    public AttributeSensorAndConfigKey(AttributeSensorAndConfigKey<T,S> orig, Object defaultValue) {
         super(orig.getType(), orig.getName(), orig.getDescription());
-        configKey = new BasicConfigKey<ConfigType>(orig.configKey.getType(), orig.getName(), orig.getDescription(), 
-            TypeCoercions.coerce(defaultValue, orig.configKey.getType()));
+        configKey = new BasicConfigKey<T>(orig.configKey, TypeCoercions.coerce(defaultValue, orig.configKey.getType()));
     }
 
-    public ConfigKey<ConfigType> getConfigKey() { return configKey; }
+    public ConfigKey<T> getConfigKey() { return configKey; }
 
-    public AttributeSensor<SensorType> asAttributeSensor() { return this; }
+    public AttributeSensor<S> asAttributeSensor() { return this; }
 
     /**
      * Returns the sensor value for this attribute on the given entity, if present,
@@ -70,11 +73,11 @@ public abstract class AttributeSensorAndConfigKey<ConfigType, SensorType> extend
      * the framework calls this from {@link EntityLocal#setAttribute(AttributeSensorAndConfigKey)} 
      * typically via {@link ConfigToAttributes#apply(EntityLocal)} e.g. from SoftwareProcess.preStart.</em> 
      */
-    public SensorType getAsSensorValue(Entity e) {
-        SensorType sensorValue = e.getAttribute(this);
+    public S getAsSensorValue(Entity e) {
+        S sensorValue = e.getAttribute(this);
         if (sensorValue!=null) return sensorValue;
 
-        ConfigType v = ((EntityLocal)e).getConfig(this);
+        T v = ((EntityLocal)e).getConfig(this);
         if (v==null) v = configKey.getDefaultValue();
         try {
             return convertConfigToSensor(v, e);
@@ -84,7 +87,7 @@ public abstract class AttributeSensorAndConfigKey<ConfigType, SensorType> extend
     }
 
     /**
-     * Converts the given ConfigType value to the corresponding SensorType value, 
+     * Converts the given T value to the corresponding S value, 
      * with respect to the given entity.
      * <p>
      * This is invoked after checks whether the entity already has a value for the sensor,
@@ -93,6 +96,6 @@ public abstract class AttributeSensorAndConfigKey<ConfigType, SensorType> extend
      * <p>
      * This message should be allowed to return null if the conversion cannot be completed at this time.
      */
-    protected abstract SensorType convertConfigToSensor(ConfigType value, Entity entity);
+    protected abstract S convertConfigToSensor(T value, Entity entity);
 
 }

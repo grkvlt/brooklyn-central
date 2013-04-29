@@ -10,11 +10,11 @@ import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
 import brooklyn.entity.ParameterType;
 import brooklyn.entity.basic.AbstractEntity;
-import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.basic.BasicParameterType;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.ExplicitEffector;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
 /**
@@ -24,9 +24,9 @@ public class ExampleJavaEntity extends AbstractEntity {
     private static final long serialVersionUID = -3526068165423444054L;
 
     @SetFromFlag("myConfig1")
-    public static final ConfigKey<String> MY_CONFIG1 = ConfigKeys.newConfigKey("example.java.myConfig1", "My config 1", "default val1");
+    public static final ConfigKey<String> MY_CONFIG1 = new BasicConfigKey<String>("example.java.myConfig1", "My config 1", "default val1");
 
-    public static final AttributeSensor<String> MY_SENSOR1 = Attributes.newAttributeSensor("example.java.mySensor1", "My sensor 1");
+    public static final AttributeSensor<String> MY_SENSOR1 = new BasicAttributeSensor<String>("example.java.mySensor1", "My sensor 1");
 
     @SuppressWarnings("serial")
     public static final Effector<Void> EFFECTOR1 = new ExplicitEffector<ExampleJavaEntity, Void>(

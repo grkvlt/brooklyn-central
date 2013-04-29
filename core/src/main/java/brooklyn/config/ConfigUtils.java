@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import brooklyn.config.ConfigKey.HasConfigKey;
 import brooklyn.entity.Entity;
-import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.exceptions.Exceptions;
 
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings("unchecked")
 public class ConfigUtils {
 
     private static final Logger log = LoggerFactory.getLogger(ConfigUtils.class);
@@ -28,27 +28,34 @@ public class ConfigUtils {
         return result;
     }
     
-    /** prepends the given prefix to the key.  prefix will typically end with a ".".
-     * this is useful for configuration purposes when a subsystem uses a short-name config (e.g. "user")
-     * but in entity config or at the root (brooklyn.properties) there are longer names (e.g. "brooklyn.ssh.config.user"),
-     * and we wish to convert from the shorter names to the longer names. */
+    /**
+     * Prepends the given prefix to the key.
+     * <p>
+     * Prefix will typically end with a {@literal .}. This is useful for configuration purposes when a subsystem uses a
+     * short-name config (e.g. {@code user}) but in entity config or at the root (brooklyn.properties) there are
+     * longer names (e.g. {@code brooklyn.ssh.config.user}) and we wish to convert from the shorter names to the longer names.
+     */
     public static <T> ConfigKey<T> prefixedKey(String prefix, ConfigKey<T> key) {
-        return ConfigKeys.newConfigKey(key.getType(), prefix+key.getName(), key.getDescription(), key.getDefaultValue());
+        return new BasicConfigKey<T>(prefix+key.getName(), key.getDescription(), key.getDefaultValue());
     }
-    
-    /** removes the given prefix from the key for configuration purposes; logs warning and does nothing if there is no such prefix.
-     * prefix will typically end with a ".".
-     * this is useful for configuration purposes when a subsystem uses a short-name config (e.g. "user")
-     * but in entity config or at the root (brooklyn.properties) there are longer names (e.g. "brooklyn.ssh.config.user"),
-     * and we wish to convert from the longer names to the short-name. */
+
+    /**
+     * Removes the given prefix from the key for configuration purposes.
+     * <p>
+     * Logs warning and does nothing if there is no such prefix.
+     *
+     * @see #prefixedKey(String, ConfigKey)
+     */
     public static <T> ConfigKey<T> unprefixedKey(String prefix, ConfigKey<T> key) {
         String newName = key.getName();
-        if (newName.startsWith(prefix)) newName = newName.substring(prefix.length());
-        else log.warn("Cannot remove prefix "+prefix+" from key "+key+" (ignoring)");
-        return ConfigKeys.newConfigKey(key.getType(), newName, key.getDescription(), key.getDefaultValue());
+        if (newName.startsWith(prefix)) {
+            newName = newName.substring(prefix.length());
+        } else {
+            log.warn("Cannot remove prefix "+prefix+" from key "+key+" (ignoring)");
+        }
+        return new BasicConfigKey<T>(newName, key.getDescription(), key.getDefaultValue());
     }
-    
-    
+
     public static BrooklynProperties loadFromFile(String file) {
         BrooklynProperties result = BrooklynProperties.Factory.newEmpty();
         if (file!=null) result.addFrom(new File(file));
@@ -64,8 +71,8 @@ public class ConfigUtils {
         }
         return result;
     }
-    
-    /** prefix generally ends with a full stop */
+
+    /** Prefix generally ends with a {@literal .} (full stop). */
     public static BrooklynProperties filterForPrefixAndStrip(Map<String,?> properties, String prefix) {
         BrooklynProperties result = BrooklynProperties.Factory.newEmpty();
         for (String k: properties.keySet()) {

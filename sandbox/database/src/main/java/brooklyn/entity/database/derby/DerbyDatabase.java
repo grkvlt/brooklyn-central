@@ -43,16 +43,16 @@ public class DerbyDatabase extends SoftwareProcessImpl implements Database, Uses
     public static final ConfigKey<String> SUGGESTED_VERSION =
             ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "10.8.1.2");
 
-    public static final PortAttributeSensorAndConfigKey JDBC_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey(
+    public static final PortAttributeSensorAndConfigKey JDBC_PORT = new PortAttributeSensorAndConfigKey(
             "derby.jdbcPort", "Suggested JDBC port");
     
-    public static final ConfigKey<String> VIRTUAL_HOST_NAME = ConfigKeys.newConfigKey(
+    public static final ConfigKey<String> VIRTUAL_HOST_NAME = new BasicConfigKey<String>(
             "derby.virtualHost", "Derby virtual host name", "localhost");
 
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = ConfigKeys.newAttributeSensorAndConfigKey(
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_USER = new BasicAttributeSensorAndConfigKey<String>(
             Attributes.JMX_USER, "admin");
     
-    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = ConfigKeys.newAttributeSensorAndConfigKey(
+    public static final BasicAttributeSensorAndConfigKey<String> JMX_PASSWORD = new BasicAttributeSensorAndConfigKey<String>(
             Attributes.JMX_PASSWORD, "admin");
 
     @SetFromFlag

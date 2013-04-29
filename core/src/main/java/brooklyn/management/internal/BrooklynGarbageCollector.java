@@ -48,16 +48,16 @@ public class BrooklynGarbageCollector {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BrooklynGarbageCollector.class);
 
-    public static final ConfigKey<Long> GC_PERIOD = ConfigKeys.newConfigKey("brooklyn.gc.period", "the period, in millisconds, for checking if any tasks need to be deleted", 60*1000L);
+    public static final ConfigKey<Long> GC_PERIOD = new BasicConfigKey<Long>("brooklyn.gc.period", "the period, in millisconds, for checking if any tasks need to be deleted", 60*1000L);
     
-    public static final ConfigKey<Boolean> DO_SYSTEM_GC = ConfigKeys.newConfigKey("brooklyn.gc.doSystemGc", "whether to periodically call System.gc()", false);
+    public static final ConfigKey<Boolean> DO_SYSTEM_GC = new BasicConfigKey<Boolean>("brooklyn.gc.doSystemGc", "whether to periodically call System.gc()", false);
     
-    public static final ConfigKey<Integer> MAX_TASKS_PER_TAG = ConfigKeys.newConfigKey(
+    public static final ConfigKey<Integer> MAX_TASKS_PER_TAG = new BasicConfigKey<Integer>(
             "brooklyn.gc.maxTasksPerTag", 
             "the maximum number of tasks to be kept for a given tag (e.g. for effector calls invoked on a particular entity)", 
             100);
     
-    public static final ConfigKey<Long> MAX_TASK_AGE = ConfigKeys.newConfigKey(
+    public static final ConfigKey<Long> MAX_TASK_AGE = new BasicConfigKey<Long>(
             "brooklyn.gc.maxTaskAge", 
             "the number of milliseconds after which a completed task will be automatically deleted", 
             TimeUnit.DAYS.toMillis(1));

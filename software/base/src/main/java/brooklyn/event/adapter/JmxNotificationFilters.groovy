@@ -4,7 +4,7 @@ import javax.management.Notification
 import javax.management.NotificationFilter
 
 /**
- * @deprecated Use brooklyn.event.feed.jmx.JmxNotificationFilters instead
+ * @deprecated Since 0.5.0; Use {@link brooklyn.event.feed.jmx.JmxNotificationFilters}
  */
 @Deprecated
 public class JmxNotificationFilters {

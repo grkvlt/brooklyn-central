@@ -14,22 +14,20 @@ import brooklyn.event.basic.BasicConfigKey;
 import com.google.common.base.Function;
 
 public class DownloadProducerFromCloudsoftRepo implements Function<DownloadRequirement, DownloadTargets> {
-    
+
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(DownloadProducerFromCloudsoftRepo.class);
 
-    public static final ConfigKey<String> CLOUDSOFT_REPO_URL = BasicConfigKey.builder(String.class)
-            .name(DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.cloudsoft.url")
-            .description("Whether to use the cloudsoft repo for downloading entities, during installs")
-            .defaultValue("http://downloads.cloudsoftcorp.com/brooklyn/repository")
-            .build();
+    public static final ConfigKey<String> CLOUDSOFT_REPO_URL = new BasicConfigKey<String>(
+            DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.cloudsoft.url",
+            "Whether to use the cloudsoft repo for downloading entities, during installs",
+            "http://downloads.cloudsoftcorp.com/brooklyn/repository");
 
-    public static final ConfigKey<Boolean> CLOUDSOFT_REPO_ENABLED = BasicConfigKey.builder(Boolean.class)
-            .name(DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.cloudsoft.enabled")
-            .description("Whether to use the cloudsoft repo for downloading entities, during installs")
-            .defaultValue(true)
-            .build();
-    
+    public static final ConfigKey<Boolean> CLOUDSOFT_REPO_ENABLED = new BasicConfigKey<Boolean>(
+            DownloadProducerFromProperties.DOWNLOAD_CONF_PREFIX+"repo.cloudsoft.enabled",
+            "Whether to use the cloudsoft repo for downloading entities, during installs",
+            true);
+
     public static final String CLOUDSOFT_REPO_URL_PATTERN = "%s/"+
             "${simpletype}/${version}/"+
             "<#if filename??>"+
@@ -48,17 +46,16 @@ public class DownloadProducerFromCloudsoftRepo implements Function<DownloadRequi
     public DownloadProducerFromCloudsoftRepo(StringConfigMap config) {
         this.config = config;
     }
-    
+
     public DownloadTargets apply(DownloadRequirement req) {
         Boolean enabled = config.getConfig(CLOUDSOFT_REPO_ENABLED);
         String baseUrl = config.getConfig(CLOUDSOFT_REPO_URL);
         String url = String.format(CLOUDSOFT_REPO_URL_PATTERN, baseUrl);
-        
+
         if (enabled) {
             Map<String, ?> subs = DownloadSubstituters.getBasicSubscriptions(req);
             String result = DownloadSubstituters.substitute(url, subs);
             return BasicDownloadTargets.builder().addPrimary(result).build();
-            
         } else {
             return BasicDownloadTargets.empty();
         }

@@ -4,13 +4,13 @@
 package brooklyn.entity.nosql.cassandra;
 
 import brooklyn.config.ConfigKey;
-import brooklyn.entity.basic.Attributes;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.java.UsesJmx;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.AttributeSensor;
+import brooklyn.event.basic.BasicAttributeSensor;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.location.basic.PortRanges;
 import brooklyn.util.flags.SetFromFlag;
@@ -22,52 +22,52 @@ import brooklyn.util.flags.SetFromFlag;
 public interface CassandraNode extends SoftwareProcess, UsesJmx {
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "1.2.2");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.2.2");
 
     @SetFromFlag("downloadUrl")
-    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             SoftwareProcess.DOWNLOAD_URL, "${driver.mirrorUrl}/${version}/apache-cassandra-${version}-bin.tar.gz");
 
     /** download mirror, if desired */
     @SetFromFlag("mirrorUrl")
-    ConfigKey<String> MIRROR_URL = ConfigKeys.newConfigKey("cassandra.install.mirror.url", "URL of mirror", "http://www.mirrorservice.org/sites/ftp.apache.org/cassandra");
+    ConfigKey<String> MIRROR_URL = new BasicConfigKey<String>("cassandra.install.mirror.url", "URL of mirror", "http://www.mirrorservice.org/sites/ftp.apache.org/cassandra");
 
     @SetFromFlag("tgzUrl")
-    ConfigKey<String> TGZ_URL = ConfigKeys.newConfigKey("cassandra.install.tgzUrl", "URL of TGZ download file");
+    ConfigKey<String> TGZ_URL = new BasicConfigKey<String>("cassandra.install.tgzUrl", "URL of TGZ download file");
 
     @SetFromFlag("clusterName")
     BasicAttributeSensorAndConfigKey<String> CLUSTER_NAME = CassandraCluster.CLUSTER_NAME;
 
     @SetFromFlag("gossipPort")
-    PortAttributeSensorAndConfigKey GOSSIP_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey("cassandra.gossip.port", "Cassandra Gossip communications port", PortRanges.fromString("7000+"));
+    PortAttributeSensorAndConfigKey GOSSIP_PORT = new PortAttributeSensorAndConfigKey("cassandra.gossip.port", "Cassandra Gossip communications port", PortRanges.fromString("7000+"));
 
     @SetFromFlag("sslGgossipPort")
-    PortAttributeSensorAndConfigKey SSL_GOSSIP_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey("cassandra.ssl-gossip.port", "Cassandra Gossip SSL communications port", PortRanges.fromString("7001+"));
+    PortAttributeSensorAndConfigKey SSL_GOSSIP_PORT = new PortAttributeSensorAndConfigKey("cassandra.ssl-gossip.port", "Cassandra Gossip SSL communications port", PortRanges.fromString("7001+"));
 
     @SetFromFlag("thriftPort")
-    PortAttributeSensorAndConfigKey THRIFT_PORT = ConfigKeys.newPortAttributeSensorAndConfigKey("cassandra.thrift.port", "Cassandra Thrift RPC port", PortRanges.fromString("9160+"));
+    PortAttributeSensorAndConfigKey THRIFT_PORT = new PortAttributeSensorAndConfigKey("cassandra.thrift.port", "Cassandra Thrift RPC port", PortRanges.fromString("9160+"));
 
     @SetFromFlag("cassandraConfigTemplateUrl")
-    BasicAttributeSensorAndConfigKey<String> CASSANDRA_CONFIG_TEMPLATE_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> CASSANDRA_CONFIG_TEMPLATE_URL = new BasicAttributeSensorAndConfigKey<String>(
             "cassandra.config.templateUrl", "Template file (in freemarker format) for the cassandra.yaml config file", 
             "classpath://brooklyn/entity/nosql/cassandra/cassandra.yaml");
 
     @SetFromFlag("cassandraConfigFileName")
-    BasicAttributeSensorAndConfigKey<String> CASSANDRA_CONFIG_FILE_NAME = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> CASSANDRA_CONFIG_FILE_NAME = new BasicAttributeSensorAndConfigKey<String>(
             "cassandra.config.fileName", "Name for the copied config file", "cassandra.yaml");
 
-    AttributeSensor<Long> TOKEN = Attributes.newAttributeSensor("cassandra.token", "Cassandra Token");
+    AttributeSensor<Long> TOKEN = new BasicAttributeSensor<Long>("cassandra.token", "Cassandra Token");
 
-    AttributeSensor<Integer> PEERS = Attributes.newAttributeSensor("cassandra.peers", "Number of peers in cluster");
+    AttributeSensor<Integer> PEERS = new BasicAttributeSensor<Integer>("cassandra.peers", "Number of peers in cluster");
 
     /* Metrics for read/write performance. */
 
-    AttributeSensor<Long> READ_PENDING = Attributes.newAttributeSensor("cassandra.read.pending", "Current pending ReadStage tasks");
-    AttributeSensor<Integer> READ_ACTIVE = Attributes.newAttributeSensor("cassandra.read.active", "Current active ReadStage tasks");
-    AttributeSensor<Long> READ_COMPLETED = Attributes.newAttributeSensor("cassandra.read.completed", "Total completed ReadStage tasks");
-    AttributeSensor<Long> WRITE_PENDING = Attributes.newAttributeSensor("cassandra.write.pending", "Current pending MutationStage tasks");
-    AttributeSensor<Integer> WRITE_ACTIVE = Attributes.newAttributeSensor("cassandra.write.active", "Current active MutationStage tasks");
-    AttributeSensor<Long> WRITE_COMPLETED = Attributes.newAttributeSensor("cassandra.write.completed", "Total completed MutationStage tasks");
+    AttributeSensor<Long> READ_PENDING = new BasicAttributeSensor<Long>("cassandra.read.pending", "Current pending ReadStage tasks");
+    AttributeSensor<Integer> READ_ACTIVE = new BasicAttributeSensor<Integer>("cassandra.read.active", "Current active ReadStage tasks");
+    AttributeSensor<Long> READ_COMPLETED = new BasicAttributeSensor<Long>("cassandra.read.completed", "Total completed ReadStage tasks");
+    AttributeSensor<Long> WRITE_PENDING = new BasicAttributeSensor<Long>("cassandra.write.pending", "Current pending MutationStage tasks");
+    AttributeSensor<Integer> WRITE_ACTIVE = new BasicAttributeSensor<Integer>("cassandra.write.active", "Current active MutationStage tasks");
+    AttributeSensor<Long> WRITE_COMPLETED = new BasicAttributeSensor<Long>("cassandra.write.completed", "Total completed MutationStage tasks");
 
     ConfigKey<String> SEEDS = CassandraCluster.SEEDS;
 

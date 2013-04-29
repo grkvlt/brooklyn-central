@@ -28,7 +28,8 @@ import com.google.common.reflect.TypeToken;
  * and is typically used to populate the sensor's value at runtime.
  */
 public class BasicAttributeSensorAndConfigKey<T> extends AttributeSensorAndConfigKey<T, T> {
-    private static final long serialVersionUID = 1L; // FIXME
+    /** serialVersionUID */
+    private static final long serialVersionUID = 2743840637293430398L;
 
     public BasicAttributeSensorAndConfigKey(Class<T> type, String name) {
         this(type, name, name, null);
@@ -39,7 +40,7 @@ public class BasicAttributeSensorAndConfigKey<T> extends AttributeSensorAndConfi
     }
 
     public BasicAttributeSensorAndConfigKey(Class<T> type, String name, String description, T defaultValue) {
-        super(type, type, name, description, defaultValue);
+        super(type, name, description, defaultValue);
     }
 
     @SuppressWarnings("unchecked")

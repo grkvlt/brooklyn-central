@@ -1,8 +1,12 @@
 package brooklyn.event.adapter;
 
-import javax.management.ObjectName
+import groovy.lang.Closure;
 
-import brooklyn.event.Sensor
+import java.util.Map;
+
+import javax.management.ObjectName;
+
+import brooklyn.event.Sensor;
 
 
 /** 

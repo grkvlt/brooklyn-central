@@ -4,12 +4,12 @@ import java.util.Map;
 
 import brooklyn.catalog.Catalog;
 import brooklyn.config.ConfigKey;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.messaging.MessageBroker;
 import brooklyn.entity.messaging.amqp.AmqpServer;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.basic.BasicAttributeSensorAndConfigKey;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
@@ -23,14 +23,14 @@ import com.google.common.annotations.Beta;
 public interface RabbitBroker extends SoftwareProcess, MessageBroker, AmqpServer {
 
     @SetFromFlag("version")
-    ConfigKey<String> SUGGESTED_VERSION = ConfigKeys.newConfigKey(SoftwareProcess.SUGGESTED_VERSION, "2.8.7");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "2.8.7");
 
     @SetFromFlag("downloadUrl")
-    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> DOWNLOAD_URL = new BasicAttributeSensorAndConfigKey<String>(
             SoftwareProcess.DOWNLOAD_URL, "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/rabbitmq-server-generic-unix-${version}.tar.gz");
 
     @SetFromFlag("erlangVersion")
-    ConfigKey<String> ERLANG_VERSION = ConfigKeys.newConfigKey("erlang.version", "Erlang runtime version", "R15B");
+    ConfigKey<String> ERLANG_VERSION = new BasicConfigKey<String>("erlang.version", "Erlang runtime version", "R15B");
 
     @SetFromFlag("amqpPort")
     PortAttributeSensorAndConfigKey AMQP_PORT = AmqpServer.AMQP_PORT;
@@ -39,7 +39,7 @@ public interface RabbitBroker extends SoftwareProcess, MessageBroker, AmqpServer
     BasicAttributeSensorAndConfigKey<String> VIRTUAL_HOST_NAME = AmqpServer.VIRTUAL_HOST_NAME;
 
     @SetFromFlag("amqpVersion")
-    BasicAttributeSensorAndConfigKey<String> AMQP_VERSION = ConfigKeys.newAttributeSensorAndConfigKey(
+    BasicAttributeSensorAndConfigKey<String> AMQP_VERSION = new BasicAttributeSensorAndConfigKey<String>(
             AmqpServer.AMQP_VERSION, AmqpServer.AMQP_0_9_1);
 
     RabbitQueue createQueue(Map<?, ?> properties);

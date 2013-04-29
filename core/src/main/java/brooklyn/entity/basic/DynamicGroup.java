@@ -7,6 +7,8 @@ import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.Sensor;
 import brooklyn.event.SensorEvent;
+import brooklyn.event.basic.BasicAttributeSensor;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
 import com.google.common.base.Predicate;
@@ -15,9 +17,9 @@ import com.google.common.base.Predicate;
 public interface DynamicGroup extends AbstractGroup {
 
     @SetFromFlag("entityFilter")
-    ConfigKey<Predicate<? super Entity>> ENTITY_FILTER = ConfigKeys.newConfigKey("dynamicgroup.entityfilter", "Filter for which entities will automatically be in group", null);
+    ConfigKey<Predicate<? super Entity>> ENTITY_FILTER = new BasicConfigKey<Predicate<? super Entity>>("dynamicgroup.entityfilter", "Filter for which entities will automatically be in group", null);
 
-    AttributeSensor<Boolean> RUNNING = Attributes.newAttributeSensor(
+    AttributeSensor<Boolean> RUNNING = new BasicAttributeSensor<Boolean>(
             "dynamicgroup.running", "Whether the entity is running, so will automatically update group membership");
 
     /**

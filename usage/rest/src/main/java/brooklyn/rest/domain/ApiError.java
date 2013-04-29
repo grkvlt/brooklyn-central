@@ -1,6 +1,7 @@
 package brooklyn.rest.domain;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class ApiError {

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.config.ConfigKey.HasConfigKey;
+import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.MutableMap;
 import brooklyn.util.ResourceUtils;
@@ -26,24 +27,30 @@ import brooklyn.util.flags.TypeCoercions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 
-/** utils for accessing command-line and system-env properties;
- * doesn't resolve anything (unless an execution context is supplied)
+/**
+ * Utils for accessing command-line and system-env properties.
+ * <p>
+ * Doesn't resolve anything (unless an execution context is supplied)
  * and treats ConfigKeys as of type object when in doubt,
  * or string when that is likely wanted (e.g. {@link #getFirst(Map, String...)}
  * <p>
  * TODO methods in this class are not thread safe.
- * intention is that they are set during startup and not modified thereafter. */
+ * intention is that they are set during startup and not modified thereafter.
+ */
 @SuppressWarnings("rawtypes")
 public class BrooklynProperties extends LinkedHashMap implements StringConfigMap {
 
     private static final long serialVersionUID = -945875483083108978L;
+
     protected static final Logger LOG = LoggerFactory.getLogger(BrooklynProperties.class);
 
     public static class Factory {
         public static BrooklynProperties newEmpty() {
             return new BrooklynProperties();
         }
-        /** @deprecated since 0.4.0 use newDefault or newEm=pty */
+
+        /** @deprecated since 0.4.0 use {@link #newDefault} or {@link #newEmpty()}. */
+        @Deprecated
         public static BrooklynProperties newWithSystemAndEnvironment() {
             return newDefault();
         }
@@ -73,12 +80,10 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
     protected BrooklynProperties() {
     }
 
-    @SuppressWarnings("unchecked")
     public BrooklynProperties addEnvironmentVars() {
         putAll(System.getenv());
         return this;
     }
-    @SuppressWarnings("unchecked")
     public BrooklynProperties addSystemProperties() {
         putAll(System.getProperties());
         return this;
@@ -122,11 +127,14 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
         }
     }
     /**
-     * @see ResourceUtils#getResourceFromUrl(String)
+     * Adds properties from a URL.
+     * <p>
+     * For convenience if the URL does not start with {@literal xxx:} it is treated as a classpath reference or a file.
      *
-     * of the form form file:///home/... or http:// or classpath://xx ;
-     * for convenience if not starting with xxx: it is treated as a classpath reference or a file;
-     * throws if not found (but does nothing if argument is null)
+     * @param url URL of the form form {@literal file:///home/...} or {@literal http://xxx/} or {@literal classpath://xxx}.
+     * @throws RuntimeException if not found (but does nothing if argument is null)
+     *
+     * @see ResourceUtils#getResourceFromUrl(String)
      */
     public BrooklynProperties addFromUrl(String url) {
         try {
@@ -137,8 +145,11 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
         }
     }
 
-    /** expects a property already set in scope, whose value is acceptable to {@link #addFromUrl(String)};
-     * if property not set, does nothing */
+    /**
+     * Expects a property already set in scope, whose value is acceptable to {@link #addFromUrl(String)}.
+     * <p>
+     * If property not set, does nothing.
+     */
     public BrooklynProperties addFromUrlProperty(String urlProperty) {
         String url = (String) get(urlProperty);
         if (url==null) addFromUrl(url);
@@ -146,9 +157,8 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
     }
 
     /**
-    * adds the indicated properties
-    */
-    @SuppressWarnings("unchecked")
+     * adds the indicated properties
+     */
     public BrooklynProperties addFromMap(Map properties) {
         putAll(properties);
         return this;
@@ -161,7 +171,8 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
         return true;
     }
 
-   /** @deprecated attempts to call get with this syntax are probably mistakes; get(key, defaultValue) is fine but
+   /**
+    * @deprecated attempts to call get with this syntax are probably mistakes; get(key, defaultValue) is fine but
     * Map is unlikely the key, much more likely they meant getFirst(flags, key).
     */
    @Deprecated
@@ -172,11 +183,13 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
        return getFirst(flags, key);
    }
 
-    /** returns the value of the first key which is defined
+    /**
+     * Returns the value of the first key which is defined.
      * <p>
      * takes the following flags:
      * 'warnIfNone', 'failIfNone' (both taking a boolean (to use default message) or a string (which is the message));
-     * and 'defaultIfNone' (a default value to return if there is no such property); defaults to no warning and null response */
+     * and 'defaultIfNone' (a default value to return if there is no such property); defaults to no warning and null response
+     */
     @Override
     public String getFirst(String ...keys) {
        return getFirst(MutableMap.of(), keys);
@@ -275,7 +288,7 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
     public Map<ConfigKey<?>, Object> getAllConfig() {
         Map<ConfigKey<?>, Object> result = new LinkedHashMap<ConfigKey<?>, Object>();
         for (Object entry: entrySet())
-            result.put(new BasicConfigKey<Object>(Object.class, ""+((Map.Entry)entry).getKey()), ((Map.Entry)entry).getValue());
+            result.put(new BasicConfigKey(((Map.Entry)entry).getKey().toString()), ((Map.Entry)entry).getValue());
         return result;
     }
 
@@ -283,7 +296,7 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
     public BrooklynProperties submap(Predicate<ConfigKey<?>> filter) {
         BrooklynProperties result = Factory.newEmpty();
         for (Object entry: entrySet()) {
-            ConfigKey<?> k = new BasicConfigKey<Object>(Object.class, ""+((Map.Entry)entry).getKey());
+            ConfigKey<?> k = new BasicConfigKey(((Map.Entry)entry).getKey().toString());
             if (filter.apply(k))
                 result.put(((Map.Entry)entry).getKey(), ((Map.Entry)entry).getValue());
         }

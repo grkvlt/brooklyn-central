@@ -27,13 +27,13 @@ import brooklyn.config.ConfigKey;
 import brooklyn.config.ConfigKey.HasConfigKey;
 import brooklyn.config.ConfigUtils;
 import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.event.basic.MapConfigKey;
 import brooklyn.location.Location;
 import brooklyn.location.MachineLocation;
 import brooklyn.location.OsDetails;
 import brooklyn.location.PortRange;
 import brooklyn.location.PortSupplier;
-import brooklyn.location.basic.PortRanges.BasicPortRange;
 import brooklyn.location.geo.HasHostGeoInfo;
 import brooklyn.location.geo.HostGeoInfo;
 import brooklyn.util.MutableMap;
@@ -110,8 +110,8 @@ public class SshMachineLocation extends AbstractLocation implements MachineLocat
     public static final ConfigKey<String> SSH_HOST = ConfigKeys.SSH_CONFIG_HOST;
     public static final ConfigKey<Integer> SSH_PORT = ConfigKeys.SSH_CONFIG_PORT;
 
-    public static final ConfigKey<String> SSH_EXECUTABLE = ConfigKeys.newConfigKey("sshExecutable", "Allows an `ssh` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
-    public static final ConfigKey<String> SCP_EXECUTABLE = ConfigKeys.newConfigKey("scpExecutable", "Allows an `scp` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
+    public static final ConfigKey<String> SSH_EXECUTABLE = new BasicConfigKey<String>("sshExecutable", "Allows an `ssh` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
+    public static final ConfigKey<String> SCP_EXECUTABLE = new BasicConfigKey<String>("scpExecutable", "Allows an `scp` executable file to be specified, to be used in place of the default (programmatic) java ssh client", null);
 
     // TODO remove
     public static final ConfigKey<String> PASSWORD = SshTool.PROP_PASSWORD;
@@ -119,16 +119,16 @@ public class SshMachineLocation extends AbstractLocation implements MachineLocat
     public static final ConfigKey<String> PRIVATE_KEY_DATA = SshTool.PROP_PRIVATE_KEY_DATA;
     public static final ConfigKey<String> PRIVATE_KEY_PASSPHRASE = SshTool.PROP_PRIVATE_KEY_PASSPHRASE;
 
-    public static final ConfigKey<String> SCRIPT_DIR = ConfigKeys.newConfigKey("scriptDir", "directory where scripts should be placed and executed on the SSH target machine", null);
-    public static final MapConfigKey<Object> SSH_ENV_MAP = ConfigKeys.newMapConfigKey("env", "environment variables to pass to the remote SSH shell session", null);
+    public static final ConfigKey<String> SCRIPT_DIR = new BasicConfigKey<String>("scriptDir", "directory where scripts should be placed and executed on the SSH target machine", null);
+    public static final MapConfigKey<Object> SSH_ENV_MAP = new MapConfigKey<Object>("env", "environment variables to pass to the remote SSH shell session", null);
 
     public static final ConfigKey<Boolean> ALLOCATE_PTY = SshTool.PROP_ALLOCATE_PTY;
 
-    public static final ConfigKey<OutputStream> STDOUT = ConfigKeys.newConfigKey("out");
-    public static final ConfigKey<OutputStream> STDERR = ConfigKeys.newConfigKey("err");
-    public static final ConfigKey<Boolean> NO_STDOUT_LOGGING = ConfigKeys.newConfigKey("noStdoutLogging", "whether to disable logging of stdout from SSH commands (e.g. for verbose commands)", false);
-    public static final ConfigKey<Boolean> NO_STDERR_LOGGING = ConfigKeys.newConfigKey("noStderrLogging", "whether to disable logging of stderr from SSH commands (e.g. for verbose commands)", false);
-    public static final ConfigKey<String> LOG_PREFIX = ConfigKeys.newConfigKey("logPrefix");
+    public static final ConfigKey<OutputStream> STDOUT = new BasicConfigKey<OutputStream>("out");
+    public static final ConfigKey<OutputStream> STDERR = new BasicConfigKey<OutputStream>("err");
+    public static final ConfigKey<Boolean> NO_STDOUT_LOGGING = new BasicConfigKey<Boolean>("noStdoutLogging", "whether to disable logging of stdout from SSH commands (e.g. for verbose commands)", false);
+    public static final ConfigKey<Boolean> NO_STDERR_LOGGING = new BasicConfigKey<Boolean>("noStderrLogging", "whether to disable logging of stderr from SSH commands (e.g. for verbose commands)", false);
+    public static final ConfigKey<String> LOG_PREFIX = new BasicConfigKey<String>("logPrefix");
     
     public static final ConfigKey<File> LOCAL_TEMP_DIR = SshTool.PROP_LOCAL_TEMP_DIR;
 
@@ -634,8 +634,8 @@ public class SshMachineLocation extends AbstractLocation implements MachineLocat
     }
 
     /**
-     * @see #obtainPort(PortRange)
-     * @see BasicPortRange#ANY_HIGH_PORT
+     * @see {@link #obtainPort(PortRange)}
+     * @see {@link PortRanges#ANY_HIGH_PORT}
      */
     public boolean obtainSpecificPort(int portNumber) {
 	    // TODO Does not yet check if the port really is free on this machine

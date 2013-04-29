@@ -30,66 +30,33 @@ import com.google.common.reflect.TypeToken;
  *
  * TODO Create interface
  */
-public class ListConfigKey<V> extends BasicConfigKey<List<? extends V>> implements StructuredConfigKey {
+public class ListConfigKey<V> extends BasicConfigKey<List<V>> implements StructuredConfigKey {
 
     private static final long serialVersionUID = 751024268729803210L;
     private static final Logger log = LoggerFactory.getLogger(ListConfigKey.class);
 
-    public final Class<V> subType;
-
-    public ListConfigKey(Class<V> subType, String name) {
-        this(subType, name, name, null);
-    }
-
-    public ListConfigKey(Class<V> subType, String name, String description) {
-        this(subType, name, description, null);
-    }
-
     @SuppressWarnings("serial")
-    public ListConfigKey(Class<V> subType, String name, String description, List<? extends V> defaultValue) {
-        super(new TypeToken<List<? extends V>>(ListConfigKey.class) { }, name, description, defaultValue);
-        this.subType = subType;
-    }
+    private TypeToken<V> subType = new TypeToken<V>(getClass()) { };
 
-    @SuppressWarnings("unchecked")
-    public ListConfigKey(TypeToken<V> subType, String name) {
-        this((Class<V>) subType.getRawType(), name, name, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    public ListConfigKey(TypeToken<V> subType, String name, String description) {
-        this((Class<V>) subType.getRawType(), name, description, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    public ListConfigKey(TypeToken<V> subType, String name, String description, List<? extends V> defaultValue) {
-        this((Class<V>) subType.getRawType(), name, description, defaultValue);
-    }
-
-    @SuppressWarnings("serial")
     public ListConfigKey(String name) {
-        this(new TypeToken<V>(MapConfigKey.class) { }, name, name, null);
+        this(name, name, null);
     }
 
-    @SuppressWarnings("serial")
     public ListConfigKey(String name, String description) {
-        this(new TypeToken<V>(MapConfigKey.class) { }, name, description, null);
+        this(name, description, null);
     }
 
-    @SuppressWarnings("serial")
-    public ListConfigKey(String name, String description, List<? extends V> defaultValue) {
-        this(new TypeToken<V>(ListConfigKey.class) { }, name, description, defaultValue);
+    public ListConfigKey(String name, String description, List<V> defaultValue) {
+        super(name, description, defaultValue);
     }
 
-    @SuppressWarnings({ "serial", "unchecked" })
-    public ListConfigKey(ListConfigKey<V> key, List<? extends V> defaultValue) {
+    public ListConfigKey(ListConfigKey<V> key, List<V> defaultValue) {
         super(key, defaultValue);
-        this.subType = (Class<V>) new TypeToken<V>(ListConfigKey.class) { }.getRawType();
     }
 
     public ConfigKey<V> subKey() {
         String subName = Identifiers.makeRandomId(8);
-        return new SubElementConfigKey<V>(this, subType, getName()+"."+subName, "element of "+getName()+", uid "+subName, null);
+        return new SubElementConfigKey<V>(this, getName()+"."+subName, "element of "+getName()+", uid "+subName, null);
     }
 
     public boolean isSubKey(Object contender) {
@@ -98,6 +65,15 @@ public class ListConfigKey<V> extends BasicConfigKey<List<? extends V>> implemen
 
     public boolean isSubKey(ConfigKey<?> contender) {
         return (contender instanceof SubElementConfigKey && this.equals(((SubElementConfigKey<?>) contender).parent));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<V> getSubType() {
+        return (Class<V>) subType.getRawType();
+    }
+
+    public TypeToken<V> getSubTypeToken() {
+        return subType;
     }
 
     @SuppressWarnings("unchecked")

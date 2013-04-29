@@ -59,7 +59,7 @@ public class WebClusterDatabaseExampleApp extends AbstractApplication implements
     public static final String DEFAULT_WAR_PATH = "classpath://hello-world-sql-webapp.war";
     
     @CatalogConfig(label="WAR (URL)", priority=2)
-    public static final ConfigKey<String> WAR_PATH = ConfigKeys.newConfigKey(
+    public static final ConfigKey<String> WAR_PATH = new BasicConfigKey<String>(
         "app.war", "URL to the application archive which should be deployed", 
         DEFAULT_WAR_PATH);
 
@@ -67,13 +67,13 @@ public class WebClusterDatabaseExampleApp extends AbstractApplication implements
     // and also confirm that this works for nginx (might be a bit fiddly);
     // booleans in the gui are working (With checkbox)
 //    @CatalogConfig(label="HTTPS")
-    public static final ConfigKey<Boolean> USE_HTTPS = ConfigKeys.newConfigKey(
+    public static final ConfigKey<Boolean> USE_HTTPS = new BasicConfigKey<Boolean>(
             "app.https", "Whether the application should use HTTPS only or just HTTP only (default)", false);
     
     public static final String DEFAULT_DB_SETUP_SQL_URL = "classpath://visitors-creation-script.sql";
     
     @CatalogConfig(label="DB Setup SQL (URL)", priority=1)
-    public static final ConfigKey<String> DB_SETUP_SQL_URL = ConfigKeys.newConfigKey(
+    public static final ConfigKey<String> DB_SETUP_SQL_URL = new BasicConfigKey<String>(
         "app.db_sql", "URL to the SQL script to set up the database", 
         DEFAULT_DB_SETUP_SQL_URL);
     
@@ -81,7 +81,7 @@ public class WebClusterDatabaseExampleApp extends AbstractApplication implements
     public static final String DB_USERNAME = "brooklyn";
     public static final String DB_PASSWORD = "br00k11n";
     
-    public static final AttributeSensor<Integer> APPSERVERS_COUNT = Attributes.newAttributeSensor(
+    public static final AttributeSensor<Integer> APPSERVERS_COUNT = new BasicAttributeSensor<Integer>(
             "appservers.count", "Number of app servers deployed");
     public static final AttributeSensor<Double> REQUESTS_PER_SECOND_IN_WINDOW = 
             WebAppServiceConstants.REQUESTS_PER_SECOND_IN_WINDOW;

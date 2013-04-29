@@ -1,11 +1,11 @@
 package brooklyn.entity.basic;
 
-import brooklyn.entity.Entity;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import brooklyn.entity.Entity;
 
 public class ConfigurableEntityFactoryFromEntityFactory<T extends Entity> extends AbstractConfigurableEntityFactory<T> {
 

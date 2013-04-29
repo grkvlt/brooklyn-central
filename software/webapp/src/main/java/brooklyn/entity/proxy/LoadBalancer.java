@@ -2,7 +2,7 @@ package brooklyn.entity.proxy;
 
 import brooklyn.config.ConfigKey;
 import brooklyn.entity.Group;
-import brooklyn.entity.basic.ConfigKeys;
+import brooklyn.event.basic.BasicConfigKey;
 import brooklyn.util.flags.SetFromFlag;
 
 /**
@@ -22,9 +22,9 @@ import brooklyn.util.flags.SetFromFlag;
 public interface LoadBalancer {
 
     @SetFromFlag("serverPool")
-    ConfigKey<Group> SERVER_POOL = ConfigKeys.newConfigKey("loadbalancer.serverpool", "The default servers to route messages to");
+    ConfigKey<Group> SERVER_POOL = new BasicConfigKey<Group>("loadbalancer.serverpool", "The default servers to route messages to");
 
     @SetFromFlag("urlMappings")
-    ConfigKey<Group> URL_MAPPINGS = ConfigKeys.newConfigKey("loadbalancer.urlmappings", "Special mapping rules (e.g. for domain/path matching, rewrite, etc)");
+    ConfigKey<Group> URL_MAPPINGS = new BasicConfigKey<Group>("loadbalancer.urlmappings", "Special mapping rules (e.g. for domain/path matching, rewrite, etc)");
 
 }

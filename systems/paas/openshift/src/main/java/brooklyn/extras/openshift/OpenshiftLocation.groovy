@@ -1,18 +1,15 @@
 package brooklyn.extras.openshift
 
 import java.net.InetAddress;
-import java.util.Map
+import java.util.Map;
 
 import brooklyn.entity.basic.ConfigurableEntityFactory;
 import brooklyn.entity.webapp.ElasticJavaWebAppService;
 import brooklyn.entity.webapp.ElasticJavaWebAppService.ElasticJavaWebAppServiceAwareLocation;
 import brooklyn.location.AddressableLocation;
-import brooklyn.location.Location
-import brooklyn.location.LocationResolver
-import brooklyn.location.basic.AbstractLocation
-import brooklyn.util.flags.SetFromFlag;
-
-import com.google.common.base.Preconditions
+import brooklyn.location.Location;
+import brooklyn.location.LocationResolver;
+import brooklyn.location.basic.AbstractLocation;
 
 class OpenshiftLocation extends AbstractLocation implements AddressableLocation, ElasticJavaWebAppServiceAwareLocation {
 

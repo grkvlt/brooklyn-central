@@ -1,10 +1,10 @@
 package brooklyn.entity.database.postgresql;
 
-import static brooklyn.entity.basic.lifecycle.CommonCommands.alternatives;
-import static brooklyn.entity.basic.lifecycle.CommonCommands.dontRequireTtyForSudo;
-import static brooklyn.entity.basic.lifecycle.CommonCommands.file;
-import static brooklyn.entity.basic.lifecycle.CommonCommands.installPackage;
-import static brooklyn.entity.basic.lifecycle.CommonCommands.sudo;
+import static brooklyn.util.ssh.CommonCommands.alternatives;
+import static brooklyn.util.ssh.CommonCommands.dontRequireTtyForSudo;
+import static brooklyn.util.ssh.CommonCommands.file;
+import static brooklyn.util.ssh.CommonCommands.installPackage;
+import static brooklyn.util.ssh.CommonCommands.sudo;
 import static java.lang.String.format;
 
 import java.io.InputStreamReader;
@@ -14,12 +14,12 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
-import brooklyn.util.MutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
 import brooklyn.location.basic.SshMachineLocation;
+import brooklyn.util.MutableMap;
 import brooklyn.util.ResourceUtils;
 
 import com.google.common.base.Function;

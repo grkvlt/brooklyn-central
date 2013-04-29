@@ -107,6 +107,7 @@ public class PolicyConfigMap implements brooklyn.config.ConfigMap {
         return Collections.unmodifiableMap(Maps.newLinkedHashMap(ownConfig));
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public Object setConfig(ConfigKey<?> key, Object v) {
         Object val;
         if ((v instanceof Future) || (v instanceof DeferredSupplier)) {
@@ -117,7 +118,7 @@ public class PolicyConfigMap implements brooklyn.config.ConfigMap {
             val = v;
         } else {
             try {
-                val = TypeCoercions.coerce(v, key.getType());
+                val = TypeCoercions.coerce(v, (Class) key.getType());
             } catch (Exception e) {
                 throw new IllegalArgumentException("Cannot coerce or set "+v+" to "+key, e);
             }

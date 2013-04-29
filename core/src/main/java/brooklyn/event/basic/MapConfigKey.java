@@ -26,42 +26,13 @@ import com.google.common.reflect.TypeToken;
  * <p>
  * TODO Create interface
  */
-public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> implements StructuredConfigKey {
+public class MapConfigKey<V> extends BasicConfigKey<Map<String, V>> implements StructuredConfigKey {
 
     private static final long serialVersionUID = -6126481503795562602L;
     private static final Logger log = LoggerFactory.getLogger(MapConfigKey.class);
 
     @SuppressWarnings("serial")
     private TypeToken<V> subType = new TypeToken<V>(getClass()) { };
-
-    public MapConfigKey(Class<V> subType, String name) {
-        this(subType, name, name, null);
-    }
-
-    public MapConfigKey(Class<V> subType, String name, String description) {
-        this(subType, name, description, null);
-    }
-
-    // TODO it isn't clear whether defaultValue is an initialValue, or a value to use when map is empty
-    // probably the latter, currently ... but maybe better to say that map configs are never null, 
-    // and defaultValue is really an initial value
-    public MapConfigKey(Class<V> subType, String name, String description, Map<String, ? extends V> defaultValue) {
-        super(name, description, defaultValue);
-        this.subType = TypeToken.of(subType);
-    }
-
-    public MapConfigKey(TypeToken<V> subType, String name) {
-        this(subType, name, name);
-    }
-
-    public MapConfigKey(TypeToken<V> subType, String name, String description) {
-        this(subType, name, description, null);
-    }
-
-    public MapConfigKey(TypeToken<V> subType, String name, String description, Map<String, ? extends V> defaultValue) {
-        super(name, description, defaultValue);
-        this.subType = subType;
-    }
 
     public MapConfigKey(String name) {
         this(name, name, null);
@@ -71,11 +42,14 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
         this(name, description, null);
     }
 
-    public MapConfigKey(String name, String description, Map<String, ? extends V> defaultValue) {
+    // TODO it isn't clear whether defaultValue is an initialValue, or a value to use when map is empty
+    // probably the latter, currently ... but maybe better to say that map configs are never null, 
+    // and defaultValue is really an initial value
+    public MapConfigKey(String name, String description, Map<String, V> defaultValue) {
         super(name, description, defaultValue);
     }
 
-    public MapConfigKey(MapConfigKey<V> key, Map<String, ? extends V> defaultValue) {
+    public MapConfigKey(MapConfigKey<V> key, Map<String, V> defaultValue) {
         super(key, defaultValue);
     }
 
@@ -85,7 +59,7 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
 
     // it is not possible to supply default values
     public ConfigKey<V> subKey(String subName, String description) {
-        return new SubElementConfigKey<V>(this, subType, getName() + "." + subName, description, null);
+        return new SubElementConfigKey<V>(this, getName()+"."+subName, description, null);
     }
 
     public boolean isSubKey(Object contender) {
@@ -94,6 +68,15 @@ public class MapConfigKey<V> extends BasicConfigKey<Map<String, ? extends V>> im
 
     public boolean isSubKey(ConfigKey<?> contender) {
         return (contender instanceof SubElementConfigKey && this.equals(((SubElementConfigKey<?>) contender).parent));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<V> getSubType() {
+        return (Class<V>) subType.getRawType();
+    }
+
+    public TypeToken<V> getSubTypeToken() {
+        return subType;
     }
 
     public String extractSubKeyName(ConfigKey<?> subKey) {
