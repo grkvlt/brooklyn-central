@@ -18,21 +18,16 @@
 	</parent>
 
 	<dependencies>
+        <dependency>
+			<groupId>io.brooklyn</groupId>
+			<artifactId>brooklyn-api</artifactId>
+            <version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>io.brooklyn</groupId>
 			<artifactId>brooklyn-software-base</artifactId>
             <version>${project.version}</version>
 		</dependency>
-        <dependency>
-			<groupId>io.brooklyn</groupId>
-			<artifactId>brooklyn-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.brooklyn</groupId>
-            <artifactId>brooklyn-software-webapp</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-locations-jclouds</artifactId>
@@ -54,14 +49,14 @@
         </dependency>
         <dependency>
             <groupId>io.brooklyn</groupId>
-            <artifactId>brooklyn-core</artifactId>
+            <artifactId>brooklyn-software-database</artifactId>
             <version>${project.version}</version>
-            <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>io.brooklyn</groupId>
-            <artifactId>brooklyn-software-base</artifactId>
+            <artifactId>brooklyn-core</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
@@ -77,13 +72,7 @@
             <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-software-database</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- bring in jclouds for testing -->
-        <dependency>
-            <groupId>io.brooklyn</groupId>
-            <artifactId>brooklyn-locations-jclouds</artifactId>
-            <version>${brooklyn.version}</version>
+            <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
 	</dependencies>

@@ -15,20 +15,13 @@
  */
 package brooklyn.entity.monitoring.ganglia;
 
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.Entity;
+import brooklyn.entity.basic.EntityLocal;
 import brooklyn.entity.basic.SoftwareProcessImpl;
 import brooklyn.event.feed.ConfigToAttributes;
-import brooklyn.event.feed.function.FunctionFeed;
-import brooklyn.event.feed.function.FunctionPollConfig;
-
-import com.google.common.base.Functions;
-import com.google.common.collect.Maps;
 
 /**
  * An implementation of {@link GangliaMonitor}.
@@ -42,7 +35,8 @@ public class GangliaMonitorImpl extends SoftwareProcessImpl implements GangliaMo
 
     @Override
     public void init() {
-        ConfigToAttributes.apply(this);
+        ConfigToAttributes.apply((EntityLocal) this);
+//        setAttribute(CLUSTER_NAME, getConfig(GangliaCluster.CLUSTER_NAME));
     }
 
     @Override

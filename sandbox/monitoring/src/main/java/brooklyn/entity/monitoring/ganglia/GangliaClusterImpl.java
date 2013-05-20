@@ -34,8 +34,6 @@ import brooklyn.entity.trait.Startable;
 import brooklyn.location.Location;
 import brooklyn.location.MachineLocation;
 import brooklyn.location.basic.SshMachineLocation;
-import brooklyn.util.MutableMap;
-import brooklyn.util.MutableSet;
 import brooklyn.util.collections.MutableMap;
 import brooklyn.util.collections.MutableSet;
 
@@ -77,6 +75,18 @@ public class GangliaClusterImpl extends AbstractEntity implements GangliaCluster
                 .configure(DynamicGroup.ENTITY_FILTER, filter)
                 .displayName("Monitored Entities"));
 
+<<<<<<< HEAD
+=======
+    @Override
+    public void init() {
+        manager = addChild(EntitySpecs.spec(GangliaManager.class));
+
+        Predicate<? super Entity> filter = Predicates.and(Predicates.not(Predicates.instanceOf(GangliaMonitor.class)), getConfig(ENTITY_FILTER));
+        monitoredEntities = addChild(EntitySpecs.spec(DynamicGroup.class)
+                .configure(DynamicGroup.ENTITY_FILTER, filter)
+                .displayName("Monitored Entities"));
+
+>>>>>>> Further tidying of Ganglia.
         monitors = addChild(EntitySpecs.spec(BasicGroup.class)
                 .configure(BasicGroup.CHILDREN_AS_MEMBERS, true)
                 .displayName("Ganglia Monitors"));
