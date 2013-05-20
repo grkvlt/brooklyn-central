@@ -24,7 +24,6 @@ import brooklyn.event.basic.PortAttributeSensorAndConfigKey;
 import brooklyn.location.basic.PortRanges;
 import brooklyn.util.flags.SetFromFlag;
 
-
 /**
  * An {@link brooklyn.entity.Entity} that represents the Ganglia management service, {@code gmetad}.
  */
@@ -32,16 +31,16 @@ import brooklyn.util.flags.SetFromFlag;
 public interface GangliaManager extends SoftwareProcess {
 
     @SetFromFlag("version")
-    public static final ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.1.6");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.1.6");
 
     @SetFromFlag("gangliaPort")
-    public static final PortAttributeSensorAndConfigKey GANGLIA_PORT = new PortAttributeSensorAndConfigKey("ganglia.port", "Ganglia communications port", PortRanges.fromString("8649+"));
+    PortAttributeSensorAndConfigKey GANGLIA_PORT = new PortAttributeSensorAndConfigKey("ganglia.port", "Ganglia communications port", PortRanges.fromString("8649+"));
 
     @SetFromFlag("clusterName")
-    public static final BasicAttributeSensor<String> CLUSTER_NAME = GangliaCluster.CLUSTER_NAME;
+    BasicAttributeSensor<String> CLUSTER_NAME = GangliaCluster.CLUSTER_NAME;
 
-    public Integer getGangliaPort();
+    Integer getGangliaPort();
 
-    public String getClusterName();
+    String getClusterName();
 
 }

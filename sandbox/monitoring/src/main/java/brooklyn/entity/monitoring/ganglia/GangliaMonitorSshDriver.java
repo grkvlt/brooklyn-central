@@ -16,16 +16,16 @@
 package brooklyn.entity.monitoring.ganglia;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
-import brooklyn.entity.basic.lifecycle.CommonCommands;
+import brooklyn.location.Location;
 import brooklyn.location.basic.SshMachineLocation;
-import brooklyn.util.MutableMap;
 import brooklyn.util.NetworkUtils;
+import brooklyn.util.collections.MutableMap;
+import brooklyn.util.ssh.CommonCommands;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

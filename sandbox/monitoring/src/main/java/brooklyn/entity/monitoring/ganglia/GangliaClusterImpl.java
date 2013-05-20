@@ -28,16 +28,19 @@ import brooklyn.entity.basic.BasicGroup;
 import brooklyn.entity.basic.DynamicGroup;
 import brooklyn.entity.basic.Entities;
 import brooklyn.entity.group.AbstractMembershipTrackingPolicy;
-import brooklyn.entity.proxying.BasicEntitySpec;
+import brooklyn.entity.proxying.EntitySpecs;
 import brooklyn.entity.trait.Startable;
 import brooklyn.location.Location;
-import brooklyn.location.MachineLocation;
-import brooklyn.util.MutableMap;
-import brooklyn.util.MutableSet;
+import brooklyn.location.basic.SshMachineLocation;
+import brooklyn.util.collections.MutableMap;
+import brooklyn.util.collections.MutableSet;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
@@ -77,21 +80,18 @@ public class GangliaClusterImpl extends AbstractEntity implements GangliaCluster
         super(flags, owner);
     }
 
-    public void postConstruct() {
-        manager = getEntityManager().createEntity(BasicEntitySpec.newInstance(GangliaManager.class).parent(this));
-        Entities.manage(manager);
+    @Override
+    public void init() {
+        manager = addChild(EntitySpecs.spec(GangliaManager.class));
 
-        Predicate<? super Entity> filter = Predicates.and(Predicates.not(Predicates.instanceOf(GangliaMonitor.class)),
-                getConfig(ENTITY_FILTER));
-        monitoredEntities = getEntityManager().createEntity(BasicEntitySpec.newInstance(DynamicGroup.class)
-                .parent(this)
-                .configure(DynamicGroup.ENTITY_FILTER, filter));
-        Entities.manage(monitoredEntities);
+        Predicate<? super Entity> filter = Predicates.and(Predicates.not(Predicates.instanceOf(GangliaMonitor.class)), getConfig(ENTITY_FILTER));
+        monitoredEntities = addChild(EntitySpecs.spec(DynamicGroup.class)
+                .configure(DynamicGroup.ENTITY_FILTER, filter)
+                .displayName("Monitored Entities"));
 
-        monitors = getEntityManager().createEntity(BasicEntitySpec.newInstance(BasicGroup.class)
-                .parent(this)
-                .configure(BasicGroup.CHILDREN_AS_MEMBERS, true));
-        Entities.manage(monitors);
+        monitors = addChild(EntitySpecs.spec(BasicGroup.class)
+                .configure(BasicGroup.CHILDREN_AS_MEMBERS, true)
+                .displayName("Ganglia Monitors"));
     }
 
     public GangliaManager getManager() {
@@ -114,14 +114,18 @@ public class GangliaClusterImpl extends AbstractEntity implements GangliaCluster
     public void start(Collection<? extends Location> locations) {
         manager.start(locations);
 
-        policy = new AbstractMembershipTrackingPolicy(MutableMap.of("name", "Ganglia Cluster Tracker")) {
+        Map<?, ?> flags = MutableMap.builder()
+                .put("name", "Ganglia Monitor Tracker")
+                .put("sensorsToTrack", ImmutableSet.of(Startable.SERVICE_UP))
+                .build();
+        policy = new AbstractMembershipTrackingPolicy(flags) {
             @Override
-            protected void onEntityChange(Entity member) { } // Don't care
-            @Override
-            protected void onEntityAdded(Entity member) {
+            protected void onEntityChange(Entity member) {
                 if (log.isDebugEnabled()) log.debug("Added {} to monitored cluster {}", member, getClusterName());
                 added(member);
             }
+            @Override
+            protected void onEntityAdded(Entity member) { } // Don't care
             @Override
             protected void onEntityRemoved(Entity member) {
                 if (log.isDebugEnabled()) log.debug("Removed {} from monitored cluster {}", member, getClusterName());
@@ -155,18 +159,20 @@ public class GangliaClusterImpl extends AbstractEntity implements GangliaCluster
 
     public void added(Entity member) {
         synchronized (mutex) {
-            for (Location location : member.getLocations()) {
-                if (location instanceof MachineLocation) {
-                    if (!entityLocations.containsKey(location)) {
-                        // install gmond
-                        GangliaMonitor gmond = getEntityManager().createEntity(
-                                BasicEntitySpec.newInstance(GangliaMonitor.class).parent(this));
-                        monitoredLocations.put(location, gmond);
-                        Entities.manage(gmond);
-                        gmond.start(MutableSet.<Location> of(location));
-                    }
-                    entityLocations.put(location, member);
+            Optional<Location> location = Iterables.tryFind(member.getLocations(), Predicates.instanceOf(SshMachineLocation.class));
+            if (location.isPresent() && member.getAttribute(Startable.SERVICE_UP)) {
+                SshMachineLocation machine = (SshMachineLocation) location.get();
+                if (!entityLocations.containsKey(machine)) {
+                    // install gmond
+                    GangliaMonitor gmond = addChild(EntitySpecs.spec(GangliaMonitor.class)
+                            .configure(GangliaMonitor.GANGLIA_MANAGER, manager)
+                            .configure(GangliaMonitor.MONITORED_ENTITY, member));
+                    monitoredLocations.put(machine, gmond);
+                    monitors.addMember(gmond);
+                    Entities.manage(gmond);
+                    gmond.start(MutableSet.<Location>of(machine));
                 }
+                entityLocations.put(machine, member);
             }
         }
     }
@@ -178,6 +184,7 @@ public class GangliaClusterImpl extends AbstractEntity implements GangliaCluster
                 if (!entityLocations.containsKey(location)) {
                     // remove gmond
                     GangliaMonitor gmond = monitoredLocations.remove(location);
+                    monitors.removeMember(gmond);
                     gmond.stop(); // May fail?
                 }
             }

@@ -45,12 +45,12 @@ public interface GangliaCluster extends Entity, Startable {
     @SetFromFlag("clusterName")
     BasicAttributeSensorAndConfigKey<String> CLUSTER_NAME = new BasicAttributeSensorAndConfigKey<String>(String.class, "ganglia.cluster.name", "Name of the Ganglia cluster", "Brooklyn Ganglia Cluster");
 
-    public GangliaManager getManager();
+    GangliaManager getManager();
 
-    public DynamicGroup getMonitoredEntities();
+    DynamicGroup getMonitoredEntities();
 
-    public Group getMonitors();
+    Group getMonitors();
 
-    public String getClusterName();
+    String getClusterName();
 
 }

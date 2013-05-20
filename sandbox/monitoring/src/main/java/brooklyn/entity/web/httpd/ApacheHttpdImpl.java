@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import brooklyn.entity.Entity;
 import brooklyn.entity.basic.SoftwareProcessImpl;
 
-import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Maps;
 
 /**
  * An implementation of {@link ApacheHttpd}.

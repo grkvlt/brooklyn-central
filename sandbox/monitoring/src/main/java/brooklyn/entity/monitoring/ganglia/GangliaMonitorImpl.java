@@ -22,7 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.entity.Entity;
+import brooklyn.entity.basic.EntityLocal;
 import brooklyn.entity.basic.SoftwareProcessImpl;
+import brooklyn.event.feed.ConfigToAttributes;
 import brooklyn.event.feed.function.FunctionFeed;
 import brooklyn.event.feed.function.FunctionPollConfig;
 
@@ -53,15 +55,32 @@ public class GangliaMonitorImpl extends SoftwareProcessImpl implements GangliaMo
 
     public GangliaMonitorImpl(Map<?, ?> flags, Entity owner) {
         super(flags, owner);
-        setAttribute(CLUSTER_NAME, getConfig(GangliaCluster.CLUSTER_NAME));
     }
 
+    @Override
+    public void init() {
+        ConfigToAttributes.apply((EntityLocal) this);
+//        setAttribute(CLUSTER_NAME, getConfig(GangliaCluster.CLUSTER_NAME));
+    }
+
+    @Override
     public Integer getGangliaPort() {
         return getAttribute(GANGLIA_PORT);
     }
 
+    @Override
     public String getClusterName() {
         return getAttribute(CLUSTER_NAME);
+    }
+
+    @Override
+    public GangliaManager getGangliaManager() {
+        return getConfig(GANGLIA_MANAGER);
+    }
+
+    @Override
+    public Entity getMonitoredEntity() {
+        return getConfig(MONITORED_ENTITY);
     }
 
     @Override

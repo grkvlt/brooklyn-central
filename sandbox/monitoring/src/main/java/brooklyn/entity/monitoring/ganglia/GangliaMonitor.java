@@ -16,6 +16,7 @@
 package brooklyn.entity.monitoring.ganglia;
 
 import brooklyn.config.ConfigKey;
+import brooklyn.entity.Entity;
 import brooklyn.entity.basic.SoftwareProcess;
 import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.event.basic.BasicAttributeSensor;
@@ -31,16 +32,26 @@ import brooklyn.util.flags.SetFromFlag;
 public interface GangliaMonitor extends SoftwareProcess {
 
     @SetFromFlag("version")
-    public static final ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.1.6");
+    ConfigKey<String> SUGGESTED_VERSION = new BasicConfigKey<String>(SoftwareProcess.SUGGESTED_VERSION, "1.1.6");
 
     @SetFromFlag("gangliaPort")
-    public static final PortAttributeSensorAndConfigKey GANGLIA_PORT = new PortAttributeSensorAndConfigKey("ganglia.port", "Ganglia communications port", PortRanges.fromString("7000+"));
+    PortAttributeSensorAndConfigKey GANGLIA_PORT = new PortAttributeSensorAndConfigKey("ganglia.port", "Ganglia communications port", PortRanges.fromString("7000+"));
 
     @SetFromFlag("clusterName")
-    public static final BasicAttributeSensor<String> CLUSTER_NAME = GangliaCluster.CLUSTER_NAME;
+    BasicAttributeSensor<String> CLUSTER_NAME = GangliaCluster.CLUSTER_NAME;
 
-    public Integer getGangliaPort();
+    @SetFromFlag("gangliaManager")
+    ConfigKey<GangliaManager> GANGLIA_MANAGER = new BasicConfigKey<GangliaManager>(GangliaManager.class, "ganglia.entity.manager", "The Ganglia manager entity");
 
-    public String getClusterName();
+    @SetFromFlag("monitoredEntity")
+    ConfigKey<Entity> MONITORED_ENTITY = new BasicConfigKey<Entity>(Entity.class, "ganglia.entity.monitored", "The monitored entity");
+
+    GangliaManager getGangliaManager();
+
+    Entity getMonitoredEntity();
+
+    Integer getGangliaPort();
+
+    String getClusterName();
 
 }
