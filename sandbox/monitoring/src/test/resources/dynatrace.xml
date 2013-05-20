@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dashboardreport name="CloudSoftIntegration" version="5.5.0.5193" reportdate="2013-05-08T18:59:02.709+01:00" description="">
+  <source name="IPscape" filtersummary="last 30s"></source>
+  <reportheader>
+    <reportdetails>
+      <user>admin</user>
+    </reportdetails>
+  </reportheader>
+  <data>
+    <chartdashlet name="endtoendresponsetime" description="" showabsolutevalues="false">
+      <source filtersummary="last 5 minutes"></source>
+      <measures>
+        <measure measure="web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]@brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e, web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]" agenthost="web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]@brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e" agentgroup="HCC Web Server Agent Group" color="#f2d1a6" aggregation="Sum" avg="9.413793103448276" unit="num" min="5.0" max="10.0" sum="273.0" lastvalue="5.0" count="273" default="Number of Requests - PHP">
+          <measurement timestamp="1368035600000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035610000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035620000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035630000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035640000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035650000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035660000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035670000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035680000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035690000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035700000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035710000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035720000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035730000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035740000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035750000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035760000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035770000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035780000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035790000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035800000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035810000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035820000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035830000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035840000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035850000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035860000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035870000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035880000" avg="1.0" min="1.0" max="1.0" sum="5.0" count="5"></measurement>
+        </measure>
+        <measure measure="web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]@brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e, web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]" agenthost="web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]@brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e" agentgroup="HCC Web Server Agent Group" color="#2150de" aggregation="Average" avg="2.110344829230473" unit="num" min="1.7000000476837158" max="2.4000000953674316" sum="61.200000047683716" lastvalue="1.7000000476837158" count="29" default="webserver request rate">
+          <measurement timestamp="1368035600000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035610000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035620000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035630000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035640000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035650000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035660000" avg="2.299999952316284" min="2.299999952316284" max="2.299999952316284" sum="2.299999952316284" count="1"></measurement>
+          <measurement timestamp="1368035670000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035680000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035690000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035700000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035710000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035720000" avg="2.4000000953674316" min="2.4000000953674316" max="2.4000000953674316" sum="2.4000000953674316" count="1"></measurement>
+          <measurement timestamp="1368035730000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035740000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035750000" avg="2.0" min="2.0" max="2.0" sum="2.0" count="1"></measurement>
+          <measurement timestamp="1368035760000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035770000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035780000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035790000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035800000" avg="1.7999999523162842" min="1.7999999523162842" max="1.7999999523162842" sum="1.7999999523162842" count="1"></measurement>
+          <measurement timestamp="1368035810000" avg="2.299999952316284" min="2.299999952316284" max="2.299999952316284" sum="2.299999952316284" count="1"></measurement>
+          <measurement timestamp="1368035820000" avg="2.0" min="2.0" max="2.0" sum="2.0" count="1"></measurement>
+          <measurement timestamp="1368035830000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035840000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035850000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035860000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035870000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035880000" avg="1.7000000476837158" min="1.7000000476837158" max="1.7000000476837158" sum="1.7000000476837158" count="1"></measurement>
+        </measure>
+        <measure measure="web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]@brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e, web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]" agenthost="web-abctelecom-brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e[Apache 2.2]@brooklyn-zjcc-hcc-bdex-ipscapewebserver-wncx-41e" agentgroup="HCC Web Server Agent Group" color="#f2a6a6" aggregation="Average" avg="0.9500990710495988" unit="ms" min="0.8305828306410048" max="1.2209794044494628" sum="27.552873060438365" lastvalue="0.9451702117919922" count="273" default="Web Requests - Response Time php">
+          <measurement timestamp="1368035600000" avg="0.9490472793579101" min="0.8106465339660645" max="1.015693187713623" sum="9.490472793579102" count="10"></measurement>
+          <measurement timestamp="1368035610000" avg="0.933073902130127" min="0.8149102926254272" max="1.0195361375808716" sum="9.33073902130127" count="10"></measurement>
+          <measurement timestamp="1368035620000" avg="0.9390137990315756" min="0.847122848033905" max="1.0099064111709595" sum="8.45112419128418" count="9"></measurement>
+          <measurement timestamp="1368035630000" avg="0.9565677642822266" min="0.856542706489563" max="1.0248198509216309" sum="9.565677642822266" count="10"></measurement>
+          <measurement timestamp="1368035640000" avg="0.9882613288031684" min="0.8815522789955139" max="1.3481076955795288" sum="8.894351959228516" count="9"></measurement>
+          <measurement timestamp="1368035650000" avg="0.9516992568969727" min="0.8991119861602783" max="0.9892135858535767" sum="9.516992568969727" count="10"></measurement>
+          <measurement timestamp="1368035660000" avg="0.9649221632215712" min="0.8750423789024353" max="1.0119763612747192" sum="8.68429946899414" count="9"></measurement>
+          <measurement timestamp="1368035670000" avg="0.9079161643981933" min="0.8086034655570984" max="1.0693691968917847" sum="9.079161643981934" count="10"></measurement>
+          <measurement timestamp="1368035680000" avg="0.9223902702331543" min="0.8114034533500671" max="1.0716253519058228" sum="9.223902702331543" count="10"></measurement>
+          <measurement timestamp="1368035690000" avg="0.9229291280110677" min="0.8600726127624512" max="0.9882498383522034" sum="8.30636215209961" count="9"></measurement>
+          <measurement timestamp="1368035700000" avg="0.9239003181457519" min="0.8379791975021362" max="0.9998334050178528" sum="9.23900318145752" count="10"></measurement>
+          <measurement timestamp="1368035710000" avg="0.9072903527153863" min="0.8131896257400513" max="1.001436471939087" sum="8.165613174438477" count="9"></measurement>
+          <measurement timestamp="1368035720000" avg="0.9172835350036621" min="0.8500797152519226" max="0.9790406823158264" sum="9.172835350036621" count="10"></measurement>
+          <measurement timestamp="1368035730000" avg="1.0060832765367296" min="0.9277377128601074" max="1.3039883375167847" sum="9.054749488830566" count="9"></measurement>
+          <measurement timestamp="1368035740000" avg="0.9380891799926758" min="0.6074530482292175" max="1.1195014715194702" sum="9.380891799926758" count="10"></measurement>
+          <measurement timestamp="1368035750000" avg="0.9400666236877442" min="0.8778254389762878" max="1.1151453256607056" sum="9.400666236877441" count="10"></measurement>
+          <measurement timestamp="1368035760000" avg="0.9925866656833224" min="0.847122848033905" max="1.3462307453155518" sum="8.933279991149902" count="9"></measurement>
+          <measurement timestamp="1368035770000" avg="1.1189796447753906" min="0.4475046396255493" max="3.293668508529663" sum="11.189796447753906" count="10"></measurement>
+          <measurement timestamp="1368035780000" avg="0.95562744140625" min="0.8630625605583191" max="0.9985734224319458" sum="8.60064697265625" count="9"></measurement>
+          <measurement timestamp="1368035790000" avg="0.9460293769836425" min="0.8601557612419128" max="0.9961634874343872" sum="9.460293769836426" count="10"></measurement>
+          <measurement timestamp="1368035800000" avg="0.8305828306410048" min="0.3655773997306824" max="1.0060170888900757" sum="7.475245475769043" count="9"></measurement>
+          <measurement timestamp="1368035810000" avg="1.2209794044494628" min="0.8239701390266418" max="3.865839958190918" sum="12.209794044494629" count="10"></measurement>
+          <measurement timestamp="1368035820000" avg="0.9029120445251465" min="0.8418129086494446" max="0.9956403970718384" sum="9.029120445251465" count="10"></measurement>
+          <measurement timestamp="1368035830000" avg="0.8917761908637153" min="0.717035710811615" max="0.9959365725517273" sum="8.025985717773438" count="9"></measurement>
+          <measurement timestamp="1368035840000" avg="0.9316105842590332" min="0.8227094411849976" max="1.0052402019500732" sum="9.316105842590332" count="10"></measurement>
+          <measurement timestamp="1368035850000" avg="0.8737500508626302" min="0.4280204772949219" max="1.0001133680343628" sum="7.863750457763672" count="9"></measurement>
+          <measurement timestamp="1368035860000" avg="0.9595857620239258" min="0.9024681448936462" max="1.0218768119812012" sum="9.595857620239258" count="10"></measurement>
+          <measurement timestamp="1368035870000" avg="0.9147485097249349" min="0.46856221556663513" max="1.0295491218566895" sum="8.232736587524414" count="9"></measurement>
+          <measurement timestamp="1368035880000" avg="0.9451702117919922" min="0.8984581828117371" max="0.9860936403274536" sum="4.725851058959961" count="5"></measurement>
+        </measure>
+        <measure measure="Web Requests - Response Time php (split by Agent, Agent Name)" agenthost="&lt;all agents&gt;" agentgroup="&lt;all-agents&gt;" color="#408040" aggregation="Average" avg="0.9500990710495988" unit="ms" min="0.8305828306410048" max="1.2209794044494628" sum="27.552873060438365" lastvalue="0.9451702117919922" count="273">
+          <measurement timestamp="1368035600000" avg="0.9490472793579101" min="0.8106465339660645" max="1.015693187713623" sum="9.490472793579102" count="10"></measurement>
+          <measurement timestamp="1368035610000" avg="0.933073902130127" min="0.8149102926254272" max="1.0195361375808716" sum="9.33073902130127" count="10"></measurement>
+          <measurement timestamp="1368035620000" avg="0.9390137990315756" min="0.847122848033905" max="1.0099064111709595" sum="8.45112419128418" count="9"></measurement>
+          <measurement timestamp="1368035630000" avg="0.9565677642822266" min="0.856542706489563" max="1.0248198509216309" sum="9.565677642822266" count="10"></measurement>
+          <measurement timestamp="1368035640000" avg="0.9882613288031684" min="0.8815522789955139" max="1.3481076955795288" sum="8.894351959228516" count="9"></measurement>
+          <measurement timestamp="1368035650000" avg="0.9516992568969727" min="0.8991119861602783" max="0.9892135858535767" sum="9.516992568969727" count="10"></measurement>
+          <measurement timestamp="1368035660000" avg="0.9649221632215712" min="0.8750423789024353" max="1.0119763612747192" sum="8.68429946899414" count="9"></measurement>
+          <measurement timestamp="1368035670000" avg="0.9079161643981933" min="0.8086034655570984" max="1.0693691968917847" sum="9.079161643981934" count="10"></measurement>
+          <measurement timestamp="1368035680000" avg="0.9223902702331543" min="0.8114034533500671" max="1.0716253519058228" sum="9.223902702331543" count="10"></measurement>
+          <measurement timestamp="1368035690000" avg="0.9229291280110677" min="0.8600726127624512" max="0.9882498383522034" sum="8.30636215209961" count="9"></measurement>
+          <measurement timestamp="1368035700000" avg="0.9239003181457519" min="0.8379791975021362" max="0.9998334050178528" sum="9.23900318145752" count="10"></measurement>
+          <measurement timestamp="1368035710000" avg="0.9072903527153863" min="0.8131896257400513" max="1.001436471939087" sum="8.165613174438477" count="9"></measurement>
+          <measurement timestamp="1368035720000" avg="0.9172835350036621" min="0.8500797152519226" max="0.9790406823158264" sum="9.172835350036621" count="10"></measurement>
+          <measurement timestamp="1368035730000" avg="1.0060832765367296" min="0.9277377128601074" max="1.3039883375167847" sum="9.054749488830566" count="9"></measurement>
+          <measurement timestamp="1368035740000" avg="0.9380891799926758" min="0.6074530482292175" max="1.1195014715194702" sum="9.380891799926758" count="10"></measurement>
+          <measurement timestamp="1368035750000" avg="0.9400666236877442" min="0.8778254389762878" max="1.1151453256607056" sum="9.400666236877441" count="10"></measurement>
+          <measurement timestamp="1368035760000" avg="0.9925866656833224" min="0.847122848033905" max="1.3462307453155518" sum="8.933279991149902" count="9"></measurement>
+          <measurement timestamp="1368035770000" avg="1.1189796447753906" min="0.4475046396255493" max="3.293668508529663" sum="11.189796447753906" count="10"></measurement>
+          <measurement timestamp="1368035780000" avg="0.95562744140625" min="0.8630625605583191" max="0.9985734224319458" sum="8.60064697265625" count="9"></measurement>
+          <measurement timestamp="1368035790000" avg="0.9460293769836425" min="0.8601557612419128" max="0.9961634874343872" sum="9.460293769836426" count="10"></measurement>
+          <measurement timestamp="1368035800000" avg="0.8305828306410048" min="0.3655773997306824" max="1.0060170888900757" sum="7.475245475769043" count="9"></measurement>
+          <measurement timestamp="1368035810000" avg="1.2209794044494628" min="0.8239701390266418" max="3.865839958190918" sum="12.209794044494629" count="10"></measurement>
+          <measurement timestamp="1368035820000" avg="0.9029120445251465" min="0.8418129086494446" max="0.9956403970718384" sum="9.029120445251465" count="10"></measurement>
+          <measurement timestamp="1368035830000" avg="0.8917761908637153" min="0.717035710811615" max="0.9959365725517273" sum="8.025985717773438" count="9"></measurement>
+          <measurement timestamp="1368035840000" avg="0.9316105842590332" min="0.8227094411849976" max="1.0052402019500732" sum="9.316105842590332" count="10"></measurement>
+          <measurement timestamp="1368035850000" avg="0.8737500508626302" min="0.4280204772949219" max="1.0001133680343628" sum="7.863750457763672" count="9"></measurement>
+          <measurement timestamp="1368035860000" avg="0.9595857620239258" min="0.9024681448936462" max="1.0218768119812012" sum="9.595857620239258" count="10"></measurement>
+          <measurement timestamp="1368035870000" avg="0.9147485097249349" min="0.46856221556663513" max="1.0295491218566895" sum="8.232736587524414" count="9"></measurement>
+          <measurement timestamp="1368035880000" avg="0.9451702117919922" min="0.8984581828117371" max="0.9860936403274536" sum="4.725851058959961" count="5"></measurement>
+        </measure>
+        <measure measure="Number of Requests - PHP (split by Agent, Agent Name)" agenthost="&lt;all agents&gt;" agentgroup="&lt;all-agents&gt;" color="#4000c0" aggregation="Sum" avg="9.413793103448276" unit="num" min="5.0" max="10.0" sum="273.0" lastvalue="5.0" count="273">
+          <measurement timestamp="1368035600000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035610000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035620000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035630000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035640000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035650000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035660000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035670000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035680000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035690000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035700000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035710000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035720000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035730000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035740000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035750000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035760000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035770000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035780000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035790000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035800000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035810000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035820000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035830000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035840000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035850000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035860000" avg="1.0" min="1.0" max="1.0" sum="10.0" count="10"></measurement>
+          <measurement timestamp="1368035870000" avg="1.0" min="1.0" max="1.0" sum="9.0" count="9"></measurement>
+          <measurement timestamp="1368035880000" avg="1.0" min="1.0" max="1.0" sum="5.0" count="5"></measurement>
+        </measure>
+        <measure measure="Request Rate (split by Agent, Agent Name)" agenthost="&lt;all agents&gt;" agentgroup="&lt;all-agents&gt;" color="#804080" aggregation="Average" avg="2.110344829230473" unit="num" min="1.7000000476837158" max="2.4000000953674316" sum="61.200000047683716" lastvalue="1.7000000476837158" count="29">
+          <measurement timestamp="1368035600000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035610000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035620000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035630000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035640000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035650000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035660000" avg="2.299999952316284" min="2.299999952316284" max="2.299999952316284" sum="2.299999952316284" count="1"></measurement>
+          <measurement timestamp="1368035670000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035680000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035690000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035700000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035710000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035720000" avg="2.4000000953674316" min="2.4000000953674316" max="2.4000000953674316" sum="2.4000000953674316" count="1"></measurement>
+          <measurement timestamp="1368035730000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035740000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035750000" avg="2.0" min="2.0" max="2.0" sum="2.0" count="1"></measurement>
+          <measurement timestamp="1368035760000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035770000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035780000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035790000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035800000" avg="1.7999999523162842" min="1.7999999523162842" max="1.7999999523162842" sum="1.7999999523162842" count="1"></measurement>
+          <measurement timestamp="1368035810000" avg="2.299999952316284" min="2.299999952316284" max="2.299999952316284" sum="2.299999952316284" count="1"></measurement>
+          <measurement timestamp="1368035820000" avg="2.0" min="2.0" max="2.0" sum="2.0" count="1"></measurement>
+          <measurement timestamp="1368035830000" avg="1.899999976158142" min="1.899999976158142" max="1.899999976158142" sum="1.899999976158142" count="1"></measurement>
+          <measurement timestamp="1368035840000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035850000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035860000" avg="2.0999999046325684" min="2.0999999046325684" max="2.0999999046325684" sum="2.0999999046325684" count="1"></measurement>
+          <measurement timestamp="1368035870000" avg="2.200000047683716" min="2.200000047683716" max="2.200000047683716" sum="2.200000047683716" count="1"></measurement>
+          <measurement timestamp="1368035880000" avg="1.7000000476837158" min="1.7000000476837158" max="1.7000000476837158" sum="1.7000000476837158" count="1"></measurement>
+        </measure>
+      </measures>
+    </chartdashlet>
+  </data>
+</dashboardreport>
