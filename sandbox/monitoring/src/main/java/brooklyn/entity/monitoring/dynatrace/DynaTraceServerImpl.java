@@ -16,7 +16,6 @@
 package brooklyn.entity.monitoring.dynatrace;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;

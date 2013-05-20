@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Copyright 2013 by Cloudsoft Corp.
  *
@@ -14,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-=======
->>>>>>> Add Zabbix entities to sandbox
 package brooklyn.entity.monitoring.zabbix;
 
 import brooklyn.config.ConfigKey;
