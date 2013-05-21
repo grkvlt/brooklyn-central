@@ -337,6 +337,10 @@ public class TestUtils {
         Asserts.continually(flags, supplier, predicate, errMsg);
     }
     
+    /**
+     * @deprecated since 0.5; use {@link brooklyn.test.Asserts.BooleanWithMessage}
+     */
+    @Deprecated
     public static class BooleanWithMessage {
         boolean value; String message;
         public BooleanWithMessage(boolean value, String message) {

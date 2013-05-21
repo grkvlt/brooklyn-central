@@ -21,6 +21,7 @@ import com.google.common.base.Predicates;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.util.concurrent.Callables;
 
 @Beta
 public class Asserts {
@@ -140,6 +141,7 @@ public class Asserts {
      * <ul>
      * <li>abortOnError (boolean, default true)
      * <li>abortOnException - (boolean, default false)
+     * <li>logException - (boolean, default false)
      * <li>timeout - (a Duration or an integer in millis, defaults to 30*SECONDS)
      * <li>period - (a Duration or an integer in millis, for fixed retry time; if not set, defaults to exponentially increasing from 1 to 500ms)
      * <li>minPeriod - (a Duration or an integer in millis; only used if period not explicitly set; the minimum period when exponentially increasing; defaults to 1ms)
@@ -152,8 +154,8 @@ public class Asserts {
      * <li>useGroovyTruth - (defaults to false; any result code apart from 'false' will be treated as success including null; ignored for Runnables which aren't Callables)
      * </ul>
      * 
-     * @param flags, accepts the flags listed above
-     * @param r
+     * @param flags A {@link Map} of the required flags from the list above
+     * @param c The {@link Callable} to execute 
      * @param finallyBlock
      */
     public static void succeedsEventually(Map<String,?> flags, Callable<?> c) {
