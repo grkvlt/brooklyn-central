@@ -17,17 +17,21 @@ package brooklyn.entity.web.httpd;
 
 import static java.lang.String.format;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
+import brooklyn.entity.drivers.downloads.DownloadResolver;
 import brooklyn.location.basic.SshMachineLocation;
-import brooklyn.util.MutableMap;
 import brooklyn.util.NetworkUtils;
+import brooklyn.util.collections.MutableMap;
 import brooklyn.util.ssh.CommonCommands;
 
+import com.google.common.collect.ImmutableList;
+
 public class ApacheHttpdSshDriver extends AbstractSoftwareProcessSshDriver implements ApacheHttpdDriver {
+
+    private String expandedInstallDir;
 
     public ApacheHttpdSshDriver(ApacheHttpdImpl entity, SshMachineLocation machine) {
         super(entity, machine);
@@ -45,15 +49,23 @@ public class ApacheHttpdSshDriver extends AbstractSoftwareProcessSshDriver imple
         return entity.getAttribute(ApacheHttpd.HTTP_PORT);
     }
 
+    private String getExpandedInstallDir() {
+        if (expandedInstallDir == null) throw new IllegalStateException("expandedInstallDir is null; most likely install was not called");
+        return expandedInstallDir;
+    }
+
     @Override
     public void install() {
-        String url = "http://download.nextag.com/apache/tomcat/tomcat-7/v" + getVersion() + "/bin/apache-tomcat-" + getVersion() + ".tar.gz";
-        String saveAs = "apache-httpd-" + getVersion() + ".tar.gz";
+        DownloadResolver resolver = entity.getManagementContext().getEntityDownloadsManager().newDownloader(this);
+        List<String> urls = resolver.getTargets();
+        String saveAs = resolver.getFilename();
+        expandedInstallDir = getInstallDir()+"/"+resolver.getUnpackedDirectoryName(format("apache-httpd-%s", getVersion()));
 
-        List<String> commands = new LinkedList<String>();
-        commands.addAll(CommonCommands.downloadUrlAs(url, getEntityVersionLabel("/"), saveAs));
-        commands.add(CommonCommands.installExecutable("tar"));
-        commands.add(format("tar xvzf %s", saveAs));
+        List<String> commands = ImmutableList.<String>builder()
+                .addAll(CommonCommands.downloadUrlAs(urls, saveAs))
+                .add(CommonCommands.INSTALL_TAR)
+                .add("tar xzfv " + saveAs)
+                .build();
 
         newScript(INSTALLING).
                 failOnNonZeroResultCode().body.append(commands).execute();
@@ -62,33 +74,34 @@ public class ApacheHttpdSshDriver extends AbstractSoftwareProcessSshDriver imple
     @Override
     public void customize() {
         newScript(CUSTOMIZING).body.append("").execute();
+
+        // Copy tgz/zip to machine and expand
+        // Add config for site at root URI
+
+        String statusConf = "/etc/httpd/conf.d/status.conf";
+        copyResource("classpath://brooklyn/entity/web/httpd/status.conf", statusConf);
+
     }
 
     @Override
     public void launch() {
-        Map ports = MutableMap.of("httpPort", getHttpPort());
+        Map<String, Integer> ports = MutableMap.of("httpPort", getHttpPort());
         NetworkUtils.checkPortsValid(ports);
 
-        Map flags = MutableMap.of("usePidFile", false);
+        Map<String, Boolean> flags = MutableMap.of("usePidFile", Boolean.FALSE);
 
-        newScript(flags, LAUNCHING).body.append("").execute();
+        newScript(flags, LAUNCHING).body.append(CommonCommands.sudo("service httpd start")).execute();
     }
 
     @Override
     public boolean isRunning() {
-        Map flags = MutableMap.of("usePidFile", "pid.txt");
+        Map<String, Boolean> flags = MutableMap.of("usePidFile", Boolean.FALSE);
         return newScript(flags, CHECK_RUNNING).execute() == 0;
     }
 
     @Override
     public void stop() {
-        Map flags = MutableMap.of("usePidFile", "pid.txt");
-        newScript(flags, STOPPING).execute();
-    }
-
-    @Override
-    public void kill() {
-        Map flags = MutableMap.of("usePidFile", "pid.txt");
-        newScript(flags, KILLING).execute();
+        Map<String, Boolean> flags = MutableMap.of("usePidFile", Boolean.FALSE);
+        newScript(flags, STOPPING).body.append(CommonCommands.sudo("service httpd stop")).execute();
     }
 }
