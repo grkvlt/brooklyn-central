@@ -52,6 +52,9 @@ import com.google.common.collect.Multimap;
 
 public class ZabbixServerImpl extends AbstractEntity implements ZabbixServer {
 
+    /** serialVersionUID */
+    private static final long serialVersionUID = -7585820580395149167L;
+
     private static final Logger log = LoggerFactory.getLogger(ZabbixServerImpl.class);
 
     private Object[] mutex = new Object[0];

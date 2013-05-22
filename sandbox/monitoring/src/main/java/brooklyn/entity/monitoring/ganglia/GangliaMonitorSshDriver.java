@@ -67,21 +67,13 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
         NetworkUtils.checkPortsValid(ImmutableMap.<String, Integer>builder()
                 .put("gangliaPort", getGangliaPort())
                 .build());
-
-        List<String> commands = ImmutableList.<String>builder()
-                .add(CommonCommands.sudo("service ganglia-monitor start"))
-                .build();
-
-        newScript(CUSTOMIZING)
-                .body.append(commands)
-                .execute();
     }
 
     @Override
     public void launch() {
         log.info("Launching: {}", entity);
         newScript(MutableMap.of("usePidFile", Boolean.FALSE), LAUNCHING)
-                .body.append(CommonCommands.sudo("service ganglia-monitor restart"))
+                .body.append(CommonCommands.sudo("service ganglia-monitor start"))
                 .execute();
     }
 
@@ -89,7 +81,7 @@ public class GangliaMonitorSshDriver extends AbstractSoftwareProcessSshDriver im
     public boolean isRunning() {
         log.info("Check Running: {}", entity);
         return newScript(MutableMap.of("usePidFile", Boolean.FALSE), CHECK_RUNNING)
-                .body.append(CommonCommands.sudo("service ganglia-monitor start"))
+                .body.append(CommonCommands.sudo("service ganglia-monitor status")) // FIXME
                 .execute() == 0;
     }
 

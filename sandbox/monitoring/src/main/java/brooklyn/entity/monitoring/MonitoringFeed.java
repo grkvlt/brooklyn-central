@@ -15,8 +15,6 @@
  */
 package brooklyn.entity.monitoring;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -29,7 +27,6 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -38,16 +35,12 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brooklyn.config.ConfigKey;
-import brooklyn.entity.basic.ConfigKeys;
 import brooklyn.entity.basic.EntityLocal;
-import brooklyn.entity.webapp.WebAppService;
 import brooklyn.event.feed.AbstractFeed;
 import brooklyn.event.feed.AttributePollHandler;
 import brooklyn.event.feed.DelegatingPollHandler;
 import brooklyn.event.feed.Poller;
 import brooklyn.event.feed.http.HttpPollValue;
-import brooklyn.util.exceptions.Exceptions;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;

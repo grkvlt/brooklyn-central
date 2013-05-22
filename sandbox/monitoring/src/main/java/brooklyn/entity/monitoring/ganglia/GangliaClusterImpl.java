@@ -64,22 +64,6 @@ public class GangliaClusterImpl extends AbstractEntity implements GangliaCluster
     private Multimap<Location, Entity> entityLocations = HashMultimap.create();
     private Map<Location, GangliaMonitor> monitoredLocations = Maps.newHashMap();
 
-    public GangliaClusterImpl() {
-        this(Maps.newHashMap(), null);
-    }
-
-    public GangliaClusterImpl(Map<?, ?> flags) {
-        this(flags, null);
-    }
-
-    public GangliaClusterImpl(Entity owner) {
-        this(Maps.newHashMap(), owner);
-    }
-
-    public GangliaClusterImpl(Map<?, ?> flags, Entity owner) {
-        super(flags, owner);
-    }
-
     @Override
     public void init() {
         manager = addChild(EntitySpecs.spec(GangliaManager.class));

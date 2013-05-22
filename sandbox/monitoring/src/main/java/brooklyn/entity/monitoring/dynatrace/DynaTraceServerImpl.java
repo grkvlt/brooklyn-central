@@ -33,8 +33,8 @@ import brooklyn.entity.proxying.EntitySpecs;
 import brooklyn.entity.trait.Startable;
 import brooklyn.location.Location;
 import brooklyn.location.basic.SshMachineLocation;
-import brooklyn.util.MutableMap;
 import brooklyn.util.ResourceUtils;
+import brooklyn.util.collections.MutableMap;
 import brooklyn.util.exceptions.Exceptions;
 import brooklyn.util.ssh.CommonCommands;
 import brooklyn.util.text.Strings;
@@ -56,6 +56,9 @@ import freemarker.template.Template;
 import freemarker.template.TemplateHashModel;
 
 public class DynaTraceServerImpl extends AbstractEntity implements DynaTraceServer {
+
+    /** serialVersionUID */
+    private static final long serialVersionUID = 6855690024510828196L;
 
     private static final Logger log = LoggerFactory.getLogger(DynaTraceServerImpl.class);
 

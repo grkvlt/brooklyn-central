@@ -15,15 +15,10 @@
  */
 package brooklyn.entity.monitoring.ganglia;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brooklyn.entity.Entity;
 import brooklyn.entity.web.httpd.ApacheHttpdImpl;
-
-import com.google.common.collect.Maps;
 
 /**
  * An implementation of {@link GangliaConsole}.
@@ -34,21 +29,5 @@ public class GangliaConsoleImpl extends ApacheHttpdImpl implements GangliaConsol
     private static final long serialVersionUID = -8719174966402620778L;
 
     private static final Logger log = LoggerFactory.getLogger(GangliaConsoleImpl.class);
-
-    public GangliaConsoleImpl() {
-        this(Maps.newHashMap(), null);
-    }
-
-    public GangliaConsoleImpl(Map<?, ?> flags) {
-        this(flags, null);
-    }
-
-    public GangliaConsoleImpl(Entity owner) {
-        this(Maps.newHashMap(), owner);
-    }
-
-    public GangliaConsoleImpl(Map<?, ?> flags, Entity owner) {
-        super(flags, owner);
-    }
 
 }

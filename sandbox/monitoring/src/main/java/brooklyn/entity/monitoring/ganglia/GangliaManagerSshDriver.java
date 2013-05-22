@@ -81,7 +81,7 @@ public class GangliaManagerSshDriver extends AbstractSoftwareProcessSshDriver im
     public void launch() {
         log.info("Launching: {}", entity);
         newScript(MutableMap.of("usePidFile", Boolean.FALSE), LAUNCHING)
-                .body.append(CommonCommands.sudo("service gmetad restart"))
+                .body.append(CommonCommands.sudo("service gmetad start"))
                 .execute();
     }
 
@@ -89,7 +89,7 @@ public class GangliaManagerSshDriver extends AbstractSoftwareProcessSshDriver im
     public boolean isRunning() {
         log.info("Check Running: {}", entity);
         return newScript(MutableMap.of("usePidFile", Boolean.FALSE), CHECK_RUNNING)
-                .body.append(CommonCommands.sudo("service gmetad start"))
+                .body.append(CommonCommands.sudo("service gmetad status")) // FIXME
                 .execute() == 0;
     }
 
