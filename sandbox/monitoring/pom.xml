@@ -23,6 +23,11 @@
         </dependency>
         <dependency>
             <groupId>io.brooklyn</groupId>
+            <artifactId>brooklyn-software-webapp</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-locations-jclouds</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -33,12 +38,7 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.brooklyn</groupId>
-            <artifactId>brooklyn-software-webapp</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-core</artifactId>
@@ -49,6 +49,13 @@
         <dependency>
             <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-software-base</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.brooklyn</groupId>
+            <artifactId>brooklyn-software-webapp</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
