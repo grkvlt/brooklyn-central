@@ -15,15 +15,13 @@
  */
 package brooklyn.entity.monitoring.ganglia;
 
-import brooklyn.entity.Entity;
 import brooklyn.entity.proxying.ImplementedBy;
-import brooklyn.entity.trait.Startable;
 import brooklyn.entity.web.httpd.ApacheHttpd;
 
 /**
  * The Ganglia monitoring console.
  */
 @ImplementedBy(GangliaConsoleImpl.class)
-public interface GangliaConsole extends Entity, Startable, ApacheHttpd {
+public interface GangliaConsole extends ApacheHttpd {
 
 }
