@@ -51,8 +51,8 @@ import brooklyn.policy.Enricher;
 import brooklyn.policy.Policy;
 import brooklyn.policy.basic.AbstractPolicy;
 import brooklyn.util.BrooklynLanguageExtensions;
-import brooklyn.util.MutableMap;
-import brooklyn.util.MutableSet;
+import brooklyn.util.collections.MutableMap;
+import brooklyn.util.collections.MutableSet;
 import brooklyn.util.flags.FlagUtils;
 import brooklyn.util.flags.SetFromFlag;
 import brooklyn.util.javalang.Reflections;
@@ -102,10 +102,14 @@ import com.google.common.collect.Maps;
  * This is now deprecated.
  */
 public abstract class AbstractEntity implements EntityLocal, EntityInternal {
-    
+
+    /** serialVersionUID */
+    private static final long serialVersionUID = -7435097988189581807L;
+
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractEntity.class);
+
     static { BrooklynLanguageExtensions.init(); }
-    
+
     public static BasicNotificationSensor<Sensor> SENSOR_ADDED = new BasicNotificationSensor<Sensor>(Sensor.class,
             "entity.sensor.added", "Sensor dynamically added to entity");
     public static BasicNotificationSensor<Sensor> SENSOR_REMOVED = new BasicNotificationSensor<Sensor>(Sensor.class,
