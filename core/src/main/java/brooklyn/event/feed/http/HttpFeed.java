@@ -99,16 +99,16 @@ public class HttpFeed extends AbstractFeed {
     }
     
     public static class Builder {
-        private EntityLocal entity;
-        private Supplier<URI> baseUriProvider;
-        private long period = 500;
-        private TimeUnit periodUnits = TimeUnit.MILLISECONDS;
-        private List<HttpPollConfig<?>> polls = Lists.newArrayList();
-        private URI baseUri;
-        private Map<String, String> baseUriVars = Maps.newLinkedHashMap();
-        private Map<String, String> headers = Maps.newLinkedHashMap();
-        private boolean suspended = false;
-        private volatile boolean built;
+        protected EntityLocal entity;
+        protected Supplier<URI> baseUriProvider;
+        protected long period = 500;
+        protected TimeUnit periodUnits = TimeUnit.MILLISECONDS;
+        protected List<HttpPollConfig<?>> polls = Lists.newArrayList();
+        protected URI baseUri;
+        protected Map<String, String> baseUriVars = Maps.newLinkedHashMap();
+        protected Map<String, String> headers = Maps.newLinkedHashMap();
+        protected boolean suspended = false;
+        protected volatile boolean built;
         
         public Builder entity(EntityLocal val) {
             this.entity = val;

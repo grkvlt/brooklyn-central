@@ -92,6 +92,7 @@ public abstract class AbstractFeed {
             }
             suspended = false;
         }
+        postStart();
     }
     
     public void stop() {
@@ -115,6 +116,12 @@ public abstract class AbstractFeed {
      * For overriding.
      */
     protected void preStart() {
+    }
+
+    /**
+     * For overriding.
+     */
+    protected void postStart() {
     }
     
     /**
