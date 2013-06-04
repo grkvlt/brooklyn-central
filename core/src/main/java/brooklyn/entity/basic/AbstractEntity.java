@@ -289,7 +289,7 @@ public abstract class AbstractEntity implements EntityLocal, EntityInternal {
     
     @Override
     public AbstractEntity configure(Map flags) {
-        assertNotYetOwned();
+        assertNotYetManaged();
         // TODO use a config bag instead
 //        ConfigBag bag = new ConfigBag().putAll(flags);
         
@@ -694,8 +694,15 @@ public abstract class AbstractEntity implements EntityLocal, EntityInternal {
         return configsInternal.getConfig(key, defaultValue);
     }
 
-    // TODO assertNotYetManaged would be a better name?
+    /**
+     * @deprecated since 0.6; use assertNotYetManaged
+     */
+    @Deprecated
     protected void assertNotYetOwned() {
+        assertNotYetManaged();
+    }
+    
+    protected void assertNotYetManaged() {
         if (!inConstruction && getManagementSupport().isDeployed()) {
             LOG.warn("configuration being made to {} after deployment; may not be supported in future versions", this);
         }
@@ -704,18 +711,18 @@ public abstract class AbstractEntity implements EntityLocal, EntityInternal {
 
     @Override
     public <T> T setConfig(ConfigKey<T> key, T val) {
-        assertNotYetOwned();
+        assertNotYetManaged();
         return (T) configsInternal.setConfig(key, val);
     }
 
     @Override
     public <T> T setConfig(ConfigKey<T> key, Task<T> val) {
-        assertNotYetOwned();
+        assertNotYetManaged();
         return (T) configsInternal.setConfig(key, val);
     }
 
     public <T> T setConfig(ConfigKey<T> key, DeferredSupplier val) {
-        assertNotYetOwned();
+        assertNotYetManaged();
         return (T) configsInternal.setConfig(key, val);
     }
 
