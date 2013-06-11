@@ -442,7 +442,7 @@ public class RebindEntityTest {
 
         @Override
         public void start(Collection<? extends Location> locations) {
-            getLocations().addAll(locations);
+            addLocations(locations);
         }
 
         @Override

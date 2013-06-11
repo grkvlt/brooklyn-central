@@ -203,7 +203,7 @@ class ClusteredEntity extends TestEntityImpl {
     public void start(Collection<? extends Location> locs) {
         provisioner = locs.first()
         MachineLocation machine = provisioner.obtain([:]);
-        locations << machine
+        addLocations([machine]);
         setAttribute(HOSTNAME, machine.address.hostName);
     }
     public void stop() {
