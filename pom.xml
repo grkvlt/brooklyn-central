@@ -654,6 +654,7 @@
                 <module>sandbox/web-acceptance</module>
                 <module>sandbox/monitoring</module>
                 <module>sandbox/dropwizard</module>
+                <module>sandbox/camp</module>
                 <module>sandbox/nosql</module>
             </modules>
         </profile>
