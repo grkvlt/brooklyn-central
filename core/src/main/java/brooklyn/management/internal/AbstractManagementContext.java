@@ -298,7 +298,7 @@ public abstract class AbstractManagementContext implements ManagementContextInte
         }
         if (catalog==null) {
             // retry, either an error, or was blank
-            catalog = new BasicBrooklynCatalog(this, CatalogDtoUtils.newDefaultLocalScanningDto(CatalogScanningModes.TYPES));
+            catalog = new BasicBrooklynCatalog(this, CatalogDtoUtils.newDefaultLocalScanningDto(CatalogScanningModes.ANNOTATIONS));
             if (log.isDebugEnabled())
                 log.debug("Loaded default (local classpath) catalog: "+catalog);
         }
