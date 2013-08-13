@@ -3,10 +3,9 @@ package brooklyn.management.internal;
 import static brooklyn.util.JavaGroovyEquivalents.elvis;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -41,6 +40,17 @@ public class LocalManagementContext extends AbstractManagementContext {
     @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(LocalManagementContext.class);
 
+    public static final List<LocalManagementContext> INSTANCES = new CopyOnWriteArrayList<LocalManagementContext>();
+
+    public static List<LocalManagementContext> getInstances(){
+        return new LinkedList<LocalManagementContext>(INSTANCES);
+    }
+
+    public static void terminateAll(){
+        for(LocalManagementContext context:INSTANCES){
+            context.terminate();
+        }
+    }
 
     private BasicExecutionManager execution;
     private SubscriptionManager subscriptions;
@@ -78,11 +88,12 @@ public class LocalManagementContext extends AbstractManagementContext {
         final int instanceCount = LocalManagementContext.instanceCount.incrementAndGet();
         if(instanceCount >1){
             try{
-            throw new RuntimeException();
+                throw new RuntimeException(format("%s LocalManagementContext instances detected, please terminate old instances before starting new ones.",instanceCount));
             }catch(RuntimeException e){
-                log.warn(format("%s LocalManagementContext instances detected, please terminate old instances before starting new ones.",instanceCount), e);
+                log.warn(e.getMessage(), e);
             }
         }
+        INSTANCES.add(this);
     }
     
     public void prePreManage(Entity entity) {
@@ -152,6 +163,7 @@ public class LocalManagementContext extends AbstractManagementContext {
     
     @Override
     public void terminate() {
+        INSTANCES.remove(this);
         super.terminate();
         if (execution != null) execution.shutdownNow();
         if (gc != null) gc.shutdownNow();
