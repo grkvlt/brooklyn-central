@@ -3,11 +3,13 @@ package brooklyn.management.internal;
 import static brooklyn.util.JavaGroovyEquivalents.elvis;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +18,6 @@ import brooklyn.config.BrooklynProperties;
 import brooklyn.entity.Application;
 import brooklyn.entity.Effector;
 import brooklyn.entity.Entity;
-import brooklyn.entity.basic.AbstractEffector;
-import brooklyn.entity.basic.EffectorWithBody;
-import brooklyn.entity.basic.Effectors;
 import brooklyn.internal.storage.BrooklynStorageFactory;
 import brooklyn.location.Location;
 import brooklyn.management.ExecutionManager;
@@ -30,28 +29,40 @@ import brooklyn.util.task.BasicExecutionManager;
 import brooklyn.util.text.Identifiers;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * A local implementation of the {@link ManagementContext} API.
  */
 public class LocalManagementContext extends AbstractManagementContext {
-    public static final AtomicInteger instanceCount = new AtomicInteger();
-
-    @SuppressWarnings("unused")
+    
     private static final Logger log = LoggerFactory.getLogger(LocalManagementContext.class);
 
-    private static final List<LocalManagementContext> INSTANCES = new CopyOnWriteArrayList<LocalManagementContext>();
+    private static final Set<LocalManagementContext> INSTANCES = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<LocalManagementContext, Boolean>()));
 
-    public static List<LocalManagementContext> getInstances(){
-        return new LinkedList<LocalManagementContext>(INSTANCES);
+    @VisibleForTesting
+    static Set<LocalManagementContext> getInstances() {
+        synchronized (INSTANCES) {
+            return ImmutableSet.copyOf(INSTANCES);
+        }
     }
 
-    public static void terminateAll(){
-        for(LocalManagementContext context:INSTANCES){
-            try{
+    // Note also called reflectively by BrooklynLeakListener
+    public static void logAll(Logger logger){
+        for (LocalManagementContext context : getInstances()) {
+            logger.warn("Management Context running, creation stacktrace:\n" + Throwables.getStackTraceAsString(context.constructionStackTrace));
+        }
+    }
+
+    
+    // Note also called reflectively by BrooklynLeakListener
+    public static void terminateAll() {
+        for (LocalManagementContext context : getInstances()) {
+            try {
                 context.terminate();
-            }catch(Throwable t){
-                log.warn("Failed to terminate management context",t);
+            }catch (Throwable t) {
+                log.warn("Failed to terminate management context", t);
             }
         }
     }
@@ -64,6 +75,8 @@ public class LocalManagementContext extends AbstractManagementContext {
     private final String shortid = Identifiers.getBase64IdFromValue(System.identityHashCode(this), 5);
     private final String tostring = "LocalManagementContext("+shortid+")";
 
+    private final Throwable constructionStackTrace = new Exception("for construction stacktrace").fillInStackTrace();
+    
     /**
      * Creates a LocalManagement with default BrooklynProperties.
      */
@@ -89,14 +102,6 @@ public class LocalManagementContext extends AbstractManagementContext {
         configMap.putAll(checkNotNull(brooklynProperties, "brooklynProperties"));
         this.locationManager = new LocalLocationManager(this);
 
-        final int instanceCount = LocalManagementContext.instanceCount.incrementAndGet();
-        if(instanceCount >1){
-            try{
-                throw new RuntimeException(format("%s LocalManagementContext instances detected, please terminate old instances before starting new ones.",instanceCount));
-            }catch(RuntimeException e){
-                log.warn(e.getMessage(), e);
-            }
-        }
         INSTANCES.add(this);
     }
 
@@ -171,7 +176,6 @@ public class LocalManagementContext extends AbstractManagementContext {
         super.terminate();
         if (execution != null) execution.shutdownNow();
         if (gc != null) gc.shutdownNow();
-        instanceCount.decrementAndGet();
     }
 
     @Override

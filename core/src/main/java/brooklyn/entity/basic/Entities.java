@@ -493,7 +493,7 @@ public class Entities {
     /** stops, destroys, and unmanages all apps in the given context,
      * and then terminates the management context */
     public static void destroyAll(ManagementContext mgmt) {
-        log.debug("destroying all apps in "+mgmt+": "+mgmt.getApplications());
+        if (!mgmt.isRunning()) return;
         for (Application app: mgmt.getApplications()) {
             log.debug("destroying app "+app+" (managed? "+isManaged(app)+"; mgmt is "+mgmt+")");
             destroy(app);
