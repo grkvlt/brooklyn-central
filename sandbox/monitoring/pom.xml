@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+=======
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+>>>>>>> Add Zabbix entities to sandbox
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.brooklyn.sandbox</groupId>
     <artifactId>brooklyn-sandbox-software-monitoring</artifactId>
     <packaging>bundle</packaging>
     <name>Brooklyn Monitoring Software Entities</name>
     <description>
+<<<<<<< HEAD
         Brooklyn entities for monitoring software
     </description>
+=======
+		Brooklyn entitites for monitoring
+	</description>
+>>>>>>> Add Zabbix entities to sandbox
 
     <parent>
         <groupId>io.brooklyn</groupId>
@@ -21,6 +31,7 @@
             <artifactId>brooklyn-software-base</artifactId>
             <version>${project.version}</version>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-software-webapp</artifactId>
@@ -31,6 +42,8 @@
             <artifactId>brooklyn-locations-jclouds</artifactId>
             <version>${project.version}</version>
         </dependency>
+=======
+>>>>>>> Add Zabbix entities to sandbox
 
         <dependency>
             <groupId>io.brooklyn</groupId>
@@ -38,7 +51,10 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
 
+=======
+>>>>>>> Add Zabbix entities to sandbox
         <dependency>
             <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-core</artifactId>
@@ -53,6 +69,7 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>io.brooklyn</groupId>
             <artifactId>brooklyn-software-webapp</artifactId>
@@ -60,6 +77,8 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
+=======
+>>>>>>> Add Zabbix entities to sandbox
     </dependencies>
 
 </project>

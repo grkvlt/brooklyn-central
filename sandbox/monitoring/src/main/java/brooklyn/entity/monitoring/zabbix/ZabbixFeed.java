@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Copyright 2013 by Cloudsoft Corp.
  *
@@ -13,6 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+=======
+>>>>>>> Add Zabbix entities to sandbox
 package brooklyn.entity.monitoring.zabbix;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -45,6 +48,10 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+<<<<<<< HEAD
+=======
+import brooklyn.entity.Entity;
+>>>>>>> Add Zabbix entities to sandbox
 import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.basic.EntityLocal;
 import brooklyn.event.feed.AbstractFeed;
@@ -54,17 +61,34 @@ import brooklyn.event.feed.Poller;
 import brooklyn.event.feed.http.HttpPollValue;
 import brooklyn.event.feed.http.HttpValueFunctions;
 import brooklyn.location.Location;
+<<<<<<< HEAD
+=======
+import brooklyn.location.MachineLocation;
+>>>>>>> Add Zabbix entities to sandbox
 import brooklyn.location.access.BrooklynAccessUtils;
 import brooklyn.location.basic.SupportsPortForwarding;
 import brooklyn.util.exceptions.Exceptions;
 import brooklyn.util.net.Cidr;
 
+<<<<<<< HEAD
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+=======
+import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicates;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+>>>>>>> Add Zabbix entities to sandbox
 import com.google.common.net.HostAndPort;
 import com.google.gson.JsonObject;
 
@@ -100,6 +124,10 @@ public class ZabbixFeed extends AbstractFeed {
 
     public static class Builder<T extends ZabbixFeed, B extends Builder<T,B>> {
         private EntityLocal entity;
+<<<<<<< HEAD
+=======
+        private Supplier<URI> baseUriProvider;
+>>>>>>> Add Zabbix entities to sandbox
         private long period = 500;
         private TimeUnit periodUnits = TimeUnit.MILLISECONDS;
         private List<ZabbixPollConfig<?>> polls = Lists.newArrayList();
@@ -112,6 +140,14 @@ public class ZabbixFeed extends AbstractFeed {
         private Integer sessionTimeout;
         private Integer groupId;
         private Integer templateId;
+<<<<<<< HEAD
+=======
+        private Function<? super EntityLocal, String> uniqueHostnameGenerator = new Function<EntityLocal, String>() {
+            @Override public String apply(EntityLocal entity) {
+                Location loc = Iterables.find(entity.getLocations(), Predicates.instanceOf(MachineLocation.class));
+                return loc.getId();
+            }};
+>>>>>>> Add Zabbix entities to sandbox
 
         @SuppressWarnings("unchecked")
         protected B self() {
@@ -122,7 +158,19 @@ public class ZabbixFeed extends AbstractFeed {
             this.entity = val;
             return self();
         }
+<<<<<<< HEAD
         public B baseUri(URI val) {
+=======
+        public B baseUri(Supplier<URI> val) {
+            if (baseUri!=null && val!=null)
+                throw new IllegalStateException("Builder cannot take both a URI and a URI Provider");
+            this.baseUriProvider = val;
+            return self();
+        }
+        public B baseUri(URI val) {
+            if (baseUriProvider!=null && val!=null)
+                throw new IllegalStateException("Builder cannot take both a URI and a URI Provider");
+>>>>>>> Add Zabbix entities to sandbox
             this.baseUri = val;
             return self();
         }
@@ -185,6 +233,7 @@ public class ZabbixFeed extends AbstractFeed {
             this.templateId = templateId;
             return self();
         }
+<<<<<<< HEAD
 
         @SuppressWarnings("unchecked")
         public T build() {
@@ -194,6 +243,25 @@ public class ZabbixFeed extends AbstractFeed {
                 ZabbixServer server = Preconditions.checkNotNull(entity.getConfig(ZabbixMonitored.ZABBIX_SERVER),
                         "The ZABBIX_SERVER config key must be set on the entity");
                 log.warn("Setting properties for feed based on ZabbixServer entity {}", server);
+=======
+        /**
+         * For generating the name to be used when registering the zabbix agent with the zabbix server.
+         * When called, guarantees that the entity will have a {@link MachineLocation} (see {@link Entity#getLocations()}).
+         * Must return a non-empty string that will be unique across all machines where zabbix agents are installed.
+         */
+        public B uniqueHostnameGenerator(Function<? super EntityLocal, String> val) {
+            this.uniqueHostnameGenerator = checkNotNull(val, "uniqueHostnameGenerator");
+            return self();
+        }
+        
+        @SuppressWarnings("unchecked")
+        public T build() {
+            // If server not set and other config not available, try to obtain from entity config
+            if (server == null
+                    && (baseUri == null || baseUriProvider == null)
+                    && username == null && password == null && sessionTimeout == null) {
+                ZabbixServer server = Preconditions.checkNotNull(entity.getConfig(ZabbixMonitored.ZABBIX_SERVER), "The ZABBIX_SERVER config key must be set on the entity");
+>>>>>>> Add Zabbix entities to sandbox
                 server(server);
             }
             // Now create feed
@@ -215,6 +283,7 @@ public class ZabbixFeed extends AbstractFeed {
         protected ZabbixPollIdentifier(String itemName) {
             this.itemName = checkNotNull(itemName, "itemName");
         }
+<<<<<<< HEAD
     }
 
     protected final Set<ZabbixPollConfig<?>> polls;
@@ -232,25 +301,86 @@ public class ZabbixFeed extends AbstractFeed {
 
         // Build the set of polling configurations
         ImmutableSet.Builder<ZabbixPollConfig<?>> pollsBuilder = ImmutableSet.builder();
+=======
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(itemName);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof ZabbixPollIdentifier)) {
+                return false;
+            }
+            ZabbixPollIdentifier o = (ZabbixPollIdentifier) other;
+            return Objects.equal(itemName, o.itemName);
+        }
+    }
+
+    // Treat as immutable once built
+    protected final Set<ZabbixPollConfig<?>> polls = Sets.newLinkedHashSet();
+
+    protected Supplier<URI> baseUriProvider;
+    protected Integer groupId, templateId;
+
+    // Flag set when the Zabbix agent is registered for a host
+    protected final AtomicBoolean registered = new AtomicBoolean(false);
+
+    private final Function<? super EntityLocal, String> uniqueHostnameGenerator;
+
+    protected ZabbixFeed(final Builder<? extends ZabbixFeed, ?> builder) {
+        super(builder.entity);
+
+        baseUriProvider = builder.baseUriProvider;
+        if (builder.baseUri!=null) {
+            if (baseUriProvider!=null)
+                throw new IllegalStateException("Not permitted to supply baseUri and baseUriProvider");
+            URI uri = builder.baseUri;
+            baseUriProvider = Suppliers.ofInstance(uri);
+        }
+        checkNotNull(baseUriProvider);
+
+        groupId = checkNotNull(builder.groupId, "Zabbix groupId must be set");
+        templateId = checkNotNull(builder.templateId, "Zabbix templateId must be set");
+
+>>>>>>> Add Zabbix entities to sandbox
         for (ZabbixPollConfig<?> config : builder.polls) {
             @SuppressWarnings({ "unchecked", "rawtypes" })
             ZabbixPollConfig<?> configCopy = new ZabbixPollConfig(config);
             if (configCopy.getPeriod() < 0) configCopy.period(builder.period, builder.periodUnits);
+<<<<<<< HEAD
             pollsBuilder.add(configCopy);
         }
         polls = pollsBuilder.build();
+=======
+            polls.add(configCopy);
+        }
+        
+        uniqueHostnameGenerator = checkNotNull(builder.uniqueHostnameGenerator, "uniqueHostnameGenerator");
+>>>>>>> Add Zabbix entities to sandbox
     }
 
     @Override
     protected void preStart() {
         log.info("starting zabbix feed for {}", entity);
 
+<<<<<<< HEAD
         final DefaultHttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
         httpClient.setReuseStrategy(new NoConnectionReuseStrategy());
         try {
             registerSslSocketFactoryIfRequired(apiUri, httpClient);
         } catch (Exception e) {
             log.warn("Error in ZabbixFeed of {}, setting HTTP trust for uri {}", entity, apiUri);
+=======
+        // TODO if supplier returns null, we may wish to defer initialization until url available?
+        final DefaultHttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
+        httpClient.setReuseStrategy(new NoConnectionReuseStrategy());
+        try {
+            registerSslSocketFactoryIfRequired(baseUriProvider.get(), httpClient);
+        } catch (Exception e) {
+            log.warn("Error in ZabbixFeed of {}, setting HTTP trust for uri {}", entity, baseUriProvider.get());
+>>>>>>> Add Zabbix entities to sandbox
             throw Exceptions.propagate(e);
         }
 
@@ -259,6 +389,7 @@ public class ZabbixFeed extends AbstractFeed {
             @Override
             public HttpPollValue call() throws Exception {
                 if (!registered.get()) {
+<<<<<<< HEAD
                     // Set the agent name attribute on the entity
                     String agentName = entity.getConfig(ZabbixMonitored.ZABBIX_AGENT_NAME_FUNCTION).apply(entity);
                     entity.setAttribute(ZabbixMonitored.ZABBIX_AGENT_HOSTNAME, agentName);
@@ -270,6 +401,23 @@ public class ZabbixFeed extends AbstractFeed {
                     if (location.isPresent()) {
                         Cidr management = entity.getConfig(BrooklynAccessUtils.MANAGEMENT_ACCESS_CIDR);
                         HostAndPort forwarded = ((SupportsPortForwarding) location.get()).getSocketEndpointFor(management, port);
+=======
+                    // Find the first machine, if available
+                    Optional<Location> location = Iterables.tryFind(entity.getLocations(), Predicates.instanceOf(MachineLocation.class));
+                    if (!location.isPresent()) {
+                        return null; // Do nothing until location is present
+                    }
+                    MachineLocation machine = (MachineLocation) location.get();
+
+                    String host = uniqueHostnameGenerator.apply(entity);
+                    
+                    // Select address and port using port-forwarding if available
+                    String address = entity.getAttribute(Attributes.ADDRESS);
+                    Integer port = entity.getAttribute(ZabbixMonitored.ZABBIX_AGENT_PORT);
+                    if (machine instanceof SupportsPortForwarding) {
+                        Cidr management = entity.getConfig(BrooklynAccessUtils.MANAGEMENT_ACCESS_CIDR);
+                        HostAndPort forwarded = ((SupportsPortForwarding) machine).getSocketEndpointFor(management, port);
+>>>>>>> Add Zabbix entities to sandbox
                         address = forwarded.getHostText();
                         port = forwarded.getPort();
                     }
@@ -277,14 +425,22 @@ public class ZabbixFeed extends AbstractFeed {
                     // Fill in the JSON template and POST it
                     byte[] body = JSON_HOST_CREATE
                             .replace("{{token}}", entity.getConfig(ZabbixMonitored.ZABBIX_SERVER).getAttribute(ZabbixServer.ZABBIX_TOKEN))
+<<<<<<< HEAD
                             .replace("{{host}}", entity.getAttribute(ZabbixMonitored.ZABBIX_AGENT_HOSTNAME))
+=======
+                            .replace("{{host}}", host)
+>>>>>>> Add Zabbix entities to sandbox
                             .replace("{{ip}}", address)
                             .replace("{{port}}", Integer.toString(port))
                             .replace("{{groupId}}", Integer.toString(groupId))
                             .replace("{{templateId}}", Integer.toString(templateId))
                             .replace("{{id}}", Integer.toString(id.incrementAndGet()))
                             .getBytes();
+<<<<<<< HEAD
                     return httpPost(httpClient, apiUri, body);
+=======
+                    return httpPost(httpClient, baseUriProvider.get(), body);
+>>>>>>> Add Zabbix entities to sandbox
                 }
                 return null;
             }
@@ -297,6 +453,7 @@ public class ZabbixFeed extends AbstractFeed {
                 if (registered.get() || val == null) {
                     return; // Skip if we are registered already or no data from job
                 }
+<<<<<<< HEAD
                 if (val.getResponseCode() == 200) {
                     JsonObject response = HttpValueFunctions.jsonContents().apply(val).getAsJsonObject();
                     if (response.has("error")) {
@@ -319,12 +476,47 @@ public class ZabbixFeed extends AbstractFeed {
                     }
                 } else {
                     throw new IllegalStateException(String.format("zabbix sever returned failure code: %d", val.getResponseCode()));
+=======
+                JsonObject response = HttpValueFunctions.jsonContents().apply(val).getAsJsonObject();
+                if (response.has("error")) {
+                    // Parse the JSON error object and log the message
+                    JsonObject error = response.get("error").getAsJsonObject();
+                    String message = error.get("message").getAsString();
+                    String data = error.get("data").getAsString();
+                    log.warn("zabbix failed registering host - {}: {}", message, data);
+                } else if (response.has("result")) {
+                    // Parse the JSON result object and save the hostId
+                    JsonObject result = response.get("result").getAsJsonObject();
+                    String hostId = result.get("hostids").getAsJsonArray().get(0).getAsString();
+                    // Update the registered status if not set
+                    if (registered.compareAndSet(false, true)) {
+                        entity.setAttribute(ZabbixMonitored.ZABBIX_AGENT_HOSTID, hostId);
+                        log.info("zabbix registered host as id {}", hostId);
+                    }
+                } else {
+                    throw new IllegalStateException(String.format("zabbix host registration returned invalid result: %s", response.toString()));
+>>>>>>> Add Zabbix entities to sandbox
                 }
             }
             @Override
             public void onError(Exception error) {
                 log.warn("zabbix exception registering host", error);
             }
+<<<<<<< HEAD
+=======
+            @Override
+            public boolean checkSuccess(HttpPollValue val) {
+                return (val.getResponseCode() == 200);
+            }
+            @Override
+            public void onFailure(HttpPollValue val) {
+                log.warn("zabbix sever returned failure code: {}", val.getResponseCode());
+            }
+            @Override
+            public void onException(Exception exception) {
+                log.warn("zabbix exception registering host", exception);
+            }
+>>>>>>> Add Zabbix entities to sandbox
         };
 
         // Schedule registration attempt once per second
@@ -343,7 +535,11 @@ public class ZabbixFeed extends AbstractFeed {
                                 .replace("{{itemKey}}", config.getItemKey())
                                 .replace("{{id}}", Integer.toString(id.incrementAndGet()))
                                 .getBytes();
+<<<<<<< HEAD
                         return httpPost(httpClient, apiUri, body);
+=======
+                        return httpPost(httpClient, baseUriProvider.get(), body);
+>>>>>>> Add Zabbix entities to sandbox
                     } else {
                         throw new IllegalStateException("zabbix agent not yet registered");
                     }
