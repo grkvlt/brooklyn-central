@@ -637,6 +637,7 @@ public abstract class AbstractEntity implements EntityLocal, EntityInternal {
     
     @Override
     public EntityType getEntityType() {
+        if (entityType==null) return null;
         return entityType.getSnapshot();
     }
 
