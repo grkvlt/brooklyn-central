@@ -99,12 +99,13 @@ import com.google.common.collect.Sets;
  * This is now deprecated.
  */
 public abstract class AbstractEntity implements EntityLocal, EntityInternal {
-
-    /** serialVersionUID */
-    private static final long serialVersionUID = -7435097988189581807L;
-
+    
+    /**
+     * @deprecated since 0.6; will be made private in subsequent release; instead declare more appropriate logger 
+     */
+    @Deprecated
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractEntity.class);
-
+    
     static { BrooklynLanguageExtensions.init(); }
 
     public static final BasicNotificationSensor<Sensor> SENSOR_ADDED = new BasicNotificationSensor<Sensor>(Sensor.class,
