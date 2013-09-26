@@ -61,7 +61,7 @@ public class MySqlSshDriver extends AbstractSoftwareProcessSshDriver implements 
         String osp2 = os.is64bit() ? "x86_64" : "i686";
         return osp1+"-"+osp2;
     }
-	
+    
 	public String getMirrorUrl() {
         return entity.getConfig(MySqlNode.MIRROR_URL);
 	}
@@ -180,6 +180,7 @@ public class MySqlSshDriver extends AbstractSoftwareProcessSshDriver implements 
 
     @Override
     public void launch() {
+        entity.setAttribute(MySqlNode.PID_FILE, getRunDir() + "/" + AbstractSoftwareProcessSshDriver.PID_FILENAME);
         newScript(MutableMap.of("usePidFile", true), LAUNCHING).
             updateTaskAndFailOnNonZeroResultCode().
             body.append(

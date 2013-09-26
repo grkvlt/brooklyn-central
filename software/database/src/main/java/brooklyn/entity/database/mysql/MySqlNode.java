@@ -74,5 +74,7 @@ public interface MySqlNode extends DatabaseNode, HasShortName {
             "classpath://brooklyn/entity/database/mysql/mysql.conf");
 
     public static final AttributeSensor<Double> QUERIES_PER_SECOND_FROM_MYSQL = Sensors.newDoubleSensor("mysql.queries.perSec.fromMysql");
+
+    public static final AttributeSensor<String> PID_FILE = Sensors.newStringSensor( "mysql.pid.file", "PID file");;
     
 }
