@@ -1,22 +1,6 @@
 package brooklyn.entity.webapp.jboss;
 
-import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
-import brooklyn.entity.basic.SoftwareProcess;
-import brooklyn.entity.database.mysql.MySqlNode;
-import brooklyn.entity.drivers.downloads.DownloadResolver;
-import brooklyn.entity.webapp.JavaWebAppSshDriver;
-import brooklyn.location.basic.SshMachineLocation;
-import brooklyn.util.ResourceUtils;
-import brooklyn.util.collections.MutableMap;
-import brooklyn.util.net.Networking;
-import brooklyn.util.ssh.BashCommands;
-import com.google.common.base.Charsets;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
-import com.google.common.hash.Hashing;
-import com.google.common.io.BaseEncoding;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.lang.String.format;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -25,7 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static java.lang.String.format;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import brooklyn.entity.basic.SoftwareProcess;
+import brooklyn.entity.drivers.downloads.DownloadResolver;
+import brooklyn.entity.webapp.JavaWebAppSshDriver;
+import brooklyn.location.basic.SshMachineLocation;
+import brooklyn.util.ResourceUtils;
+import brooklyn.util.collections.MutableMap;
+import brooklyn.util.net.Networking;
+import brooklyn.util.ssh.BashCommands;
+
+import com.google.common.base.Charsets;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
 
 public class JBoss7SshDriver extends JavaWebAppSshDriver implements JBoss7Driver {
 
