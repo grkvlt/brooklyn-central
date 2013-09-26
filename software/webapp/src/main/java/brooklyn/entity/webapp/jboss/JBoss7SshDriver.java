@@ -1,6 +1,8 @@
 package brooklyn.entity.webapp.jboss;
 
+import brooklyn.entity.basic.AbstractSoftwareProcessSshDriver;
 import brooklyn.entity.basic.SoftwareProcess;
+import brooklyn.entity.database.mysql.MySqlNode;
 import brooklyn.entity.drivers.downloads.DownloadResolver;
 import brooklyn.entity.webapp.JavaWebAppSshDriver;
 import brooklyn.location.basic.SshMachineLocation;
@@ -201,6 +203,7 @@ public class JBoss7SshDriver extends JavaWebAppSshDriver implements JBoss7Driver
 
     @Override
     public void launch() {
+        entity.setAttribute(JBoss7Server.PID_FILE, getRunDir() + "/" + PID_FILENAME);
         Map flags = MutableMap.of("usePidFile", false);
 
         // We wait for evidence of tomcat running because, using
