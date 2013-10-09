@@ -100,7 +100,6 @@ import com.google.common.collect.Sets;
  * This is now deprecated.
  */
 public abstract class AbstractEntity implements EntityLocal, EntityInternal {
-<<<<<<< HEAD
     
     /**
      * @deprecated since 0.6; will be made private in subsequent release; instead declare more appropriate logger 
@@ -111,17 +110,6 @@ public abstract class AbstractEntity implements EntityLocal, EntityInternal {
     static { BrooklynLanguageExtensions.init(); }
 
     public static final BasicNotificationSensor<Sensor> SENSOR_ADDED = new BasicNotificationSensor<Sensor>(Sensor.class,
-=======
-
-    /** serialVersionUID */
-    private static final long serialVersionUID = -7435097988189581807L;
-
-    protected static final Logger LOG = LoggerFactory.getLogger(AbstractEntity.class);
-
-    static { BrooklynLanguageExtensions.init(); }
-
-    public static BasicNotificationSensor<Sensor> SENSOR_ADDED = new BasicNotificationSensor<Sensor>(Sensor.class,
->>>>>>> Tidying
             "entity.sensor.added", "Sensor dynamically added to entity");
     public static final BasicNotificationSensor<Sensor> SENSOR_REMOVED = new BasicNotificationSensor<Sensor>(Sensor.class,
             "entity.sensor.removed", "Sensor dynamically removed from entity");
