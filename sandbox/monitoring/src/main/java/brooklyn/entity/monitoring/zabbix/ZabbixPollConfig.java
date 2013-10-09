@@ -34,11 +34,12 @@ public class ZabbixPollConfig<T> extends PollConfig<HttpPollValue, T, ZabbixPoll
 
     private String itemKey;
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public ZabbixPollConfig(AttributeSensor<T> sensor) {
         super(sensor);
         // Extract the last value of the item
         onSuccess(
-                Functions.compose(JsonFunctions.cast(getSensor().getType()),
+                Functions.compose(JsonFunctions.cast((Class) getSensor().getType()),
                     Functions.compose(new Function<JsonElement, JsonElement>() {
                         @Override
                         public JsonElement apply(@Nullable JsonElement input) {
@@ -49,7 +50,7 @@ public class ZabbixPollConfig<T> extends PollConfig<HttpPollValue, T, ZabbixPoll
                         }
                     }, HttpValueFunctions.jsonContents())));
         // Return a default (zero) value on error
-        onError((Function) XmlFunctions.defaultValue(getSensor().getType()));
+        onException((Function) XmlFunctions.defaultValue(getSensor().getType()));
     }
 
     public ZabbixPollConfig(ZabbixPollConfig<T> other) {

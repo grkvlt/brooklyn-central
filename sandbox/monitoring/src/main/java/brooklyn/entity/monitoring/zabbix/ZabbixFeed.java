@@ -15,7 +15,7 @@
  */
 package brooklyn.entity.monitoring.zabbix;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -40,12 +40,11 @@ import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brooklyn.entity.Entity;
 import brooklyn.entity.basic.Attributes;
 import brooklyn.entity.basic.EntityLocal;
 import brooklyn.event.feed.AbstractFeed;
@@ -55,13 +54,11 @@ import brooklyn.event.feed.Poller;
 import brooklyn.event.feed.http.HttpPollValue;
 import brooklyn.event.feed.http.HttpValueFunctions;
 import brooklyn.location.Location;
-import brooklyn.location.MachineLocation;
 import brooklyn.location.access.BrooklynAccessUtils;
 import brooklyn.location.basic.SupportsPortForwarding;
 import brooklyn.util.exceptions.Exceptions;
 import brooklyn.util.net.Cidr;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
@@ -210,6 +207,7 @@ public class ZabbixFeed extends AbstractFeed {
             result.start();
             return result;
         }
+
         @Override
         protected void finalize() {
             if (!built) log.warn("ZabbixFeed.Builder created, but build() never called");
@@ -266,7 +264,7 @@ public class ZabbixFeed extends AbstractFeed {
     protected void preStart() {
         log.info("starting zabbix feed for {}", entity);
 
-        final DefaultHttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
+        final DefaultHttpClient httpClient = new DefaultHttpClient(new PoolingClientConnectionManager());
         httpClient.setReuseStrategy(new NoConnectionReuseStrategy());
         try {
             registerSslSocketFactoryIfRequired(apiUri, httpClient);

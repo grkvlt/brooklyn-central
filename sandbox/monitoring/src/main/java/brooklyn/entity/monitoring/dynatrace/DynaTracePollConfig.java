@@ -55,7 +55,7 @@ public class DynaTracePollConfig<T> extends PollConfig<HttpPollValue, T, DynaTra
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void setupFunctions() {
         // Extract the last measurement from the measure data, or zero if not available
-        onSuccess(Functions.compose(XmlFunctions.cast(getSensor().getType(), XmlFunctions.defaultValueSupplier(getSensor().getType()).get()),
+        onSuccess(Functions.compose(XmlFunctions.cast((Class) getSensor().getType(), XmlFunctions.defaultValueSupplier(getSensor().getType()).get()),
                 Functions.compose(XmlFunctions.xpath(getXPathExpression()),
                     Functions.compose(XmlFunctions.asDocument(),
                         Functions.compose(XmlFunctions.debug("dynatrace poll"),

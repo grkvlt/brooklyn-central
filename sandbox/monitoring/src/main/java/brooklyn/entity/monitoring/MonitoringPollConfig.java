@@ -40,7 +40,7 @@ public class MonitoringPollConfig<T> extends PollConfig<HttpPollValue, T, Monito
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void setupFunctions() {
-        onSuccess(Functions.compose(XmlFunctions.defaultValue(getSensor().getType()),
+        onSuccess(Functions.compose(XmlFunctions.defaultValue((Class) getSensor().getType()),
                     Functions.compose(XmlFunctions.debug("poll"),
                         HttpValueFunctions.stringContentsFunction())));
 

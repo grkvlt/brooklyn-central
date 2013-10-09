@@ -1,11 +1,8 @@
 package brooklyn.entity.monitoring.monit;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brooklyn.entity.Entity;
 import brooklyn.entity.basic.SoftwareProcessImpl;
 import brooklyn.event.feed.ssh.SshFeed;
 import brooklyn.event.feed.ssh.SshPollConfig;
@@ -24,19 +21,8 @@ public class MonitNodeImpl extends SoftwareProcessImpl implements MonitNode {
     
     private SshFeed feed;
     
-    public MonitNodeImpl() {
-    }
-    
-    public MonitNodeImpl(Map flags) {
-        super(flags, null);
-    }
-    
-    public MonitNodeImpl(Map flags, Entity parent) {
-        super(flags, parent);
-    }
-
     @Override
-    public Class getDriverInterface() {
+    public Class<?> getDriverInterface() {
         return MonitDriver.class;
     }
     

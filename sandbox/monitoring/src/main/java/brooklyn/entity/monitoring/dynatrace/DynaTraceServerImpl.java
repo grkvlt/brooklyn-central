@@ -29,14 +29,14 @@ import brooklyn.entity.Entity;
 import brooklyn.entity.basic.AbstractEntity;
 import brooklyn.entity.basic.DynamicGroup;
 import brooklyn.entity.group.AbstractMembershipTrackingPolicy;
-import brooklyn.entity.proxying.EntitySpecs;
+import brooklyn.entity.proxying.EntitySpec;
 import brooklyn.entity.trait.Startable;
 import brooklyn.location.Location;
 import brooklyn.location.basic.SshMachineLocation;
 import brooklyn.util.ResourceUtils;
 import brooklyn.util.collections.MutableMap;
 import brooklyn.util.exceptions.Exceptions;
-import brooklyn.util.ssh.CommonCommands;
+import brooklyn.util.ssh.BashCommands;
 import brooklyn.util.text.Strings;
 
 import com.google.common.base.Optional;
@@ -57,9 +57,6 @@ import freemarker.template.TemplateHashModel;
 
 public class DynaTraceServerImpl extends AbstractEntity implements DynaTraceServer {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 6855690024510828196L;
-
     private static final Logger log = LoggerFactory.getLogger(DynaTraceServerImpl.class);
 
     private Object[] mutex = new Object[0];
@@ -71,7 +68,7 @@ public class DynaTraceServerImpl extends AbstractEntity implements DynaTraceServ
     public void init() {
         super.init();
         Predicate<? super Entity> filter = getConfig(ENTITY_FILTER);
-        monitoredEntities = addChild(EntitySpecs.spec(DynamicGroup.class)
+        monitoredEntities = addChild(EntitySpec.create(DynamicGroup.class)
                 .configure(DynamicGroup.ENTITY_FILTER, filter)
                 .displayName("agents"));
     }
@@ -135,7 +132,7 @@ public class DynaTraceServerImpl extends AbstractEntity implements DynaTraceServ
                     int copyHostConfig = machine.copyTo(processTemplate(hostConfigTemplate, member), hostConfigFile);
 
                     // Restart web server
-                    int restartHttpd = machine.execCommands("configuring DynaTrace agent", ImmutableList.of(CommonCommands.sudo("service httpd restart")));
+                    int restartHttpd = machine.execCommands("configuring DynaTrace agent", ImmutableList.of(BashCommands.sudo("service httpd restart")));
 
                     // Check results
                     if (copyAgentConfig == 0 && copyHostConfig == 0 && restartHttpd == 0) {

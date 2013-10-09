@@ -52,9 +52,6 @@ import com.google.common.collect.Multimap;
 
 public class ZabbixServerImpl extends AbstractEntity implements ZabbixServer {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = -7585820580395149167L;
-
     private static final Logger log = LoggerFactory.getLogger(ZabbixServerImpl.class);
 
     private Object[] mutex = new Object[0];
@@ -86,8 +83,14 @@ public class ZabbixServerImpl extends AbstractEntity implements ZabbixServer {
                 .poll(new HttpPollConfig<String>(ZABBIX_TOKEN)
                         .method("POST")
                         .body(jsonData)
-                        .onFailure(Functions.constant(""))
-                        .onSuccess(HttpValueFunctions.jsonContents("result", String.class)))
+                        .onException(Functions.constant(""))
+                        .onSuccess(Functions.compose(new Function<String, String>() {
+                            @Override
+                            public String apply(@Nullable String input) {
+                                login.suspend();
+                                return input;
+                            }
+                        }, HttpValueFunctions.jsonContents("result", String.class))))
                 .build();
 
         Map<?, ?> flags = MutableMap.builder()
@@ -123,7 +126,7 @@ public class ZabbixServerImpl extends AbstractEntity implements ZabbixServer {
 
                     // Configure the Zabbix agent
                     List<String> commands = ImmutableList.<String>builder()
-                            .add("sed -i.bk 's/\\$HOSTNAME/" + machine.getName() + "/' /etc/zabbix/zabbix_agentd.conf")
+                            .add("sed -i.bk 's/\\$HOSTNAME/" + machine.getDisplayName() + "/' /etc/zabbix/zabbix_agentd.conf")
                             .add("zabbix_agentd")
                             .build();
                     int result = machine.execCommands("configuring Zabbix agent", commands);
