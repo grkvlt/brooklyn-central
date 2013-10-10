@@ -3,8 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<packaging>bundle</packaging>
     
-	<artifactId>brooklyn-sandbox-software-monitoring</artifactId>
-	<groupId>io.brooklyn.sandbox</groupId>
+	<artifactId>brooklyn-software-monitoring</artifactId>
     
 	<name>Brooklyn Monitoring Software Entities</name>
 	<description>

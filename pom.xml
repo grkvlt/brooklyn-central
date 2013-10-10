@@ -676,6 +676,7 @@
                 <module>software/osgi</module>
                 <module>software/webapp</module>
                 <module>software/messaging</module>
+                <module>software/monitoring</module>
                 <module>software/nosql</module>
                 <module>software/database</module>
                 <module>systems/whirr/base</module>
@@ -725,7 +726,6 @@
                 <module>sandbox/dropwizard</module>
                 <module>sandbox/camp</module>
                 <module>sandbox/nosql</module>
-                <module>sandbox/monitoring</module>
             </modules>
         </profile>
 
