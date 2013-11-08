@@ -10,6 +10,6 @@ import brooklyn.mementos.Memento;
  */
 public interface Rebindable {
 
-    public RebindSupport getRebindSupport();
+    public RebindSupport<?> getRebindSupport();
     
 }

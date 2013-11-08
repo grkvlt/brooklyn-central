@@ -20,13 +20,13 @@ public interface EntityMemento extends Memento, TreeNode {
 
     public boolean isTopLevelApp();
     
-    public Map<ConfigKey, Object> getConfig();
+    public Map<ConfigKey<?>, Object> getConfig();
 
-    public Map<AttributeSensor, Object> getAttributes();
+    public Map<AttributeSensor<?>, Object> getAttributes();
 
-    public Set<AttributeSensor> getEntityReferenceAttributes();
+    public Set<AttributeSensor<?>> getEntityReferenceAttributes();
     
-    public Set<ConfigKey> getEntityReferenceConfigs();
+    public Set<ConfigKey<?>> getEntityReferenceConfigs();
 
     /**
      * The ids of the member entities, if this is a Group; otherwise empty.
@@ -45,7 +45,7 @@ public interface EntityMemento extends Memento, TreeNode {
      */
     public Collection<String> getPolicies();
 
-    public Collection<? extends ConfigKey> getLocationReferenceConfigs();
+    public Collection<? extends ConfigKey<?>> getLocationReferenceConfigs();
 
-    public Collection<? extends AttributeSensor> getLocationReferenceAttributes();
+    public Collection<? extends AttributeSensor<?>> getLocationReferenceAttributes();
 }

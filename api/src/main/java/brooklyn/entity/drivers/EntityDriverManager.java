@@ -15,7 +15,7 @@ import brooklyn.location.Location;
  * This will use the registered driver types, or if one is not registered will fallback to the 
  * default strategy.
  */
-public interface EntityDriverManager extends EntityDriverFactory {
+public interface EntityDriverManager {
 
     /**
      * Builds a new {@link EntityDriver} for the given entity/location.
@@ -26,6 +26,6 @@ public interface EntityDriverManager extends EntityDriverFactory {
      * @return the creates EntityDriver.
      */
     <D extends EntityDriver> D build(DriverDependentEntity<D> entity, Location location);
-    
+
     <D extends EntityDriver> void registerDriver(Class<D> driverInterface, Class<? extends Location> locationClazz, Class<? extends D> driverClazz);
 }
