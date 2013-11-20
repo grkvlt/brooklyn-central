@@ -19,7 +19,6 @@ import brooklyn.config.ConfigUtils;
 import brooklyn.config.StringConfigMap;
 import brooklyn.entity.basic.lifecycle.NaiveScriptRunner;
 import brooklyn.entity.basic.lifecycle.ScriptHelper;
-import brooklyn.entity.drivers.downloads.DownloadResolver;
 import brooklyn.entity.drivers.downloads.DownloadResolverManager;
 import brooklyn.location.basic.SshMachineLocation;
 import brooklyn.util.collections.MutableMap;
@@ -69,20 +68,13 @@ public abstract class AbstractSoftwareProcessSshDriver extends AbstractSoftwareP
             machine.configure(getSshFlags());
     }
 
-    /**
-     * @deprecated since 0.4. Set default on ConfigKey in entity, rather than overriding it here 
-     * and not telling the entity what value was chosen!
-     */
-    @Deprecated
-    protected String getDefaultVersion() { return NO_VERSION_INFO; }
-
     /** returns location (tighten type, since we know it is an ssh machine location here) */	
     public SshMachineLocation getLocation() {
         return (SshMachineLocation) super.getLocation();
     }
 
     public String getVersion() {
-        return elvis(getEntity().getConfig(SoftwareProcess.SUGGESTED_VERSION), getDefaultVersion());
+        return elvis(getEntity().getConfig(SoftwareProcess.SUGGESTED_VERSION), NO_VERSION_INFO);
     }
 
     /**
