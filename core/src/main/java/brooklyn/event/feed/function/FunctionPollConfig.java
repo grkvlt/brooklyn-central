@@ -1,13 +1,11 @@
 package brooklyn.event.feed.function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import groovy.lang.Closure;
 
 import java.util.concurrent.Callable;
 
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.feed.PollConfig;
-import brooklyn.util.GroovyJavaMethods;
 
 public class FunctionPollConfig<S, T> extends PollConfig<S, T, FunctionPollConfig<S, T>> {
 
@@ -30,9 +28,5 @@ public class FunctionPollConfig<S, T> extends PollConfig<S, T, FunctionPollConfi
         this.callable = checkNotNull(val, "callable");
         return this;
     }
-    
-    public FunctionPollConfig<S, T> closure(Closure<?> val) {
-        this.callable = GroovyJavaMethods.callableFromClosure(checkNotNull(val, "closure"));
-        return this;
-    }
+
 }

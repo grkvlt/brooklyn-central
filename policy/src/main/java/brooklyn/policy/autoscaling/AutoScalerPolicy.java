@@ -2,7 +2,6 @@ package brooklyn.policy.autoscaling;
 
 import static brooklyn.util.GroovyJavaMethods.truth;
 import static com.google.common.base.Preconditions.checkNotNull;
-import groovy.lang.Closure;
 
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -31,7 +30,6 @@ import brooklyn.policy.basic.AbstractPolicy;
 import brooklyn.policy.loadbalancing.LoadBalancingPolicy;
 import brooklyn.util.collections.MutableMap;
 import brooklyn.util.flags.SetFromFlag;
-import brooklyn.util.flags.TypeCoercions;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
@@ -165,21 +163,6 @@ public class AutoScalerPolicy extends AbstractPolicy {
                     .putIfNotNull("maxReachedNotificationDelay", maxReachedNotificationDelay)
                     .build();
         }
-    }
-    
-    // TODO Is there a nicer pattern for registering such type-coercions? 
-    // Can't put it in the ResizeOperator interface, nor in core TypeCoercions class because interface is defined in policy/.
-    static {
-        TypeCoercions.registerAdapter(Closure.class, ResizeOperator.class, new Function<Closure,ResizeOperator>() {
-            @Override
-            public ResizeOperator apply(final Closure closure) {
-                return new ResizeOperator() {
-                    @Override public Integer resize(Entity entity, Integer input) {
-                        return (Integer) closure.call(entity, input);
-                    }
-                };
-            }
-        });
     }
     
     // Pool workrate notifications.

@@ -7,7 +7,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
-import groovy.lang.Closure;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -257,7 +256,7 @@ public class LocalEntitiesTest {
         HelloEntity dad = app.createAndManageChild(EntitySpec.create(HelloEntity.class));
         HelloEntity son = entityManager.createEntity(EntitySpec.create(HelloEntity.class)
                 .parent(dad)
-                .configure(HelloEntity.MY_NAME, transform(attributeWhenReady(dad, HelloEntity.FAVOURITE_NAME, (Closure)null), new Function<String,String>() {
+                .configure(HelloEntity.MY_NAME, transform(attributeWhenReady(dad, HelloEntity.FAVOURITE_NAME, null), new Function<String,String>() {
                     public String apply(String input) {
                         return input+input.charAt(input.length()-1)+"y";
                     }})));

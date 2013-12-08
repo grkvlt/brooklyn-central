@@ -1,7 +1,6 @@
 package brooklyn.entity.basic.lifecycle;
 
 import static java.lang.String.format;
-import groovy.lang.Closure;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,7 +20,6 @@ import brooklyn.entity.basic.BrooklynTasks;
 import brooklyn.management.ExecutionContext;
 import brooklyn.management.Task;
 import brooklyn.management.TaskQueueingContext;
-import brooklyn.util.GroovyJavaMethods;
 import brooklyn.util.collections.MutableMap;
 import brooklyn.util.exceptions.RuntimeInterruptedException;
 import brooklyn.util.mutex.WithMutexes;
@@ -61,14 +59,9 @@ public class ScriptHelper {
     }
 
     /**
-     * Takes a closure which accepts this ScriptHelper and returns true or false
+     * Takes a {@link Predicate} which accepts this ScriptHelper and returns true or false
      * as to whether the script needs to run (or can throw error if desired)
      */
-    public ScriptHelper executeIf(Closure c) {
-        Predicate<ScriptHelper> predicate = GroovyJavaMethods.predicateFromClosure(c);
-        return executeIf(predicate);
-    }
-
     public ScriptHelper executeIf(Predicate<? super ScriptHelper> c) {
         executionCheck = c;
         return this;
@@ -147,16 +140,11 @@ public class ScriptHelper {
     /**
      * Convenience for error-checking the result.
      * <p/>
-     * Takes closure which accepts bash exit code (integer),
+     * Takes {@link Predicate} which accepts bash exit code (integer),
      * and returns false if it is invalid. Default is that this resultCodeCheck
      * closure always returns true (and the exit code is made available to the
      * caller if they care)
      */
-    public ScriptHelper requireResultCode(Closure integerFilter) {
-        Predicate<Integer> objectPredicate = GroovyJavaMethods.predicateFromClosure(integerFilter);
-        return requireResultCode(objectPredicate);
-    }
-
     public ScriptHelper requireResultCode(Predicate<? super Integer> integerFilter) {
         resultCodeCheck = integerFilter;
         return this;

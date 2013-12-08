@@ -24,7 +24,7 @@ import com.google.common.util.concurrent.Callables;
 /**
  * Simple DSL to repeat a fragment of code periodically until a condition is satisfied.
  *
- * In its simplest case, it is passed two {@link groovy.lang.Closure}s / {@link Callable} - 
+ * In its simplest case, it is passed two {@link Callable}s - 
  * the first is executed, then the second. If the second closure returns false, the loop
  * is repeated; if true, it finishes. Further customization can be applied to set the period 
  * between loops and place a maximum limit on how long the loop should run for.
@@ -64,8 +64,6 @@ public class Repeater {
     // to use idiomatic java
     
     private static final Logger log = LoggerFactory.getLogger(Repeater.class);
-
-    static { TimeExtras.init(); }
 
 	@SetFromFlag
     private final String description;
@@ -310,7 +308,7 @@ public class Repeater {
                 if (log.isDebugEnabled()) {
                     String msg = String.format("%s: unsatisfied during iteration %s %s", description, iterations,
                             (iterationLimit > 0 ? "(max "+iterationLimit+" attempts)" : "") + 
-                            (endTime > 0 ? "("+Time.makeTimeString(endTime - System.currentTimeMillis())+" remaining)" : ""));
+                            (endTime > 0 ? "("+Time.makeTimeStringRounded(endTime - System.currentTimeMillis())+" remaining)" : ""));
                     if (iterations == 1) {
                         log.debug(msg);
                     } else {
@@ -333,7 +331,7 @@ public class Repeater {
             if (endTime > 0) {
 				if (System.currentTimeMillis() > endTime) {
                     if (log.isDebugEnabled()) log.debug("{}: condition not satisfied and deadline {} passed", 
-                            description, Time.makeTimeString(endTime - System.currentTimeMillis()));
+                            description, Time.makeTimeStringRounded(endTime - System.currentTimeMillis()));
 	                if (rethrowException && lastError != null) {
 	                    log.error("{}: error caught checking condition: {}", description, lastError.getMessage());
 	                    throw Exceptions.propagate(lastError);

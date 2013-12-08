@@ -15,7 +15,7 @@ import brooklyn.entity.Entity;
  * where jobs can be:
  * <ul>
  * <li>Tracked with tags/buckets
- * <li>Be {@link Runnable}s, {@link Callable}s, or {@link groovy.lang.Closure}s
+ * <li>Be {@link Runnable}s, {@link Callable}s
  * <li>Remembered after completion
  * <li>Treated as {@link Task} instances (see below)
  * <li>Given powerful synchronization capabilities
@@ -86,11 +86,7 @@ public interface ExecutionManager {
      *                      used for associating with contexts, mutex execution, and other purposes
      * <li><em>synchId</em> - A string, or {@link Collection} of strings, representing a category on which an object should own a synch lock 
      * <li><em>synchObj</em> - A string, or {@link Collection} of strings, representing a category on which an object should own a synch lock 
-     * <li><em>newTaskStartCallback</em> - A {@link groovy.lang.Closure} that will be invoked just before the task starts if it starts as a result of this call
-     * <li><em>newTaskEndCallback</em> - A {@link groovy.lang.Closure} that will be invoked when the task completes if it starts as a result of this call
      * </ul>
-     * Callbacks run in the task's thread, and if the callback is a {@link groovy.lang.Closure} it is passed the task for convenience. The closure can be any of the
-     * following types; either a {@link groovy.lang.Closure}, {@link Runnable} or {@link Callable}.
      * <p>
      * If a Map is supplied it must be modifiable (currently; may allow immutable maps in future). 
      */

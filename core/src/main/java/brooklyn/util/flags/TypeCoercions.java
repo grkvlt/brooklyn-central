@@ -1,6 +1,5 @@
 package brooklyn.util.flags;
 
-import groovy.lang.Closure;
 import groovy.time.TimeDuration;
 
 import java.lang.reflect.Constructor;
@@ -23,7 +22,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brooklyn.entity.basic.ClosureEntityFactory;
 import brooklyn.entity.basic.ConfigurableEntityFactory;
 import brooklyn.entity.basic.ConfigurableEntityFactoryFromEntityFactory;
 import brooklyn.entity.basic.EntityFactory;
@@ -33,12 +31,12 @@ import brooklyn.util.net.Networking;
 import brooklyn.util.time.Duration;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Primitives;
 import com.google.common.reflect.TypeToken;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class TypeCoercions {
 
     private static final Logger log = LoggerFactory.getLogger(TypeCoercions.class);
@@ -64,7 +62,6 @@ public class TypeCoercions {
     }
 
     /** see {@link #coerce(Object, Class)} */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T> T coerce(Object value, TypeToken<T> targetTypeToken) {
         if (value==null) return null;
         // does not actually cast generified contents; that is left to the caller
@@ -167,7 +164,6 @@ public class TypeCoercions {
      * For example, when using generics then type-erasure means it doesn't actually cast,
      * which causes tests to fail with 0 != 0.0
      */
-    @SuppressWarnings("unchecked")
     public static <T> T castPrimitive(Object value, Class<T> targetType) {
         if (value==null) return null;
         assert isPrimitiveOrBoxer(targetType) : "targetType="+targetType;
@@ -239,12 +235,10 @@ public class TypeCoercions {
         }
     }
     
-    @SuppressWarnings("unchecked")
     public static boolean isPrimitiveOrBoxer(Class<?> type) {
         return Primitives.allPrimitiveTypes().contains(type) || Primitives.allWrapperTypes().contains(type);
     }
     
-    @SuppressWarnings("unchecked")
     public static <T> T stringToPrimitive(String value, Class<T> targetType) {
         assert Primitives.allPrimitiveTypes().contains(targetType) || Primitives.allWrapperTypes().contains(targetType) : "targetType="+targetType;
 
@@ -378,43 +372,11 @@ public class TypeCoercions {
                 }
             }
         });
-        registerAdapter(Closure.class, ConfigurableEntityFactory.class, new Function<Closure,ConfigurableEntityFactory>() {
-            @Override
-            public ConfigurableEntityFactory apply(Closure input) {
-                return new ClosureEntityFactory(input);
-            }
-        });
         registerAdapter(EntityFactory.class, ConfigurableEntityFactory.class, new Function<EntityFactory,ConfigurableEntityFactory>() {
             @Override
             public ConfigurableEntityFactory apply(EntityFactory input) {
                 if (input instanceof ConfigurableEntityFactory) return (ConfigurableEntityFactory)input;
                 return new ConfigurableEntityFactoryFromEntityFactory(input);
-            }
-        });
-        registerAdapter(Closure.class, EntityFactory.class, new Function<Closure,EntityFactory>() {
-            @Override
-            public EntityFactory apply(Closure input) {
-                return new ClosureEntityFactory(input);
-            }
-        });
-        registerAdapter(Closure.class, Predicate.class, new Function<Closure,Predicate>() {
-            @Override
-            public Predicate<?> apply(final Closure closure) {
-                return new Predicate<Object>() {
-                    @Override public boolean apply(Object input) {
-                        return (Boolean) closure.call(input);
-                    }
-                };
-            }
-        });
-        registerAdapter(Closure.class, Function.class, new Function<Closure,Function>() {
-            @Override
-            public Function apply(final Closure closure) {
-                return new Function() {
-                    @Override public Object apply(Object input) {
-                        return closure.call(input);
-                    }
-                };
             }
         });
         registerAdapter(Object.class, Duration.class, new Function<Object,Duration>() {

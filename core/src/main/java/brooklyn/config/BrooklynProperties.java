@@ -2,8 +2,6 @@ package brooklyn.config;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import groovy.lang.Closure;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -131,12 +129,10 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
     protected BrooklynProperties() {
     }
 
-    @SuppressWarnings("unchecked")
     public BrooklynProperties addEnvironmentVars() {
         putAll(System.getenv());
         return this;
     }
-    @SuppressWarnings("unchecked")
     public BrooklynProperties addSystemProperties() {
         putAll(System.getProperties());
         return this;
@@ -206,7 +202,6 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
     /**
     * adds the indicated properties
     */
-    @SuppressWarnings("unchecked")
     public BrooklynProperties addFromMap(Map properties) {
         putAll(properties);
         return this;
@@ -252,8 +247,6 @@ public class BrooklynProperties extends LinkedHashMap implements StringConfigMap
         }
         if (flags.get("failIfNone")!=null && !Boolean.FALSE.equals(flags.get("failIfNone"))) {
             Object f = flags.get("failIfNone");
-            if (f instanceof Closure)
-                ((Closure)f).call((Object[])keys);
             if (Boolean.TRUE.equals(f))
                 throw new NoSuchElementException("Brooklyn unable to find mandatory property "+keys[0]+
                     (keys.length>1 ? " (or "+(keys.length-1)+" other possible names, full list is "+Arrays.asList(keys)+")" : "") );

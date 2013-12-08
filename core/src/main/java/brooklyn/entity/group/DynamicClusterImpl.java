@@ -2,7 +2,6 @@ package brooklyn.entity.group;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import groovy.lang.Closure;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +30,6 @@ import brooklyn.location.Location;
 import brooklyn.location.cloud.AvailabilityZoneExtension;
 import brooklyn.management.Task;
 import brooklyn.policy.Policy;
-import brooklyn.util.GroovyJavaMethods;
 import brooklyn.util.collections.MutableList;
 import brooklyn.util.collections.MutableMap;
 import brooklyn.util.exceptions.Exceptions;
@@ -89,12 +87,6 @@ public class DynamicClusterImpl extends AbstractGroupImpl implements DynamicClus
     @Override
     public void setRemovalStrategy(Function<Collection<Entity>, Entity> val) {
         setConfig(REMOVAL_STRATEGY, checkNotNull(val, "removalStrategy"));
-    }
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Override
-    public void setRemovalStrategy(Closure val) {
-        setRemovalStrategy(GroovyJavaMethods.functionFromClosure(val));
     }
 
     protected Function<Collection<Entity>, Entity> getRemovalStrategy() {

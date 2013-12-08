@@ -1,6 +1,5 @@
 package brooklyn.config.render;
 
-import groovy.lang.Closure;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -10,7 +9,6 @@ import java.util.Set;
 import brooklyn.entity.Entity;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.Sensor;
-import brooklyn.util.GroovyJavaMethods;
 
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
@@ -49,11 +47,6 @@ public class RendererHints {
 
         public NamedActionWithUrl(String actionName) {
             this(actionName, (Function<Object,String>)null);
-        }
-
-        public NamedActionWithUrl(String actionName, Closure<String> postProcessing) {
-            this.actionName = actionName;
-            this.postProcessing = (postProcessing == null) ? null : GroovyJavaMethods.functionFromClosure(postProcessing);
         }
 
         public NamedActionWithUrl(String actionName, Function<Object,String> postProcessing) {

@@ -10,9 +10,6 @@ import com.google.common.base.Supplier;
  * Subsequent calls to getConfig will result in further calls to deferredProvider.get(), 
  * rather than reusing the result. If you want to reuse the result, consider instead 
  * using a Future.
- * 
- * Note that this functionality replaces the ues of Closure in brooklyn 0.4.0, which 
- * served the same purpose.
  */
 public interface DeferredSupplier<T> extends Supplier<T> {
     @Override

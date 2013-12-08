@@ -1,7 +1,5 @@
 package brooklyn.util.task;
 
-import groovy.lang.Closure;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +19,7 @@ import brooklyn.util.collections.MutableMap;
 
 /**
  * A {@link Task} that is comprised of other units of work: possibly a heterogeneous mix of {@link Task},
- * {@link Runnable}, {@link Callable} and {@link Closure} instances.
+ * {@link Runnable} and {@link Callable} instances.
  * 
  * This class holds the collection of child tasks, but subclasses have the responsibility of executing them in a
  * sensible manner by implementing the abstract {@link #runJobs} method.
@@ -66,7 +64,6 @@ public abstract class CompoundTask<T> extends BasicTask<List<T>> implements HasT
         this.children = new ArrayList<Task<? extends T>>(jobs.size());
         for (Object job : jobs) {
             if (job instanceof TaskAdaptable) { children.add(((TaskAdaptable)job).asTask()); }
-            else if (job instanceof Closure)  { children.add(new BasicTask<T>((Closure) job)); }
             else if (job instanceof Callable) { children.add(new BasicTask<T>((Callable) job)); }
             else if (job instanceof Runnable) { children.add(new BasicTask<T>((Runnable) job)); }
             

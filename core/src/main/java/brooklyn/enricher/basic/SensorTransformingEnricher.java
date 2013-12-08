@@ -1,16 +1,13 @@
 package brooklyn.enricher.basic;
 
-import groovy.lang.Closure;
 import brooklyn.entity.Entity;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.Sensor;
 import brooklyn.event.SensorEvent;
-import brooklyn.policy.Enricher;
-import brooklyn.util.GroovyJavaMethods;
 
 import com.google.common.base.Function;
 
-public class SensorTransformingEnricher<T,U> extends AbstractTypeTransformingEnricher {
+public class SensorTransformingEnricher<T,U> extends AbstractTypeTransformingEnricher<T,U> {
 
     private Function<? super T, ? extends U> transformation;
 
@@ -19,26 +16,16 @@ public class SensorTransformingEnricher<T,U> extends AbstractTypeTransformingEnr
         this.transformation = transformation;
     }
 
-    public SensorTransformingEnricher(Entity producer, Sensor<T> source, Sensor<U> target, Closure transformation) {
-        super(producer, source, target);
-        this.transformation = GroovyJavaMethods.functionFromClosure(transformation);
-    }
-
     public SensorTransformingEnricher(Sensor<T> source, Sensor<U> target, Function<T,U> transformation) {
         super(null, source, target);
         this.transformation = transformation;
     }
 
-    public SensorTransformingEnricher(Sensor<T> source, Sensor<U> target, Closure transformation) {
-        super(null, source, target);
-        this.transformation = GroovyJavaMethods.functionFromClosure(transformation);
-    }
-
     @Override
-    public void onEvent(SensorEvent event) {
+    public void onEvent(SensorEvent<T> event) {
         if (accept((T)event.getValue())) {
             if (target instanceof AttributeSensor)
-                entity.setAttribute((AttributeSensor)target, compute((T)event.getValue()));
+                entity.setAttribute((AttributeSensor<U>)target, compute((T)event.getValue()));
             else 
                 entity.emit(target, compute((T)event.getValue()));
         }

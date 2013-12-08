@@ -1,7 +1,5 @@
 package brooklyn.util.task;
 
-import groovy.lang.Closure;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +37,7 @@ public class DynamicSequentialTask<T> extends BasicTask<T> implements HasTaskChi
     /**
      * Constructs a new compound task containing the specified units of work.
      * 
-     * @param jobs  A potentially heterogeneous mixture of {@link Runnable}, {@link Callable}, {@link Closure} and {@link Task} can be provided. 
+     * @param jobs  A potentially heterogeneous mixture of {@link Runnable}, {@link Callable} and {@link Task} can be provided. 
      * @throws IllegalArgumentException if any of the passed child jobs is not one of the above types 
      */
     public DynamicSequentialTask() {

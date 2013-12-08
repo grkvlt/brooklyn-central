@@ -1,7 +1,5 @@
 package brooklyn.test;
 
-import groovy.lang.Closure;
-
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -279,14 +277,6 @@ public class Asserts {
     
     public static void assertFails(Callable<?> c) {
         assertFailsWith(c, Predicates.alwaysTrue());
-    }
-    
-    public static void assertFailsWith(Callable<?> c, final Closure<Boolean> exceptionChecker) {
-        assertFailsWith(c, new Predicate<Throwable>() {
-            public boolean apply(Throwable input) {
-                return exceptionChecker.call(input);
-            }
-        });
     }
     
     public static void assertFailsWith(Runnable c, final Class<? extends Throwable> validException, final Class<? extends Throwable> ...otherValidExceptions) {

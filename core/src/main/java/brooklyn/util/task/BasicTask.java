@@ -3,7 +3,6 @@ package brooklyn.util.task;
 import static brooklyn.util.JavaGroovyEquivalents.asString;
 import static brooklyn.util.JavaGroovyEquivalents.elvisString;
 import static brooklyn.util.JavaGroovyEquivalents.join;
-import groovy.lang.Closure;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -19,6 +18,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -26,10 +26,10 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brooklyn.management.ExecutionManager;
 import brooklyn.management.HasTaskChildren;
 import brooklyn.management.Task;
 import brooklyn.util.GroovyJavaMethods;
+import brooklyn.util.JavaGroovyEquivalents;
 import brooklyn.util.exceptions.Exceptions;
 import brooklyn.util.text.Identifiers;
 import brooklyn.util.time.Duration;
@@ -45,7 +45,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * The basic concrete implementation of a {@link Task} to be executed.
  *
- * A {@link Task} is a wrapper for an executable unit, such as a {@link Closure} or a {@link Runnable} or
+ * A {@link Task} is a wrapper for an executable unit, such as a {@link Runnable} or
  * {@link Callable} and will run in its own {@link Thread}.
  * <p>
  * The task can be given an optional displayName and description in its constructor (as named
@@ -71,12 +71,8 @@ public class BasicTask<T> implements TaskInternal<T> {
 
     protected final ExecutionList listeners = new ExecutionList();
     
-    /**
-     * Constructor needed to prevent confusion in groovy stubs when looking for default constructor,
-     *
-     * The generics on {@link Closure} break it if that is first constructor.
-     */
     protected BasicTask() { this(Collections.emptyMap()); }
+
     protected BasicTask(Map<?,?> flags) { this(flags, (Callable<T>) null); }
 
     public BasicTask(Callable<T> job) { this(Collections.emptyMap(), job); }
@@ -100,10 +96,8 @@ public class BasicTask<T> implements TaskInternal<T> {
         displayName = d;
     }
 
-    public BasicTask(Runnable job) { this(GroovyJavaMethods.<T>callableFromRunnable(job)); }
-    public BasicTask(Map<?,?> flags, Runnable job) { this(flags, GroovyJavaMethods.<T>callableFromRunnable(job)); }
-    public BasicTask(Closure<T> job) { this(GroovyJavaMethods.callableFromClosure(job)); }
-    public BasicTask(Map<?,?> flags, Closure<T> job) { this(flags, GroovyJavaMethods.callableFromClosure(job)); }
+    public BasicTask(Runnable job) { this(JavaGroovyEquivalents.<T>toCallable(job)); }
+    public BasicTask(Map<?,?> flags, Runnable job) { this(flags, JavaGroovyEquivalents.<T>toCallable(job)); }
 
     @Override
     public String getId() {

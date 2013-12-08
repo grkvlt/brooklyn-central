@@ -1,7 +1,6 @@
 package brooklyn.location.basic;
 
 import static brooklyn.util.GroovyJavaMethods.truth;
-import groovy.lang.Closure;
 
 import java.io.Closeable;
 import java.io.File;
@@ -63,7 +62,6 @@ import brooklyn.util.stream.ReaderInputStream;
 import brooklyn.util.stream.StreamGobbler;
 import brooklyn.util.task.Tasks;
 import brooklyn.util.task.system.internal.ExecWithLoggingHelpers;
-import brooklyn.util.task.system.internal.ExecWithLoggingHelpers.ExecRunner;
 import brooklyn.util.text.Strings;
 
 import com.google.common.base.Function;
@@ -483,13 +481,6 @@ public class SshMachineLocation extends AbstractLocation implements MachineLocat
                 return ""+SshMachineLocation.this;
             }
         }.logger(logSsh);
-    }
-
-    protected int execWithLogging(Map<String,?> props, String summaryForLogging, List<String> commands, Map env, final Closure<Integer> execCommand) {
-        return newExecWithLoggingHelpers().execWithLogging(props, summaryForLogging, commands, env, new ExecRunner() {
-                @Override public int exec(ShellTool ssh, Map<String, ?> flags, List<String> cmds, Map<String, ?> env) {
-                    return execCommand.call(ssh, flags, cmds, env);
-                }});
     }
     
     public int copyTo(File src, File destination) {

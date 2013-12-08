@@ -1,6 +1,5 @@
 package brooklyn.util;
 
-import groovy.lang.Closure;
 import groovy.lang.GString;
 import groovy.time.TimeDuration;
 
@@ -145,14 +144,6 @@ public class JavaGroovyEquivalents {
         } else {
             throw new IllegalArgumentException("Cannot convert "+duration+" of type "+duration.getClass().getName()+" to a TimeDuration");
         }
-    }
-
-    public static <T> Predicate<T> toPredicate(final Closure<Boolean> c) {
-        return new Predicate<T>() {
-            @Override public boolean apply(T input) {
-                return c.call(input);
-            }
-        };
     }
     
     @SuppressWarnings("unchecked")

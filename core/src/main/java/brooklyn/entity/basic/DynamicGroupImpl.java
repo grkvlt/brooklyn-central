@@ -1,7 +1,5 @@
 package brooklyn.entity.basic;
 
-import groovy.lang.Closure;
-
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
@@ -14,7 +12,6 @@ import brooklyn.event.SensorEvent;
 import brooklyn.event.SensorEventListener;
 import brooklyn.management.internal.CollectionChangeListener;
 import brooklyn.management.internal.ManagementContextInternal;
-import brooklyn.util.GroovyJavaMethods;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -39,10 +36,6 @@ public class DynamicGroupImpl extends AbstractGroupImpl implements DynamicGroup 
         // TODO Sould this be "evenIfOwned"?
         setConfigEvenIfOwned(ENTITY_FILTER, filter);
         rescanEntities();
-    }
-    
-    public void setEntityFilter(Closure<Boolean> filter) {
-        setEntityFilter(filter != null ? GroovyJavaMethods.<Entity>predicateFromClosure(filter) : null);
     }
     
     private boolean isRunning() {

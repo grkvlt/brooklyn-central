@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.groovy.runtime.MethodClosure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,10 +153,6 @@ public class MethodEffector<T> extends AbstractEffector<T> {
 
     public MethodEffector(Method method) {
         this(new AnnotationsOnMethod(method.getDeclaringClass(), method), null);
-    }
-
-    public MethodEffector(MethodClosure mc) {
-        this(new AnnotationsOnMethod((Class)mc.getDelegate(), mc.getMethod()), null);
     }
 
     protected MethodEffector(AnnotationsOnMethod anns, String description) {

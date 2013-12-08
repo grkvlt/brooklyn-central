@@ -1,7 +1,5 @@
 package brooklyn.event.basic;
 
-import groovy.lang.Closure;
-
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -73,11 +71,6 @@ public class DependentConfiguration {
         return attributeWhenReady(source, sensor, GroovyJavaMethods.truthPredicate());
     }
     
-    public static <T> Task<T> attributeWhenReady(Entity source, AttributeSensor<T> sensor, Closure ready) {
-        Predicate<T> readyPredicate = (ready != null) ? GroovyJavaMethods.predicateFromClosure(ready) : GroovyJavaMethods.truthPredicate();
-        return attributeWhenReady(source, sensor, readyPredicate);
-    }
-    
     /** returns a {@link Task} which blocks until the given sensor on the given source entity gives a value that satisfies ready, then returns that value;
      * particular useful in Entity configuration where config will block until Tasks have a value
      */
@@ -93,30 +86,12 @@ public class DependentConfiguration {
                 });
     }
 
-    public static <T,V> Task<V> attributePostProcessedWhenReady(Entity source, AttributeSensor<T> sensor, Closure<Boolean> ready, Closure<V> postProcess) {
-        Predicate<? super T> readyPredicate = (ready != null) ? GroovyJavaMethods.predicateFromClosure(ready) : GroovyJavaMethods.truthPredicate();
-        Function<? super T, V> postProcessFunction = GroovyJavaMethods.<T,V>functionFromClosure(postProcess);
-        return attributePostProcessedWhenReady(source, sensor, readyPredicate, postProcessFunction);
-    }
-
-    public static <T,V> Task<V> attributePostProcessedWhenReady(Entity source, AttributeSensor<T> sensor, Closure<V> postProcess) {
-        return attributePostProcessedWhenReady(source, sensor, GroovyJavaMethods.truthPredicate(), GroovyJavaMethods.<T,V>functionFromClosure(postProcess));
-    }
-
     public static <T> Task<T> valueWhenAttributeReady(Entity source, AttributeSensor<T> sensor, T value) {
         return DependentConfiguration.<T,T>attributePostProcessedWhenReady(source, sensor, GroovyJavaMethods.truthPredicate(), Functions.constant(value));
     }
 
     public static <T,V> Task<V> valueWhenAttributeReady(Entity source, AttributeSensor<T> sensor, Function<? super T,V> valueProvider) {
         return attributePostProcessedWhenReady(source, sensor, GroovyJavaMethods.truthPredicate(), valueProvider);
-    }
-    
-    public static <T,V> Task<V> valueWhenAttributeReady(Entity source, AttributeSensor<T> sensor, Closure<V> valueProvider) {
-        return attributePostProcessedWhenReady(source, sensor, GroovyJavaMethods.truthPredicate(), valueProvider);
-    }
-    
-    public static <T,V> Task<V> attributePostProcessedWhenReady(final Entity source, final AttributeSensor<T> sensor, final Predicate<? super T> ready, final Closure<V> postProcess) {
-        return attributePostProcessedWhenReady(source, sensor, ready, GroovyJavaMethods.<T,V>functionFromClosure(postProcess));
     }
 
     public static <T,V> Task<V> attributePostProcessedWhenReady(final Entity source, final AttributeSensor<T> sensor, final Predicate<? super T> ready, final Function<? super T,V> postProcess) {
@@ -189,12 +164,6 @@ public class DependentConfiguration {
     public static <U,T> Task<T> transform(final Task<U> task, final Function<U,T> transformer) {
         return transform(MutableMap.of("displayName", "transforming "+task), task, transformer);
     }
- 
-    /** @see #transform(Task, Function) */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static <U,T> Task<T> transform(Task<U> task, Closure transformer) {
-        return transform(task, GroovyJavaMethods.functionFromClosure(transformer));
-    }
     
     /** @see #transform(Task, Function) */
     public static <U,T> Task<T> transform(final Map flags, final TaskAdaptable<U> task, final Function<U,T> transformer) {
@@ -212,16 +181,6 @@ public class DependentConfiguration {
      * @see #transform(Task, Function) but note argument order is reversed (counterintuitive) to allow for varargs */
     public static <U,T> Task<T> transformMultiple(Function<List<U>,T> transformer, TaskAdaptable<U> ...tasks) {
         return transformMultiple(MutableMap.of("displayName", "transforming multiple"), transformer, tasks);
-    }
-
-    /** @see #transformMultiple(Function, Task...) */
-    public static <U,T> Task<T> transformMultiple(Closure transformer, TaskAdaptable<U> ...tasks) {
-        return transformMultiple(GroovyJavaMethods.functionFromClosure(transformer), tasks);
-    }
-
-    /** @see #transformMultiple(Function, Task...) */
-    public static <U,T> Task<T> transformMultiple(Map flags, Closure transformer, TaskAdaptable<U> ...tasks) {
-        return transformMultiple(flags, GroovyJavaMethods.functionFromClosure(transformer), tasks);
     }
     
     /** @see #transformMultiple(Function, Task...) */
@@ -285,11 +244,6 @@ public class DependentConfiguration {
      * optionally when the values satisfy a given readiness predicate (defaulting to groovy truth if not supplied) */
     public static <T> Task<List<T>> listAttributesWhenReady(AttributeSensor<T> sensor, Iterable<Entity> entities) {
         return listAttributesWhenReady(sensor, entities, GroovyJavaMethods.truthPredicate());
-    }
-    
-    public static <T> Task<List<T>> listAttributesWhenReady(AttributeSensor<T> sensor, Iterable<Entity> entities, Closure readiness) {
-        Predicate<T> readinessPredicate = (readiness != null) ? GroovyJavaMethods.predicateFromClosure(readiness) : GroovyJavaMethods.truthPredicate();
-        return listAttributesWhenReady(sensor, entities, readiness);
     }
     
     /** returns a task for parallel execution returning a list of values of the given sensor list on the given entity, 

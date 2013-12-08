@@ -1,7 +1,5 @@
 package brooklyn.enricher;
 
-import groovy.lang.Closure;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +8,6 @@ import brooklyn.entity.Entity;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.Sensor;
 import brooklyn.event.SensorEvent;
-import brooklyn.util.GroovyJavaMethods;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -39,9 +36,6 @@ public class TimeWeightedDeltaEnricher<T extends Number> extends AbstractTypeTra
 
     public TimeWeightedDeltaEnricher(Entity producer, Sensor<T> source, Sensor<Double> target, int unitMillis) {
         this(producer, source, target, unitMillis, Functions.<Double>identity());
-    }
-    public TimeWeightedDeltaEnricher(Entity producer, Sensor<T> source, Sensor<Double> target, int unitMillis, Closure<Double> postProcessor) {
-        this(producer, source, target, unitMillis, GroovyJavaMethods.<Double,Double>functionFromClosure(postProcessor));
     }
     
     public TimeWeightedDeltaEnricher(Entity producer, Sensor<T> source, Sensor<Double> target, int unitMillis, Function<Double,Double> postProcessor) {

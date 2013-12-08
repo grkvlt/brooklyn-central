@@ -1,7 +1,5 @@
 package brooklyn.util.task;
 
-import groovy.lang.Closure;
-
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
@@ -13,7 +11,6 @@ public class ExecutionUtils {
      * throws exception if the callable is a non-null object which cannot be invoked (not a callable or runnable)
      */
     public static Object invoke(Object callable, Object ...args) {
-        if (callable instanceof Closure) return ((Closure<?>)callable).call(args);
         if (callable instanceof Callable) {
             try {
                 return ((Callable<?>)callable).call();

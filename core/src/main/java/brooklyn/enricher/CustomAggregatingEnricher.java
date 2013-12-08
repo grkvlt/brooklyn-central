@@ -1,7 +1,5 @@
 package brooklyn.enricher;
 
-import groovy.lang.Closure;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -12,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import brooklyn.enricher.basic.AbstractAggregatingEnricher;
 import brooklyn.event.AttributeSensor;
 import brooklyn.event.SensorEventListener;
-import brooklyn.util.GroovyJavaMethods;
 import brooklyn.util.flags.TypeCoercions;
 
 import com.google.common.base.Function;
@@ -35,7 +32,7 @@ public class CustomAggregatingEnricher<S,T> extends AbstractAggregatingEnricher<
      * - producers: a collection of entities to be aggregated
      * - allMembers: indicates that should track members of the entity that the aggregator is associated with,
      *               to aggregate across all those members.
-     * - filter:     a Predicate or Closure, indicating which entities to include
+     * - filter:     a Predicate indicating which entities to include
      * 
      * @param flags
      * @param source
@@ -65,33 +62,6 @@ public class CustomAggregatingEnricher<S,T> extends AbstractAggregatingEnricher<
         this(Collections.<String,Object>emptyMap(), source, target, aggregator, null);
     }
 
-    /**
-     * @param flags
-     * @param source
-     * @param target
-     * @param aggregator   Should take a collection of values and return a single, aggregate value
-     * @param defaultValueForUnreportedSensors
-     * 
-     * @see #CustomAggregatingEnricher(Map, AttributeSensor, AttributeSensor, Function, Object)
-     */
-    @SuppressWarnings("unchecked")
-    public CustomAggregatingEnricher(Map<String,?> flags, AttributeSensor<? extends S> source, AttributeSensor<T> target,
-            Closure<?> aggregator, S defaultValueForUnreportedSensors) {
-        this(flags, source, target, GroovyJavaMethods.<Collection<S>, T>functionFromClosure((Closure<T>)aggregator), defaultValueForUnreportedSensors);
-    }
-
-    public CustomAggregatingEnricher(Map<String,?> flags, AttributeSensor<? extends S> source, AttributeSensor<T> target, Closure<?> aggregator) {
-        this(flags, source, target, aggregator, null);
-    }
-
-    public CustomAggregatingEnricher(AttributeSensor<S> source, AttributeSensor<T> target, Closure<?> aggregator, S defaultValueForUnreportedSensors) {
-        this(Collections.<String,Object>emptyMap(), source, target, aggregator, defaultValueForUnreportedSensors);
-    }
-
-    public CustomAggregatingEnricher(AttributeSensor<S> source, AttributeSensor<T> target, Closure<?> aggregator) {
-        this(Collections.<String,Object>emptyMap(), source, target, aggregator, null);
-    }
-
     @Override
     public void onUpdated() {
         try {
@@ -108,25 +78,6 @@ public class CustomAggregatingEnricher<S,T> extends AbstractAggregatingEnricher<
         }
     }
 
-    // FIXME Clean up explosion of overloading, caused by groovy-equivalent default vals...
-    public static <S,T> CustomAggregatingEnricher<S,T> newEnricher(
-            Map<String,?> flags, AttributeSensor<S> source, AttributeSensor<T> target, Closure<?> aggregator, S defaultVal) {
-        return new CustomAggregatingEnricher<S,T>(flags, source, target, aggregator, defaultVal);
-    }
-    public static <S,T> CustomAggregatingEnricher<S,T> newEnricher(
-            Map<String,?> flags, AttributeSensor<S> source, AttributeSensor<T> target, Closure<?> aggregator) {
-        return newEnricher(flags, source, target, aggregator, null);
-    }
-    public static <S,T> CustomAggregatingEnricher<S,T> newEnricher(
-            AttributeSensor<S> source, AttributeSensor<T> target, Closure<?> aggregator, S defaultVal) {
-        return newEnricher(Collections.<String,Object>emptyMap(), source, target, aggregator, defaultVal);
-    }
-    public static <S,T> CustomAggregatingEnricher<S,T> newEnricher(
-            AttributeSensor<S> source, AttributeSensor<T> target, Closure<?> aggregator) {
-        return newEnricher(Collections.<String,Object>emptyMap(), source, target, aggregator, null);
-    }
-    
-    
     // FIXME Clean up explosion of overloading, caused by groovy-equivalent default vals...
     public static <S,T> CustomAggregatingEnricher<S,T> newEnricher(
             Map<String,?> flags, AttributeSensor<S> source, AttributeSensor<T> target, Function<Collection<S>, T> aggregator, S defaultVal) {
