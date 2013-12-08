@@ -12,14 +12,13 @@ import brooklyn.util.time.Duration;
 import com.google.common.base.Stopwatch
 
 public class RepeaterTest {
-    static { TimeExtras.init() }
 
     @Test
     public void sanityTest() {
         new Repeater("Sanity test")
             .repeat()
             .until { true }
-            .every(10 * MILLISECONDS);
+            .every(10);
     }
 
     @Test
@@ -27,7 +26,7 @@ public class RepeaterTest {
         new Repeater()
             .repeat()
             .until { true }
-            .every(10 * MILLISECONDS);
+            .every(10);
     }
 
     @Test
@@ -35,7 +34,7 @@ public class RepeaterTest {
         Repeater.create("Sanity test")
             .repeat()
             .until { true }
-            .every(10 * MILLISECONDS);
+            .every(10);
     }
 
     @Test
@@ -76,7 +75,7 @@ public class RepeaterTest {
 
     @Test(expectedExceptions = [ IllegalArgumentException.class ])
     public void everyFailsIfPeriodIsNegative() {
-        new Repeater("everyFailsIfPeriodIsNegative").every(-1 * MILLISECONDS);
+        new Repeater("everyFailsIfPeriodIsNegative").every(-1);
         fail "Expected exception was not thrown"
     }
 
@@ -88,7 +87,7 @@ public class RepeaterTest {
 
     @Test
     public void everySucceedsIfPeriodIsPositiveAndUnitsIsNonNull() {
-        new Repeater("repeatSucceedsIfClosureIsNonNull").every(10 * MILLISECONDS);
+        new Repeater("repeatSucceedsIfClosureIsNonNull").every(10);
     }
 
     @Test(expectedExceptions = [ IllegalArgumentException.class ])
@@ -133,7 +132,7 @@ public class RepeaterTest {
     public void runReturnsTrueIfExitConditionIsTrue() {
         assertTrue new Repeater("runReturnsTrueIfExitConditionIsTrue")
             .repeat()
-            .every(1 * MILLISECONDS)
+            .every(1)
             .until { true }
             .run();
     }
@@ -143,7 +142,7 @@ public class RepeaterTest {
         int iterations = 0;
         assertFalse new Repeater("runRespectsMaximumIterationLimitAndReturnsFalseIfReached")
             .repeat { iterations++ }
-            .every(1 * MILLISECONDS)
+            .every(1)
             .until { false }
             .limitIterationsTo(5)
             .run();
@@ -166,7 +165,7 @@ public class RepeaterTest {
         final long LIMIT = 2000l;
         Repeater repeater = new Repeater("runRespectsTimeLimitAndReturnsFalseIfReached")
             .repeat()
-            .every(100 * MILLISECONDS)
+            .every(100)
             .until { false }
             .limitTimeTo(LIMIT, TimeUnit.MILLISECONDS);
 
@@ -185,7 +184,7 @@ public class RepeaterTest {
     public void runFailsIfUntilWasNotSet() {
         new Repeater("runFailsIfUntilWasNotSet")
             .repeat()
-            .every(10 * MILLISECONDS)
+            .every(10)
             .run();
         fail "Expected exception was not thrown"
     }
@@ -203,7 +202,7 @@ public class RepeaterTest {
     public void testRethrowsException() {
         boolean result = new Repeater("throwRuntimeException")
             .repeat()
-            .every(10 * MILLISECONDS)
+            .every(10)
             .until { throw new UnsupportedOperationException("fail") }
             .rethrowException()
             .limitIterationsTo(2)
@@ -214,23 +213,23 @@ public class RepeaterTest {
     @Test
     public void testNoRethrowsException() {
         try {
-	        boolean result = new Repeater("throwRuntimeException")
-	            .repeat()
-	            .every(10 * MILLISECONDS)
-	            .until { throw new UnsupportedOperationException("fail") }
-	            .limitIterationsTo(2)
-	            .run();
-	        assertFalse result
+            boolean result = new Repeater("throwRuntimeException")
+                .repeat()
+                .every(10)
+                .until { throw new UnsupportedOperationException("fail") }
+                .limitIterationsTo(2)
+                .run();
+            assertFalse result
         } catch (RuntimeException re) {
             fail "Exception should not have been thrown: " + re.getMessage()
         }
     }
-	
-	public void testFlags() {
-		int count=0;
-		new Repeater(period: 5*MILLISECONDS, timeout: 100*MILLISECONDS).repeat({ count++ }).until({ count>100}).run();
-		assertTrue count>10
-		assertTrue count<30
-	}
-	
+    
+    public void testFlags() {
+        int count=0;
+        new Repeater(period: 5, timeout: 100).repeat({ count++ }).until({ count>100}).run();
+        assertTrue count>10
+        assertTrue count<30
+    }
+    
 }

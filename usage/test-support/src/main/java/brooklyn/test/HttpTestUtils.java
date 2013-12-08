@@ -3,7 +3,6 @@ package brooklyn.test;
 import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.base.Throwables.getCausalChain;
 import static com.google.common.collect.Iterables.find;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
@@ -209,7 +208,7 @@ public class HttpTestUtils {
     }
 
     public static void assertContentEventuallyContainsText(Map flags, final String url, final String phrase, final String ...additionalPhrases) {
-        TestUtils.executeUntilSucceeds(new Runnable() {
+        TestUtils.executeUntilSucceeds(flags, new Runnable() {
             public void run() {
                 assertContentContainsText(url, phrase, additionalPhrases);
             }

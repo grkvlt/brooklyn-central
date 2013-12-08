@@ -1,22 +1,28 @@
-package brooklyn.entity.basic
+package brooklyn.entity.basic;
 
-import static brooklyn.test.TestUtils.*
-import static org.testng.Assert.*
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
-import java.util.concurrent.CopyOnWriteArrayList
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.testng.annotations.AfterMethod
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
-import brooklyn.entity.proxying.EntitySpec
-import brooklyn.event.SensorEvent
-import brooklyn.event.SensorEventListener
-import brooklyn.event.basic.BasicSensorEvent
-import brooklyn.location.basic.SimulatedLocation
-import brooklyn.management.SubscriptionHandle
-import brooklyn.test.entity.TestApplication
-import brooklyn.test.entity.TestEntity
+import brooklyn.entity.proxying.EntitySpec;
+import brooklyn.event.SensorEvent;
+import brooklyn.event.SensorEventListener;
+import brooklyn.event.basic.BasicSensorEvent;
+import brooklyn.location.basic.SimulatedLocation;
+import brooklyn.management.SubscriptionHandle;
+import brooklyn.test.Asserts;
+import brooklyn.test.entity.TestApplication;
+import brooklyn.test.entity.TestEntity;
+import brooklyn.util.collections.MutableList;
+import brooklyn.util.collections.MutableMap;
+
+import com.google.common.collect.ImmutableList;
 
 public class EntitySubscriptionTest {
 
@@ -51,7 +57,7 @@ public class EntitySubscriptionTest {
         
         listener = new RecordingSensorEventListener();
         
-        app.start([loc])
+        app.start(MutableList.of(loc));
     }
     
     @AfterMethod(alwaysRun=true)
@@ -70,13 +76,14 @@ public class EntitySubscriptionTest {
         observedEntity.setAttribute(TestEntity.NAME, "myname");
         observedEntity.emit(TestEntity.MY_NOTIF, 456);
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events, [
-                new BasicSensorEvent(TestEntity.SEQUENCE, observedEntity, 123),
-                new BasicSensorEvent(TestEntity.NAME, observedEntity, "myname"),
-                new BasicSensorEvent(TestEntity.MY_NOTIF, observedEntity, 456)
-            ])
-        }
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events, ImmutableList.of(
+                    new BasicSensorEvent(TestEntity.SEQUENCE, observedEntity, 123),
+                    new BasicSensorEvent(TestEntity.NAME, observedEntity, "myname"),
+                    new BasicSensorEvent(TestEntity.MY_NOTIF, observedEntity, 456)));
+            }
+        });
     }
     
     @Test
@@ -86,12 +93,13 @@ public class EntitySubscriptionTest {
         observedEntity.setAttribute(TestEntity.SEQUENCE, 123);
         otherEntity.setAttribute(TestEntity.SEQUENCE, 456);
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events, [
-                new BasicSensorEvent(TestEntity.SEQUENCE, observedEntity, 123),
-                new BasicSensorEvent(TestEntity.SEQUENCE, otherEntity, 456),
-            ])
-        }
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events, ImmutableList.of(
+                    new BasicSensorEvent(TestEntity.SEQUENCE, observedEntity, 123),
+                    new BasicSensorEvent(TestEntity.SEQUENCE, otherEntity, 456)));
+            }
+        });
     }
     
     @Test
@@ -101,25 +109,27 @@ public class EntitySubscriptionTest {
         observedChildEntity.setAttribute(TestEntity.SEQUENCE, 123);
         observedEntity.setAttribute(TestEntity.SEQUENCE, 456);
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events, [
-                new BasicSensorEvent(TestEntity.SEQUENCE, observedChildEntity, 123)
-            ])
-        }
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events, ImmutableList.of(
+                    new BasicSensorEvent(TestEntity.SEQUENCE, observedChildEntity, 123)));
+            }
+        });
     }
     
     @Test
     public void testSubscribeToChildrenReceivesEventsForDynamicallyAddedChildren() {
         entity.subscribeToChildren(observedEntity, TestEntity.SEQUENCE, listener);
         
-        TestEntity observedChildEntity2 = observedEntity.createAndManageChild(EntitySpec.create(TestEntity.class));
+        final TestEntity observedChildEntity2 = observedEntity.createAndManageChild(EntitySpec.create(TestEntity.class));
         observedChildEntity2.setAttribute(TestEntity.SEQUENCE, 123);
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events, [
-                new BasicSensorEvent(TestEntity.SEQUENCE, observedChildEntity2, 123)
-            ])
-        }
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events, ImmutableList.of(
+                    new BasicSensorEvent(TestEntity.SEQUENCE, observedChildEntity2, 123)));
+            }
+        });
     }
     
     @Test
@@ -127,28 +137,30 @@ public class EntitySubscriptionTest {
         entity.subscribeToMembers(observedGroup, TestEntity.SEQUENCE, listener);
         
         observedMemberEntity.setAttribute(TestEntity.SEQUENCE, 123);
-        observedGroup.setAttribute(TestEntity.SEQUENCE, 456);
+        ((EntityLocal) observedGroup).setAttribute(TestEntity.SEQUENCE, 456);
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events, [
-                new BasicSensorEvent(TestEntity.SEQUENCE, observedMemberEntity, 123)
-            ])
-        }
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events, ImmutableList.of(
+                new BasicSensorEvent(TestEntity.SEQUENCE, observedMemberEntity, 123)));
+            }
+        });
     }
     
     @Test
     public void testSubscribeToMembersReceivesEventsForDynamicallyAddedMembers() {
         entity.subscribeToMembers(observedGroup, TestEntity.SEQUENCE, listener);
         
-        TestEntity observedMemberEntity2 = app.createAndManageChild(EntitySpec.create(TestEntity.class));
+        final TestEntity observedMemberEntity2 = app.createAndManageChild(EntitySpec.create(TestEntity.class));
         observedGroup.addMember(observedMemberEntity2);
         observedMemberEntity2.setAttribute(TestEntity.SEQUENCE, 123);
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events, [
-                new BasicSensorEvent(TestEntity.SEQUENCE, observedMemberEntity2, 123)
-            ])
-        }
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events, ImmutableList.of(
+                new BasicSensorEvent(TestEntity.SEQUENCE, observedMemberEntity2, 123)));
+            }
+        });
     }
     
     @Test
@@ -159,13 +171,15 @@ public class EntitySubscriptionTest {
         
         observedMemberEntity.setAttribute(TestEntity.SEQUENCE, 123);
         
-        assertSucceedsContinually {
-            assertEquals(listener.events, []);
-        }
+        Asserts.succeedsContinually(new Runnable() {
+            public void run() {
+                assertTrue(listener.events.isEmpty());
+            }
+        });
     }
     
     @Test
-    public void testUnsubscribeRemovesAllSubscriptionsForThatEntity() {
+    public void testUnsubscribeRemovesAllSubscriptionsForThatEntity() throws Exception {
         entity.subscribe(observedEntity, TestEntity.SEQUENCE, listener);
         entity.subscribe(observedEntity, TestEntity.NAME, listener);
         entity.subscribe(observedEntity, TestEntity.MY_NOTIF, listener);
@@ -177,10 +191,10 @@ public class EntitySubscriptionTest {
         observedEntity.emit(TestEntity.MY_NOTIF, 123);
         otherEntity.setAttribute(TestEntity.SEQUENCE, 456);
         
-        Thread.sleep(SHORT_WAIT_MS)
-        assertEquals(listener.events, [
+        Thread.sleep(SHORT_WAIT_MS);
+        assertEquals(listener.events, ImmutableList.of(
             new BasicSensorEvent(TestEntity.SEQUENCE, otherEntity, 456)
-        ]);
+        ));
     }
     
     @Test
@@ -189,35 +203,38 @@ public class EntitySubscriptionTest {
         SubscriptionHandle handle2 = entity.subscribe(observedEntity, TestEntity.NAME, listener);
         SubscriptionHandle handle3 = entity.subscribe(otherEntity, TestEntity.SEQUENCE, listener);
         
-        entity.unsubscribe(observedEntity, handle2)
+        entity.unsubscribe(observedEntity, handle2);
         
         observedEntity.setAttribute(TestEntity.SEQUENCE, 123);
         observedEntity.setAttribute(TestEntity.NAME, "myname");
         otherEntity.setAttribute(TestEntity.SEQUENCE, 456);
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events, [
-                new BasicSensorEvent(TestEntity.SEQUENCE, observedEntity, 123),
-                new BasicSensorEvent(TestEntity.SEQUENCE, otherEntity, 456)
-            ])
-        }
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events, ImmutableList.of(
+                    new BasicSensorEvent(TestEntity.SEQUENCE, observedEntity, 123),
+                    new BasicSensorEvent(TestEntity.SEQUENCE, otherEntity, 456)));
+            }
+        });
     }
     
     @Test
     public void testSubscriptionReceivesEventsInOrder() {
-        final int NUM_EVENTS = 100
+        final int NUM_EVENTS = 100;
         entity.subscribe(observedEntity, TestEntity.MY_NOTIF, listener);
 
         for (int i = 0; i < NUM_EVENTS; i++) {
             observedEntity.emit(TestEntity.MY_NOTIF, i);
         }
         
-        executeUntilSucceeds(timeout:TIMEOUT_MS) {
-            assertEquals(listener.events.size(), NUM_EVENTS)
-            for (int i = 0; i < NUM_EVENTS; i++) {
-                assertEquals(listener.events.get(i).getValue(), i)
+        Asserts.succeedsEventually(MutableMap.of("timeout", TIMEOUT_MS), new Runnable() {
+            public void run() {
+                assertEquals(listener.events.size(), NUM_EVENTS);
+                for (int i = 0; i < NUM_EVENTS; i++) {
+                    assertEquals(listener.events.get(i).getValue(), i);
+                }
             }
-        }
+        });
     }
 
     public static class RecordingSensorEventListener implements SensorEventListener<Object> {

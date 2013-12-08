@@ -39,7 +39,7 @@ public class EntityTestUtils {
     }
     
     public static <T> void assertAttributeEqualsContinually(Map<?,?> flags, final Entity entity, final AttributeSensor<T> attribute, final T expected) {
-        TestUtils.assertSucceedsContinually(new Runnable() {
+        TestUtils.assertSucceedsContinually(flags, new Runnable() {
                 public void run() {
                     assertAttributeEquals(entity, attribute, expected);
                 }});

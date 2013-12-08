@@ -15,6 +15,7 @@ import brooklyn.entity.proxying.EntitySpec
 import brooklyn.event.AttributeSensor
 import brooklyn.event.basic.BasicAttributeSensor
 import brooklyn.location.basic.SimulatedLocation
+import brooklyn.test.Asserts;
 import brooklyn.test.TestUtils
 import brooklyn.test.entity.TestApplication
 import brooklyn.test.entity.TestEntity
@@ -254,18 +255,18 @@ class CustomAggregatingEnricherTest {
 
             group.addMember(p1)
             p1.setAttribute(intSensor, 1)
-            TestUtils.executeUntilSucceeds(timeout:TIMEOUT_MS) {
+            Asserts.succeedsEventually(timeout:TIMEOUT_MS) {
                 assertEquals cae.getAggregate(), 1
             }
 
             group.addMember(p2)
             p2.setAttribute(intSensor, 2)
-            TestUtils.executeUntilSucceeds(timeout:TIMEOUT_MS) {
+            Asserts.succeedsEventually(timeout:TIMEOUT_MS) {
                 assertEquals cae.getAggregate(), 3
             }
 
             group.removeMember(p2)
-            TestUtils.executeUntilSucceeds(timeout:TIMEOUT_MS) {
+            Asserts.succeedsEventually(timeout:TIMEOUT_MS) {
                 assertEquals cae.getAggregate(), 1
             }
         } catch (Exception e) {
@@ -298,12 +299,12 @@ class CustomAggregatingEnricherTest {
         assertEquals cae.getAggregate(), 1
 
         p2.setAttribute(intSensor, 2)
-        TestUtils.executeUntilSucceeds(timeout:TIMEOUT_MS) {
+        Asserts.succeedsEventually(timeout:TIMEOUT_MS) {
             assertEquals cae.getAggregate(), 3
         }
         
         group.removeMember(p2)
-        TestUtils.executeUntilSucceeds(timeout:TIMEOUT_MS) {
+        Asserts.succeedsEventually(timeout:TIMEOUT_MS) {
             assertEquals cae.getAggregate(), 1
         }
     }
@@ -326,7 +327,7 @@ class CustomAggregatingEnricherTest {
         assertEquals cae.getAggregate(), 1
         
         group.addMember(p3)
-        TestUtils.assertSucceedsContinually(timeout:SHORT_WAIT_MS) {
+        Asserts.succeedsContinually(timeout:SHORT_WAIT_MS) {
             assertEquals cae.getAggregate(), 1
         }
     }

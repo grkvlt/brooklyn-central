@@ -3,6 +3,7 @@ package brooklyn.entity.proxy.nginx;
 import static brooklyn.test.TestUtils.*
 import static java.util.concurrent.TimeUnit.*
 import static org.testng.Assert.*
+import static brooklyn.test.HttpTestUtils.*
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -160,11 +161,11 @@ public class NginxUrlMappingIntegrationTest {
         }
         
         //these should *not* be available
-        assertEquals(urlRespondsStatusCode("http://localhost:${port}/"), 404);
-        assertEquals(urlRespondsStatusCode("http://localhost1:${port}/hello-world"), 404);
-        assertEquals(urlRespondsStatusCode("http://localhost2:${port}/"), 404);
-        assertEquals(urlRespondsStatusCode("http://localhost2:${port}/hello-world/notexists"), 404);
-        assertEquals(urlRespondsStatusCode("http://localhost3:${port}/"), 404);
+        assertEquals(getHttpStatusCode("http://localhost:${port}/"), 404);
+        assertEquals(getHttpStatusCode("http://localhost1:${port}/hello-world"), 404);
+        assertEquals(getHttpStatusCode("http://localhost2:${port}/"), 404);
+        assertEquals(getHttpStatusCode("http://localhost2:${port}/hello-world/notexists"), 404);
+        assertEquals(getHttpStatusCode("http://localhost3:${port}/"), 404);
         
         //make sure nginx default welcome page isn't displayed
         assertFails { assertUrlHasText(timeout:1, "http://localhost:${port}/", "ginx"); }
@@ -288,10 +289,10 @@ public class NginxUrlMappingIntegrationTest {
         // check nginx forwards localhost1 to c1, and localhost to core group 
         executeUntilSucceeds {
             assertUrlHasText("http://localhost1:${port}/hello-world", "Hello");
-            assertEquals(urlRespondsStatusCode("http://localhost1:${port}"), 404);
+            assertEquals(getHttpStatusCode("http://localhost1:${port}"), 404);
             
             assertUrlHasText("http://localhost:${port}", "Hello");
-            assertEquals(urlRespondsStatusCode("http://localhost:${port}/hello-world"), 404);
+            assertEquals(getHttpStatusCode("http://localhost:${port}/hello-world"), 404);
         }
     }
     
@@ -447,7 +448,7 @@ public class NginxUrlMappingIntegrationTest {
         }
 
         // And empty-core should return 404        
-        assertEquals(urlRespondsStatusCode("http://localhost:${port}"), 404);
+        assertEquals(getHttpStatusCode("http://localhost:${port}"), 404);
     }
     
     @Test(groups = "Integration")

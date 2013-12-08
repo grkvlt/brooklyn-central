@@ -34,6 +34,7 @@ import brooklyn.entity.proxying.ImplementedBy;
 import brooklyn.entity.trait.Startable;
 import brooklyn.location.Location;
 import brooklyn.location.basic.SimulatedLocation;
+import brooklyn.test.Asserts;
 import brooklyn.test.TestUtils;
 import brooklyn.util.ResourceUtils;
 import brooklyn.util.exceptions.Exceptions;
@@ -228,7 +229,7 @@ public class CliTest {
                 }
             }});
         
-        TestUtils.executeUntilSucceeds(new Runnable() {
+        Asserts.succeedsEventually(new Runnable() {
             public void run() {
                 assertTrue(exampleAppConstructed);
                 assertTrue(exampleAppRunning);

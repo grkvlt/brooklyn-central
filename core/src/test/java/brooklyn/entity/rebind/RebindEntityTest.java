@@ -42,7 +42,7 @@ import brooklyn.event.basic.Sensors;
 import brooklyn.location.Location;
 import brooklyn.management.internal.LocalManagementContext;
 import brooklyn.mementos.EntityMemento;
-import brooklyn.test.TestUtils;
+import brooklyn.test.Asserts;
 import brooklyn.test.entity.TestApplication;
 import brooklyn.test.entity.TestEntity;
 import brooklyn.util.collections.MutableMap;
@@ -186,7 +186,7 @@ public class RebindEntityTest {
         MyEntity2 newE = (MyEntity2) Iterables.find(newApp.getChildren(), Predicates.instanceOf(MyEntity2.class));
         
         newApp.setAttribute(TestApplication.MY_ATTRIBUTE, "mysensorval");
-        TestUtils.assertEventually(Suppliers.ofInstance(newE.getEvents()), Predicates.equalTo(ImmutableList.of("mysensorval")));
+        Asserts.eventually(Suppliers.<Object>ofInstance(newE.getEvents()), Predicates.<Object>equalTo(ImmutableList.of("mysensorval")));
     }
     
     @Test
@@ -304,8 +304,8 @@ public class RebindEntityTest {
             assertTrue(MyLatchingEntityImpl.reconstructStartedLatch.await(TIMEOUT_MS, TimeUnit.MILLISECONDS));
             newManagementContext.getSubscriptionManager().publish(new BasicSensorEvent<String>(TestApplication.MY_ATTRIBUTE, null, "myvaltooearly"));
             
-            TestUtils.assertContinuallyFromJava(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.equalTo(Collections.emptyList()));
-            TestUtils.assertContinuallyFromJava(Suppliers.ofInstance(events), Predicates.equalTo(Collections.emptyList()));
+            Asserts.continually(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.equalTo(Collections.emptyList()));
+            Asserts.continually(Suppliers.ofInstance(events), Predicates.equalTo(Collections.emptyList()));
             
 
             // When the entity is notified of "managing", then subscriptions take effect (but missed events not delivered); 
@@ -313,17 +313,17 @@ public class RebindEntityTest {
             MyLatchingEntityImpl.reconstructContinuesLatch.countDown();
             assertTrue(MyLatchingEntityImpl.managingStartedLatch.getCount() > 0);
 
-            TestUtils.assertContinuallyFromJava(Suppliers.ofInstance(events), Predicates.equalTo(Collections.emptyList()));
-            TestUtils.assertContinuallyFromJava(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.equalTo(Collections.emptyList()));
+            Asserts.continually(Suppliers.ofInstance(events), Predicates.equalTo(Collections.emptyList()));
+            Asserts.continually(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.equalTo(Collections.emptyList()));
 
             newManagementContext.getSubscriptionManager().publish(new BasicSensorEvent<String>(TestApplication.MY_ATTRIBUTE, null, "myvaltoreceive"));
-            TestUtils.assertEventually(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.equalTo(ImmutableList.of("myvaltoreceive")));
+            Asserts.eventually(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.<Object>equalTo(ImmutableList.of("myvaltoreceive")));
 
             // When the entity is notified of "managed", its events are only then delivered
             MyLatchingEntityImpl.managingContinuesLatch.countDown();
             assertTrue(MyLatchingEntityImpl.managedStartedLatch.await(TIMEOUT_MS, TimeUnit.MILLISECONDS));
 
-            TestUtils.assertEventually(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.equalTo(ImmutableList.of("myvaltoreceive")));
+            Asserts.eventually(Suppliers.ofInstance(MyLatchingEntityImpl.events), Predicates.<Object>equalTo(ImmutableList.of("myvaltoreceive")));
             
             MyLatchingEntityImpl.managedContinuesLatch.countDown();
             

@@ -29,15 +29,12 @@ import brooklyn.event.basic.BasicNotificationSensor;
 import brooklyn.test.entity.TestApplication;
 import brooklyn.test.entity.TestCluster;
 import brooklyn.util.collections.MutableMap;
-import brooklyn.util.internal.TimeExtras;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 public class AutoScalerPolicyTest {
-
-    static { TimeExtras.init(); }
 
     private static long TIMEOUT_MS = 10*1000;
     private static long SHORT_WAIT_MS = 250;

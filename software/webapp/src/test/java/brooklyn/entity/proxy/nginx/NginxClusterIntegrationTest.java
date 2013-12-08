@@ -214,11 +214,11 @@ public class NginxClusterIntegrationTest {
                     String rootUrl = (hostname != null) ? ("http://"+hostname+":"+port+"/") : normalRootUrl;
                     
                     String wrongUrl = rootUrl+"doesnotexist";
-                    assertEquals(urlRespondsStatusCode(wrongUrl), 404, "url="+wrongUrl);
+                    assertEquals(HttpTestUtils.getHttpStatusCode(wrongUrl), 404, "url="+wrongUrl);
                     
                     for (String pathFor200 : pathsFor200) {
                         String url = rootUrl+pathFor200;
-                        assertEquals(urlRespondsStatusCode(url), 200, "url="+url);
+                        assertEquals(HttpTestUtils.getHttpStatusCode(url), 200, "url="+url);
                     }
                 }
             }});

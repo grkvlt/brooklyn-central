@@ -1,58 +1,50 @@
-package brooklyn.entity.group
+package brooklyn.entity.group;
 
-import static org.testng.Assert.*
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.testng.annotations.AfterMethod
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
-import brooklyn.entity.Application
-import brooklyn.entity.Entity
-import brooklyn.entity.basic.ApplicationBuilder
-import brooklyn.entity.basic.BrooklynTasks;
-import brooklyn.entity.basic.Entities
-import brooklyn.entity.proxying.EntitySpec
-import brooklyn.entity.trait.Changeable
-import brooklyn.location.Location
-import brooklyn.location.basic.SimulatedLocation
-import brooklyn.management.Task
-import brooklyn.test.TestUtils
-import brooklyn.test.entity.TestApplication
-import brooklyn.test.entity.TestEntity
-import brooklyn.test.entity.TestEntityImpl
-import brooklyn.util.exceptions.Exceptions
-import brooklyn.util.internal.TimeExtras
+import brooklyn.entity.Entity;
+import brooklyn.entity.basic.ApplicationBuilder;
+import brooklyn.entity.basic.Entities;
+import brooklyn.entity.proxying.EntitySpec;
+import brooklyn.entity.trait.Changeable;
+import brooklyn.location.Location;
+import brooklyn.location.basic.SimulatedLocation;
+import brooklyn.test.entity.TestApplication;
+import brooklyn.test.entity.TestEntity;
+import brooklyn.test.entity.TestEntityImpl;
+import brooklyn.util.collections.MutableList;
+import brooklyn.util.exceptions.Exceptions;
 
-import com.google.common.base.Predicates
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.ImmutableSet
-import com.google.common.collect.Iterables
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 
+public class DynamicClusterTest {
 
-class DynamicClusterTest {
+    private static final int TIMEOUT_MS = 2000;
 
-    private static final int TIMEOUT_MS = 2000
-
-    static { TimeExtras.init() }
-
-    TestApplication app
-    SimulatedLocation loc
-    SimulatedLocation loc2
-    Random random = new Random()
+    private TestApplication app;
+    private SimulatedLocation loc;
+    private SimulatedLocation loc2;
+    private Random random = new Random();
 
     @BeforeMethod
     public void setUp() {
         app = ApplicationBuilder.newManagedApp(TestApplication.class);
-        loc = new SimulatedLocation()
-        loc2 = new SimulatedLocation()
+        loc = new SimulatedLocation();
+        loc2 = new SimulatedLocation();
     }
 
     @AfterMethod(alwaysRun = true)
@@ -77,10 +69,10 @@ class DynamicClusterTest {
     }
 
     @Test
-    public void startRequiresThatNewEntityArgumentIsGiven() {
+    public void startRequiresThatNewEntityArgumentIsGiven() throws Exception {
         DynamicCluster c = app.createAndManageChild(EntitySpec.create(DynamicCluster.class));
         try {
-            c.start([loc]);
+            c.start(MutableList.of(loc));
             fail();
         } catch (Exception e) {
             if (Exceptions.getFirstThrowableOfType(e, IllegalStateException.class) == null) throw e;
@@ -88,11 +80,11 @@ class DynamicClusterTest {
     }
 
     @Test
-    public void startMethodFailsIfLocationsParameterIsMissing() {
+    public void startMethodFailsIfLocationsParameterIsMissing() throws Exception {
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
-                .configure("factory", { new TestEntityImpl() }));
+                .configure("memberSpec", EntitySpec.create(TestEntity.class)));
         try {
-            cluster.start(null)
+            cluster.start(null);
             fail();
         } catch (Exception e) {
             if (!e.toString().contains("Null location supplied")) throw e;
@@ -101,11 +93,11 @@ class DynamicClusterTest {
     }
 
     @Test
-    public void startMethodFailsIfLocationsParameterIsEmpty() {
+    public void startMethodFailsIfLocationsParameterIsEmpty() throws Exception {
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
-                .configure("factory", { new TestEntityImpl() }));
+                .configure("memberSpec", EntitySpec.create(TestEntity.class)));
         try {
-            cluster.start([])
+            cluster.start(MutableList.<Location>of());
             fail();
         } catch (Exception e) {
             if (Exceptions.getFirstThrowableOfType(e, IllegalArgumentException.class) == null) throw e;
@@ -113,11 +105,11 @@ class DynamicClusterTest {
     }
 
     @Test
-    public void startMethodFailsIfLocationsParameterHasMoreThanOneElement() {
+    public void startMethodFailsIfLocationsParameterHasMoreThanOneElement() throws Exception {
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
-                .configure("factory", { new TestEntityImpl() }));
+                .configure("memberSpec", EntitySpec.create(TestEntity.class)));
         try {
-            cluster.start([ loc, loc2 ])
+            cluster.start(MutableList.of(loc, loc2));
             fail();
         } catch (Exception e) {
             if (Exceptions.getFirstThrowableOfType(e, IllegalArgumentException.class) == null) throw e;
@@ -127,10 +119,10 @@ class DynamicClusterTest {
     @Test
     public void testClusterHasOneLocationAfterStarting() {
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
-                .configure("factory", { new TestEntityImpl() }));
-        cluster.start([loc])
-        assertEquals(cluster.getLocations().size(), 1)
-        assertEquals(cluster.getLocations() as List, [loc])
+                .configure("memberSpec", EntitySpec.create(TestEntity.class)));
+        cluster.start(MutableList.of(loc));
+        assertEquals(cluster.getLocations().size(), 1);
+        assertEquals(cluster.getLocations(), MutableList.of(loc));
     }
 
     @Test
@@ -138,75 +130,77 @@ class DynamicClusterTest {
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
                 .configure("memberSpec", EntitySpec.create(TestEntity.class)));
         
-        cluster.start([loc])
+        cluster.start(MutableList.of(loc));
 
-        cluster.resize(1)
-        Entity entity = Iterables.getOnlyElement(cluster.getMembers());
-        assertEquals entity.count, 1
-        assertEquals entity.parent, cluster
-        assertEquals entity.application, app
+        cluster.resize(1);
+        TestEntity entity = (TestEntity) Iterables.getOnlyElement(cluster.getMembers());
+        assertEquals(entity.getCount(), 1);
+        assertEquals(entity.getParent(), cluster);
+        assertEquals(entity.getApplication(), app);
     }
 
     @Test
     public void resizeFromZeroToOneStartsANewEntityAndSetsItsParent() {
-        TestEntity entity
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
-                .configure("factory", { properties -> entity = new TestEntityImpl(properties) }));
+                .configure("memberSpec", EntitySpec.create(TestEntity.class)));
 
-        cluster.start([loc])
+        cluster.start(MutableList.of(loc));
 
-        cluster.resize(1)
-        assertEquals entity.counter.get(), 1
-        assertEquals entity.parent, cluster
-        assertEquals entity.application, app
+        cluster.resize(1);
+        TestEntity entity = (TestEntity) Iterables.getOnlyElement(cluster.getMembers());
+        assertEquals(entity.getCounter().get(), 1);
+        assertEquals(entity.getParent(), cluster);
+        assertEquals(entity.getApplication(), app);
     }
 
     @Test
     public void currentSizePropertyReflectsActualClusterSize() {
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
-                .configure("factory", { properties -> return new TestEntityImpl(properties) }));
+                .configure("memberSpec", EntitySpec.create(TestEntity.class)));
 
-        assertEquals cluster.currentSize, 0
+        assertEquals(cluster.getCurrentSize().intValue(), 0);
 
-        cluster.start([loc])
-        assertEquals cluster.currentSize, 1
-        assertEquals cluster.getAttribute(Changeable.GROUP_SIZE), 1
+        cluster.start(MutableList.of(loc));
 
-        int newSize = cluster.resize(0)
-        assertEquals newSize, 0
-        assertEquals newSize, cluster.currentSize
-        assertEquals newSize, cluster.members.size()
-        assertEquals newSize, cluster.getAttribute(Changeable.GROUP_SIZE)
+        assertEquals(cluster.getCurrentSize().intValue(), 1);
+        assertEquals(cluster.getAttribute(Changeable.GROUP_SIZE).intValue(), 1);
 
-        newSize = cluster.resize(4)
-        assertEquals newSize, 4
-        assertEquals newSize, cluster.currentSize
-        assertEquals newSize, cluster.members.size()
-        assertEquals newSize, cluster.getAttribute(Changeable.GROUP_SIZE)
+        int newSize = cluster.resize(0);
+        assertEquals(newSize, 0);
+        assertEquals(newSize, cluster.getCurrentSize().intValue());
+        assertEquals(newSize, cluster.getMembers().size());
+        assertEquals(newSize, cluster.getAttribute(Changeable.GROUP_SIZE).intValue());
 
-        newSize = cluster.resize(0)
-        assertEquals newSize, 0
-        assertEquals newSize, cluster.currentSize
-        assertEquals newSize, cluster.members.size()
-        assertEquals newSize, cluster.getAttribute(Changeable.GROUP_SIZE)
+        newSize = cluster.resize(4);
+        assertEquals(newSize, 4);
+        assertEquals(newSize, cluster.getCurrentSize().intValue());
+        assertEquals(newSize, cluster.getMembers().size());
+        assertEquals(newSize, cluster.getAttribute(Changeable.GROUP_SIZE).intValue());
+
+        newSize = cluster.resize(0);
+        assertEquals(newSize, 0);
+        assertEquals(newSize, cluster.getCurrentSize().intValue());
+        assertEquals(newSize, cluster.getMembers().size());
+        assertEquals(newSize, cluster.getAttribute(Changeable.GROUP_SIZE).intValue());
     }
 
     @Test
     public void clusterSizeAfterStartIsInitialSize() {
         DynamicCluster cluster = app.createAndManageChild(EntitySpec.create(DynamicCluster.class)
-                .configure("factory", { properties -> return new TestEntityImpl(properties) })
+                .configure("memberSpec", EntitySpec.create(TestEntity.class))
                 .configure("initialSize", 2));
 
-        cluster.start([loc])
-        assertEquals cluster.currentSize, 2
-        assertEquals cluster.members.size(), 2
-        assertEquals cluster.getAttribute(Changeable.GROUP_SIZE), 2
+        cluster.start(MutableList.of(loc));
+
+        assertEquals(cluster.getCurrentSize().intValue(), 2);
+        assertEquals(cluster.getMembers().size(), 2);
+        assertEquals(cluster.getAttribute(Changeable.GROUP_SIZE).intValue(), 2);
     }
 
     @Test
     public void clusterLocationIsPassedOnToEntityStart() {
-        Collection<Location> locations = [ loc ]
-        TestEntity entity
+        List<Location> locations = MutableList.<Location>of(loc);
+        TestEntity entity;
         def newEntity = { properties, cluster ->
             entity = new TestEntityImpl(parent:cluster) {
 	            List<Location> stashedLocations = null

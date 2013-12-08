@@ -17,7 +17,7 @@ import brooklyn.entity.basic.Entities
 import brooklyn.location.basic.LocalhostMachineProvisioningLocation
 import brooklyn.test.entity.TestApplicationImpl
 import brooklyn.util.internal.Repeater
-import brooklyn.util.internal.TimeExtras
+import brooklyn.util.net.Networking
 
 class Infinispan5ServerIntegrationTest {
     private static final Logger logger = LoggerFactory.getLogger(Infinispan5ServerIntegrationTest.class)
@@ -26,12 +26,10 @@ class Infinispan5ServerIntegrationTest {
     static int DEFAULT_PORT = 11219
 
     static boolean portLeftOpen = false;
-    
-    static { TimeExtras.init() }
 
     @BeforeMethod(groups = [ "Integration" ])
     public void failIfPortInUse() {
-        if (isPortInUse(DEFAULT_PORT, 5000L)) {
+        if (Networking.isPortAvailable(DEFAULT_PORT, 5000L)) {
             portLeftOpen = true;
             fail "someone is already listening on port $DEFAULT_PORT; tests assume that port $DEFAULT_PORT is free on localhost"
         }

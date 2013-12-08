@@ -28,6 +28,7 @@ import brooklyn.event.AttributeSensor;
 import brooklyn.event.Sensor;
 import brooklyn.event.basic.BasicSensorEvent;
 import brooklyn.event.basic.Sensors;
+import brooklyn.test.Asserts;
 import brooklyn.test.TestUtils;
 import brooklyn.test.entity.TestApplication;
 import brooklyn.test.entity.TestEntity;
@@ -149,9 +150,9 @@ public class EntityTypeTest {
         assertEquals(entity.getEntityType().getSensors(), 
                 ImmutableSet.builder().addAll(DEFAULT_SENSORS).add(TEST_SENSOR).build());
         
-        TestUtils.assertEventually(
+        Asserts.eventually(
                 Suppliers.ofInstance(listener.events), 
-                Predicates.equalTo(ImmutableList.of(new BasicSensorEvent(SENSOR_ADDED, entity, TEST_SENSOR))));
+                Predicates.<Object>equalTo(ImmutableList.of(new BasicSensorEvent(SENSOR_ADDED, entity, TEST_SENSOR))));
     }
 
     @Test
