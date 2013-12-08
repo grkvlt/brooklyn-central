@@ -1,11 +1,16 @@
 package brooklyn.util.task;
 
+import static com.google.common.base.Predicates.instanceOf;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import brooklyn.entity.Entity;
+import brooklyn.location.Location;
+import brooklyn.location.basic.SshMachineLocation;
 import brooklyn.management.Task;
 import brooklyn.management.TaskAdaptable;
 import brooklyn.management.TaskFactory;
@@ -14,7 +19,9 @@ import brooklyn.management.TaskWrapper;
 import brooklyn.util.exceptions.Exceptions;
 
 import com.google.common.annotations.Beta;
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 
 /** 
  * Contains static methods which detect and use the current {@link TaskQueueingContext} to execute tasks.
@@ -228,4 +235,35 @@ public class DynamicTasks {
         return last;
     }
 
+    public static <R> R installOnEntity(Entity entity, Callable<R> job) {
+        return queueWithMutex(entity, "installing", job);
+    }
+    public static <R> R installOnEntity(Entity entity, Task<R> task) {
+        return queueWithMutex(entity, "installing", task);
+    }
+    public static <R> R queueWithMutex(Entity entity, String mutex, Callable<R> job) {
+        Task<R> task = Tasks.fromCallable(job);
+        return queueWithMutex(entity, mutex, task);
+    }
+    public static <R> R queueWithMutex(Entity entity, String mutex, Task<R> task) {
+        Optional<Location> location = Iterables.tryFind(entity.getLocations(), instanceOf(SshMachineLocation.class));
+        if (location.isPresent()) {
+            SshMachineLocation machine = (SshMachineLocation) location.get();
+            try {
+                machine.acquireMutex(mutex, String.format("Running %s on %s @ %s", task, entity, machine));
+                Task<R> submitted = queueIfNeeded(task);
+                submitted.blockUntilEnded();
+                return submitted.get();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw Exceptions.propagateCollapsed(e);
+            } catch (Exception e) {
+                throw Exceptions.propagateCollapsed(e);
+            } finally {
+                machine.releaseMutex(mutex);
+            }
+        } else {
+            throw new IllegalStateException();
+        }
+    }
 }

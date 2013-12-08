@@ -76,6 +76,11 @@ public class Tasks {
     @SuppressWarnings("rawtypes")
     public static Task current() { return BasicExecutionManager.getPerThreadCurrentTask().get(); }
 
+    public static <R> Task<R> fromCallable(Callable<R> callable) {
+        Task<R> task = Tasks.<R>builder().name(callable.toString()).body(callable).build();
+        return task;
+    }
+
     /** @see #resolveValue(Object, Class, ExecutionContext, String) */
     public static <T> T resolveValue(Object v, Class<T> type, ExecutionContext exec) throws ExecutionException, InterruptedException {
         return resolveValue(v, type, exec, null);
