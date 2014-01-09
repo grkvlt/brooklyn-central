@@ -117,7 +117,13 @@ public class DynamicToyMySqlEntityBuilder {
                     // but if it's not up add a bunch of other info
                     log.warn("MySQL did not start: "+dir(entity));
                     ProcessTaskWrapper<Integer> info = DynamicTasks.queue(SshEffectorTasks.ssh(
+                            "echo -n PID=",
+                            "cat "+dir(entity)+"/*/data/*.pid",
                             "cd "+dir(entity)+"/*",
+                            "echo ls",
+                            "ls -l",
+                            "echo ls data",
+                            "ls -l data",
                             "cat out.log",
                             "cat err.log > /dev/stderr")).block();
                     log.info("STDOUT:\n"+info.getStdout());
