@@ -140,7 +140,7 @@ public class XmlMementoSerializer<T> extends XmlSerializer<T> implements Memento
 
         @Override
         public String toString(Object obj) {
-            return obj == null ? null : ((Identifiable)obj).getId();
+            return obj instanceof Identifiable ? ((Identifiable)obj).getId() : "unknown";
         }
         @Override
         public Object fromString(String str) {
