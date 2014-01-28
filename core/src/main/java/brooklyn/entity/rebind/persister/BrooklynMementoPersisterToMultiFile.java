@@ -200,7 +200,7 @@ public class BrooklynMementoPersisterToMultiFile implements BrooklynMementoPersi
     }
 
     private String readFile(File file) throws IOException {
-        return Joiner.on("\n").join(Files.readLines(file, Charsets.UTF_8));
+        return Files.asCharSource(file, Charsets.UTF_8).read();
     }
     
     private void persist(EntityMemento entity) {
