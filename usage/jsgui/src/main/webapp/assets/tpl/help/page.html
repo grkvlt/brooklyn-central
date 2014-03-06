@@ -1,32 +1,30 @@
 <!-- Help page -->
 <div class="container container-fluid">
 <div id="help-page">
-    <div class="help-logo-right"><img width="450" src="/assets/img/bridge.png"/></div>
-    <h3>Brooklyn Help</h3>
+    <div class="help-logo-right"><img width="450" src="/assets/img/waratek.png"/></div>
+    <h3>Waratek Help</h3>
     
-    <p>This is the Brooklyn JavaScript web client for the REST API.<br/>
-    Brooklyn is an Apache-licensed open-source project for deployment and management.
-    </p>
+    <p>This is the Waratek JavaScript web client for the REST API.<br/></p>
     
-    <p>You are currently using Brooklyn Version 0.7.0-SNAPSHOT.</p> <!-- BROOKLYN_VERSION -->
+    <p>You are currently using Waratek Version 0.7.0-SNAPSHOT.</p> <!-- BROOKLYN_VERSION -->
     
     <hr/>
     Some useful references include:
     <ul>
-        <li><a href="http://brooklyn.io">Brooklyn Project web page</a></li>
-        <li><a href="http://github.com/brooklyncentral/brooklyn">Code at Github</a></li>
+        <li><a href="http://www.waratek.com">Waratek web page</a></li>
+        <li><a href="http://github.com/waratek">Code at Github</a></li>
     </ul>
     <p>
     Note you can observe the REST requests made by the Javascript GUI 
     through the developers console in many browsers.
     <hr/>
-    Some miscellaneous Brooklyn control options are:
+    Some miscellaneous Waratek control options are:
     <ul>
         <li><a href="/logout">Log out</a></li>
-        <li>Shutdown Brooklyn Server: <a href="javascript:postShutdown(true)">stop all apps</a> or <a href="javascript:postShutdown(false)">leave apps running</a></li>
+        <li>Shutdown Waratek Server: <a href="javascript:postShutdown(true)">stop all apps</a> or <a href="javascript:postShutdown(false)">leave apps running</a></li>
         <script type="text/javascript">
         function postShutdown(stopAppsFirst) {
-          if (window.confirm("Really shutdown the Brooklyn server?")) {
+          if (window.confirm("Really shutdown the Waratek server?")) {
             $.ajax({
                 type:"POST",
                 url:"/v1/server/shutdown",
