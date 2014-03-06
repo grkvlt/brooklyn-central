@@ -1,0 +1,111 @@
+.navbar .nav>li>a.active {
+    background: url(../images/waratek-main-menu-tab-active.png) top !important;
+}
+
+.navbar .nav>li>a:hover {
+    background: url(../images/waratek-main-menu-tab-hover.png) top !important;
+}
+
+.nav-tabs .dropdown-menu .active > a
+.nav-tabs .dropdown-menu .active > a:hover {
+    background-color: #9D2235 !important;
+}
+
+.nav-tabs>li>a:hover {
+    color: #9D2235 !important;
+}
+
+.nav-tabs .dropdown-toggle:hover .caret, .nav-pills .dropdown-toggle:hover .caret {
+    border-top-color: #9D2235;
+    border-bottom-color: #9D2235;
+}
+
+.btn-info {
+    background-color: #9D2235;
+    background-image: -moz-linear-gradient(center top, #9D2235, #BE1A38);
+}
+
+.btn-info:hover, .btn-info:active, .btn-info.active, .btn-info.disabled, .btn-info[disabled] {
+    background-color: #9D2235;
+}
+
+#application-content .template-lozenge.frame.selected {
+    border: 3px solid #9D2235 !important;
+}
+
+.navbar .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+    background-color: #9D2235;
+    color: #FFFFFF !important;
+}
+
+div.apidoc-title {
+    color: #9D2235;
+}
+
+.addApplication {
+    border: 1px solid #9D2235 !important;
+    color: #505050 !important;
+    background: url(../images/waratek-addApplication-plus.png) no-repeat !important;
+    padding: 10px 0px 0px 74px !important;
+    width: 298px !important;
+    height: 201px !important;
+}
+
+.addApplication:hover {
+    border: 1px solid #9D2235 !important;
+    color: #9D2235 !important;
+    background: url(../images/waratek-addApplication-plus-hover.png) no-repeat
+        !important;
+}
+
+code {
+    background-color: #F7F7F9;
+    border: 1px solid #E1E1E8;
+    color: #DD1144;
+    padding: 2px 4px;
+}
+
+textarea:focus,input[type="text"]:focus,input[type="password"]:focus,
+input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,
+input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,
+input[type="email"]:focus,input[type="url"]:focus,input[type="search"]:focus,input[type="tel"]:focus,
+input[type="color"]:focus,.uneditable-input:focus {
+    border-color: #9D2235;
+}
+
+a {
+    color: #9D2235;
+}
+
+a:hover {
+    color: #CE0538;
+}
+
+/* HEADER  */
+.logo {
+    height: 72px !important;
+    width: 230px !important;
+    background: url(../images/waratek-logo.png) no-repeat;
+    margin-top: 23px;
+}
+
+.navbar-inner {
+    background: #FFFFFF;
+}
+
+.navbar .nav > li > a {
+    background: #B9B8B8 !important;
+    color: #FFFFFF;
+}
+
+div.apidoc-title {
+    color: #9D2235 !important;
+}
+
+.entity_tree_node a:hover {
+    color: #9D2235 !important;
+}
+
+.help-logo-right img {
+    border: none
+}
